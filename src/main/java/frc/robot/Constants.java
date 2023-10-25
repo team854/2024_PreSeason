@@ -41,13 +41,12 @@ public final class Constants {
         public static final boolean RIGHT_ENCODER_REVERSED        = true;
 
         public static final int     ENCODER_COUNTS_PER_REVOLUTION = 1024;
-        public static final double  ROBOT_WHEEL_DIAMETER_INCHES   = 6;
+        public static final double  ROBOT_WHEEL_DIAMETER_CMS      = 6 * 2.54;
 
-        public static final double  INCHES_PER_ENCODER_COUNT      =
+        public static final double  CMS_PER_ENCODER_COUNT         =
             // Assumes the encoders are directly mounted on the wheel shafts
-            (ROBOT_WHEEL_DIAMETER_INCHES * Math.PI) / ENCODER_COUNTS_PER_REVOLUTION;
+            (ROBOT_WHEEL_DIAMETER_CMS * Math.PI) / ENCODER_COUNTS_PER_REVOLUTION;
 
-        public static final boolean GYRO_REVERSED                 = false;
     }
 
     public static final class OiConstants {
@@ -56,9 +55,4 @@ public final class Constants {
         public static final double GAME_CONTROLLER_STICK_DEADBAND = 0.2;
     }
 
-    public static final class VisionConstants {
-
-        /** Time to switch pipelines and acquire a new vision target */
-        public static final double VISION_SWITCH_TIME_SEC = .25;
-    }
 }
