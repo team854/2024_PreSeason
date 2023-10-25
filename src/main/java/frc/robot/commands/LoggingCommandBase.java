@@ -1,7 +1,9 @@
 package frc.robot.commands;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -12,24 +14,29 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
  */
 public class LoggingCommandBase extends CommandBase {
 
-    protected long  initializeTime = 0;
-    private String  finishReason   = null;
+    SimpleDateFormat START_TIMESTAMP_FMT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
-    List<Subsystem> subsystemList  = new ArrayList<>();
+    protected long   initializeTime      = 0;
+    private String   finishReason        = null;
+
+    List<Subsystem>  subsystemList       = new ArrayList<>();
+
+    /**
+     * Default implementation automatically logs start of command with required subsystems
+     */
+    @Override
+    public void initialize() {
+        logCommandStart();
+    }
 
     public void logCommandStart() {
 
-        logCommandStart(new Subsystem[0]);
+        logCommandStart(null, new Subsystem[0]);
     }
 
     public void logCommandStart(String msg) {
 
         logCommandStart(msg, new Subsystem[0]);
-    }
-
-    public void logCommandStart(Subsystem... subsystemList) {
-
-        logCommandStart(null, subsystemList);
     }
 
     public void logCommandStart(String commandParms, Subsystem... subsystemList) {
@@ -52,6 +59,16 @@ public class LoggingCommandBase extends CommandBase {
         initializeTime = System.currentTimeMillis();
     }
 
+    /**
+     * Default implementation logs command end
+     *
+     * @param interrupted whether the command was interrupted/canceled
+     */
+    @Override
+    public void end(boolean interrupted) {
+        logCommandEnd(interrupted);
+    }
+
     public void logCommandEnd(boolean interrupted) {
 
         logCommandEnd(interrupted, null);
@@ -62,7 +79,7 @@ public class LoggingCommandBase extends CommandBase {
         String state = "ENDED";
 
         if (interrupted) {
-            state = "INTERUPTED";
+            state = "INTERRUPTED";
         }
 
         logCommandState(state, endMsg, true);
@@ -88,6 +105,10 @@ public class LoggingCommandBase extends CommandBase {
         logCommandState(null, msg, false);
     }
 
+    public void log(String msg, boolean logSubsystems) {
+        logCommandState(null, msg, logSubsystems);
+    }
+
     private void logCommandState(String state, String msg, boolean logSubsystems) {
 
         StringBuilder sb = new StringBuilder();
@@ -98,7 +119,12 @@ public class LoggingCommandBase extends CommandBase {
             sb.append(" : ").append(state);
         }
 
-        sb.append(" at ").append(System.currentTimeMillis() - initializeTime).append("ms");
+        if (initializeTime == 0) {
+            sb.append(" at ").append(START_TIMESTAMP_FMT.format(new Date()));
+        }
+        else {
+            sb.append(" at ").append(System.currentTimeMillis() - initializeTime).append("ms");
+        }
 
         if (finishReason != null) {
             sb.append(" : ").append(finishReason);
@@ -111,7 +137,9 @@ public class LoggingCommandBase extends CommandBase {
         if (logSubsystems) {
             // Print the subsystems as passed in on the command start
             for (Subsystem subsystem : subsystemList) {
-                sb.append("\n   ").append(subsystem.toString());
+                if (subsystem != null) {
+                    sb.append("\n   ").append(subsystem.toString());
+                }
             }
         }
 
@@ -121,6 +149,5 @@ public class LoggingCommandBase extends CommandBase {
     public void setFinishReason(String finishReason) {
         this.finishReason = finishReason;
     }
-
 
 }
