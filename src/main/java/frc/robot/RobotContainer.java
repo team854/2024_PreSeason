@@ -4,17 +4,14 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.AutoConstants.AutoPattern;
 import frc.robot.Constants.DriveConstants.DriveMode;
-import frc.robot.Constants.OiConstants;
 import frc.robot.commands.auto.AutonomousCommand;
 import frc.robot.commands.drive.DefaultDriveCommand;
-import frc.robot.commands.operator.GameController;
+import frc.robot.operatorInput.OperatorInput;
 import frc.robot.subsystems.DriveSubsystem;
 
 /**
@@ -35,9 +32,8 @@ public class RobotContainer {
     // A set of choosers for autonomous patterns
     private final SendableChooser<AutoPattern> autoPatternChooser = new SendableChooser<>();
 
-    // The driver's controller
-    private final GameController               driverController   = new GameController(
-        OiConstants.DRIVER_CONTROLLER_PORT, OiConstants.GAME_CONTROLLER_STICK_DEADBAND);
+    // The operator input class
+    private final OperatorInput                operatorInput      = new OperatorInput();
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -46,13 +42,16 @@ public class RobotContainer {
 
         // Initialize all Subsystem default commands.
         driveSubsystem
-            .setDefaultCommand(new DefaultDriveCommand(driverController, driveSubsystem, driveModeChooser));
+            .setDefaultCommand(
+                new DefaultDriveCommand(
+                    operatorInput.driverController, driveModeChooser,
+                    driveSubsystem));
 
         // Initialize the autonomous choosers
         initAutoSelectors();
 
         // Configure the button bindings
-        configureButtonBindings();
+        operatorInput.configureButtonBindings(driveSubsystem);
     }
 
     private void initAutoSelectors() {
@@ -68,15 +67,6 @@ public class RobotContainer {
         autoPatternChooser.addOption("Drive Forward", AutoPattern.DRIVE_FORWARD);
     }
 
-
-    /**
-     * Use this method to define your button->command mappings. Buttons can be
-     * created by instantiating a {@link GenericHID} or one of its subclasses
-     * ({@link edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then
-     * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
-     */
-    private void configureButtonBindings() {
-    }
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.

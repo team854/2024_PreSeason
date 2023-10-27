@@ -1,4 +1,4 @@
-package frc.robot.commands.operator;
+package frc.robot.operatorInput;
 
 import edu.wpi.first.wpilibj.XboxController;
 

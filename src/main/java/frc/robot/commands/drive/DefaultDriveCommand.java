@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.Constants.DriveConstants.DriveMode;
 import frc.robot.commands.LoggingCommandBase;
-import frc.robot.commands.operator.GameController;
+import frc.robot.operatorInput.GameController;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class DefaultDriveCommand extends LoggingCommandBase {
@@ -18,12 +18,12 @@ public class DefaultDriveCommand extends LoggingCommandBase {
      *
      * @param driveSubsystem The subsystem used by this command.
      */
-    public DefaultDriveCommand(GameController driverController, DriveSubsystem driveSubsystem,
-        SendableChooser<DriveMode> driveModeChooser) {
+    public DefaultDriveCommand(GameController driverController, SendableChooser<DriveMode> driveModeChooser,
+        DriveSubsystem driveSubsystem) {
 
         this.driverController = driverController;
-        this.driveSubsystem   = driveSubsystem;
         this.driveModeChooser = driveModeChooser;
+        this.driveSubsystem   = driveSubsystem;
 
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(driveSubsystem);
