@@ -32,8 +32,8 @@ public class AutonomousCommand extends SequentialCommandGroup {
 
         StringBuilder sb = new StringBuilder();
         sb.append("Auto Selections");
-        sb.append("\n   Auto Pattern  :").append(autoPattern);
-        sb.append("\nAlliance                     :").append(alliance);
+        sb.append("\n   Auto Pattern  : ").append(autoPattern);
+        sb.append("\n   Alliance      : ").append(alliance);
 
         System.out.println(sb.toString());
 

@@ -1,6 +1,6 @@
 package frc.robot.commands;
 
-import frc.robot.operatorInput.OperatorInput;
+import frc.robot.operator.OperatorInput;
 import frc.robot.subsystems.DriveSubsystem;
 
 /**
@@ -16,8 +16,7 @@ public class CancelCommand extends LoggingCommandBase {
      * Cancel the commands running on all subsystems.
      *
      * All subsystems must be passed to this command, and each subsystem should have a stop command
-     * that safely stops the robot
-     * from moving.
+     * that safely stops the robot from moving.
      */
     public CancelCommand(OperatorInput operatorInput, DriveSubsystem driveSubsystem) {
 
@@ -40,23 +39,39 @@ public class CancelCommand extends LoggingCommandBase {
 
         logCommandStart();
 
-        driveSubsystem.stop();
+        stopAll();
     }
 
     @Override
     public void execute() {
-        driveSubsystem.stop();
+        stopAll();
     }
 
     @Override
     public boolean isFinished() {
 
-        // Only end if the cancel button is released
+        // The cancel command has a minimum timeout of .5 seconds
+        if (!isTimeoutExceeded(.5)) {
+            return false;
+        }
+
+        // Only end once the cancel button is released after .5 seconds has elapsed
         if (!operatorInput.isCancel()) {
+            setFinishReason("Cancel button released");
             return true;
         }
 
         return false;
     }
 
+    @Override
+    public void end(boolean interrupted) {
+        logCommandEnd(interrupted);
+    }
+
+    private void stopAll() {
+
+        // Stop all of the robot movement
+        driveSubsystem.stop();
+    }
 }

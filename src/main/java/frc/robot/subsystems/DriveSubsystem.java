@@ -5,7 +5,6 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
@@ -20,8 +19,7 @@ public class DriveSubsystem extends SubsystemBase {
     private final TalonSRX      rightPrimaryMotor        = new TalonSRX(DriveConstants.RIGHT_MOTOR_PORT);
     private final TalonSRX      rightFollowerMotor       = new TalonSRX(DriveConstants.RIGHT_MOTOR_PORT + 1);
 
-    private final DigitalInput  targetSensor             = new DigitalInput(0);
-
+    // Ultrasonic sensor
     // Conversion from volts to distance in cm
     // Volts distance
     // 0.12 30.5 cm
@@ -31,7 +29,7 @@ public class DriveSubsystem extends SubsystemBase {
     private static final double ULTRASONIC_M             = (609.6 - 30.5) / (2.245 - .12);
     private static final double ULTRASONIC_B             = 609.6 - ULTRASONIC_M * 2.245;
 
-
+    // Motor speeds
     private double              leftSpeed                = 0;
     private double              rightSpeed               = 0;
 
@@ -64,6 +62,7 @@ public class DriveSubsystem extends SubsystemBase {
 
         double ultrasonicVoltage = ultrasonicDistanceSensor.getVoltage();
 
+        // Use a straight line y = mx + b equation to convert voltage into cm.
         double distanceCm        = ULTRASONIC_M * ultrasonicVoltage + ULTRASONIC_B;
 
         return Math.round(distanceCm);
@@ -83,8 +82,7 @@ public class DriveSubsystem extends SubsystemBase {
         leftPrimaryMotor.set(ControlMode.PercentOutput, leftSpeed);
         rightPrimaryMotor.set(ControlMode.PercentOutput, rightSpeed);
 
-        // NOTE: The follower motors are set to follow the primary
-        // motors
+        // NOTE: The follower motors are set to follow the primary motors
     }
 
     /** Safely stop the subsystem from moving */
@@ -92,28 +90,30 @@ public class DriveSubsystem extends SubsystemBase {
         setMotorSpeeds(0, 0);
     }
 
-    public boolean isTargetDetected() {
-        return !targetSensor.get();
-    }
-
     @Override
     public void periodic() {
 
+        /*
+         * Update all dashboard values in the periodic routine
+         */
         SmartDashboard.putNumber("Right Motor", rightSpeed);
         SmartDashboard.putNumber("Left  Motor", leftSpeed);
 
-        SmartDashboard.putNumber("Ultrasonic Voltage", ultrasonicDistanceSensor.getVoltage());
+        // Round the ultrasonic voltage to 2 decimals
+        SmartDashboard.putNumber("Ultrasonic Voltage",
+            Math.round(ultrasonicDistanceSensor.getVoltage() * 100.0d) / 100.0d);
         SmartDashboard.putNumber("Ultrasonic Distance (cm)", getUltrasonicDistanceCm());
     }
 
     @Override
     public String toString() {
 
+        // Create an appropriate text readable string describing the state of the subsystem
         StringBuilder sb = new StringBuilder();
 
         sb.append(this.getClass().getSimpleName())
-            .append(" [").append(leftSpeed)
-            .append(',').append(rightSpeed).append(']')
+            .append(" [").append(Math.round(leftSpeed * 100.0d) / 100.0d)
+            .append(',').append(Math.round(rightSpeed * 100.0d) / 100.0d).append(']')
             .append(" ultrasonic dist ").append(getUltrasonicDistanceCm());
 
         return sb.toString();

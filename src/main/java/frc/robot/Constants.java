@@ -49,7 +49,7 @@ public final class Constants {
 
     }
 
-    public static final class OiConstants {
+    public static final class OperatorConstants {
 
         public static final int    DRIVER_CONTROLLER_PORT         = 0;
         public static final double GAME_CONTROLLER_STICK_DEADBAND = 0.2;

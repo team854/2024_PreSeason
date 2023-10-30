@@ -1,4 +1,4 @@
-package frc.robot.operatorInput;
+package frc.robot.operator;
 
 import edu.wpi.first.wpilibj.XboxController;
 
@@ -85,7 +85,8 @@ public class GameController extends XboxController {
             axisValue *= -1.0;
         }
 
-        return axisValue;
+        // Round the value to 2 decimal places
+        return Math.round(axisValue * 100) / 100.0d;
     }
 
     /**
@@ -118,10 +119,39 @@ public class GameController extends XboxController {
 
     /**
      * Get the raw hardware axis value (unmodified by the deadband)
+     * <p>
+     * This method could be used to debug potential hardware issues.
      *
      * @param axis see {@link XboxController.Axis} for list of axis constants
      */
     public double getHardwareAxisValue(int axis) {
         return super.getRawAxis(axis);
+    }
+
+    @Override
+    public String toString() {
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append('(').append(getLeftX()).append(',').append(getLeftY()).append(") ")
+            .append('(').append(getRightX()).append(',').append(getRightY()).append(") ")
+            .append("T(").append(getRightTriggerAxis()).append(',').append(getLeftTriggerAxis()).append(")");
+
+        sb.append(getAButton() ? " A" : "");
+        sb.append(getBButton() ? " B" : "");
+        sb.append(getXButton() ? " X" : "");
+        sb.append(getYButton() ? " Y" : "");
+
+        sb.append(getLeftBumper() ? " Lb" : "");
+        sb.append(getRightBumper() ? " Rb" : "");
+
+        sb.append(getStartButton() ? " Start" : "");
+        sb.append(getBackButton() ? " Back" : "");
+
+        if (getPOV() >= 0) {
+            sb.append("POV(").append(getPOV()).append('0');
+        }
+
+        return sb.toString();
     }
 }

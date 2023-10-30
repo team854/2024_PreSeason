@@ -11,7 +11,7 @@ import frc.robot.Constants.AutoConstants.AutoPattern;
 import frc.robot.Constants.DriveConstants.DriveMode;
 import frc.robot.commands.auto.AutonomousCommand;
 import frc.robot.commands.drive.DefaultDriveCommand;
-import frc.robot.operatorInput.OperatorInput;
+import frc.robot.operator.OperatorInput;
 import frc.robot.subsystems.DriveSubsystem;
 
 /**
@@ -23,17 +23,15 @@ import frc.robot.subsystems.DriveSubsystem;
  */
 public class RobotContainer {
 
+    // The operator input class
+    private final OperatorInput                operatorInput      = new OperatorInput();
+
     // The robot's subsystems and commands are defined here...
     private final DriveSubsystem               driveSubsystem     = new DriveSubsystem();
 
-    // Drive mode chooser
+    // All dashboard choosers are defined here...
     private final SendableChooser<DriveMode>   driveModeChooser   = new SendableChooser<>();
-
-    // A set of choosers for autonomous patterns
     private final SendableChooser<AutoPattern> autoPatternChooser = new SendableChooser<>();
-
-    // The operator input class
-    private final OperatorInput                operatorInput      = new OperatorInput();
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -41,32 +39,29 @@ public class RobotContainer {
     public RobotContainer() {
 
         // Initialize all Subsystem default commands.
-        driveSubsystem
-            .setDefaultCommand(
-                new DefaultDriveCommand(
-                    operatorInput.driverController, driveModeChooser,
-                    driveSubsystem));
+        driveSubsystem.setDefaultCommand(
+            new DefaultDriveCommand(
+                operatorInput.driverController, driveModeChooser,
+                driveSubsystem));
 
-        // Initialize the autonomous choosers
-        initAutoSelectors();
+        // Initialize the dashboard choosers
+        initDashboardChoosers();
 
         // Configure the button bindings
         operatorInput.configureButtonBindings(driveSubsystem);
     }
 
-    private void initAutoSelectors() {
+    private void initDashboardChoosers() {
 
         driveModeChooser.setDefaultOption("Tank", DriveMode.TANK);
         SmartDashboard.putData("Drive Mode", driveModeChooser);
         driveModeChooser.addOption("Dual Stick Arcade", DriveMode.DUAL_STICK_ARCADE);
         driveModeChooser.addOption("Single Stick Arcade", DriveMode.SINGLE_STICK_ARCADE);
 
-
         autoPatternChooser.setDefaultOption("Do Nothing", AutoPattern.DO_NOTHING);
         SmartDashboard.putData("Auto Pattern", autoPatternChooser);
         autoPatternChooser.addOption("Drive Forward", AutoPattern.DRIVE_FORWARD);
     }
-
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -75,7 +70,7 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
 
-        // FIXME pass in all of the choosers to an appropriate auto command.
+        // Pass in all of the subsystems and all of the choosers to the auto command.
         return new AutonomousCommand(
             driveSubsystem,
             autoPatternChooser);

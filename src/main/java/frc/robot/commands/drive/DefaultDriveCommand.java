@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.Constants.DriveConstants.DriveMode;
 import frc.robot.commands.LoggingCommandBase;
-import frc.robot.operatorInput.GameController;
+import frc.robot.operator.GameController;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class DefaultDriveCommand extends LoggingCommandBase {
@@ -71,6 +71,7 @@ public class DefaultDriveCommand extends LoggingCommandBase {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
+        // The default drive command never ends, but can be interrupted by other commands.
         return false;
     }
 
