@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -13,11 +14,11 @@ public class DriveSubsystem extends SubsystemBase {
 
     // The motors on the left side of the drive.
     private final TalonSRX      leftPrimaryMotor         = new TalonSRX(DriveConstants.LEFT_MOTOR_PORT);
-    private final TalonSRX      leftFollowerMotor        = new TalonSRX(DriveConstants.LEFT_MOTOR_PORT + 1);
+    private final VictorSPX     leftFollowerMotor        = new VictorSPX(DriveConstants.LEFT_MOTOR_PORT + 1);
 
     // The motors on the right side of the drive.
-    private final TalonSRX      rightPrimaryMotor        = new TalonSRX(DriveConstants.RIGHT_MOTOR_PORT);
-    private final TalonSRX      rightFollowerMotor       = new TalonSRX(DriveConstants.RIGHT_MOTOR_PORT + 1);
+    private final VictorSPX     rightPrimaryMotor        = new VictorSPX(DriveConstants.RIGHT_MOTOR_PORT);
+    private final VictorSPX     rightFollowerMotor       = new VictorSPX(DriveConstants.RIGHT_MOTOR_PORT + 1);
 
     // Ultrasonic sensor
     // Conversion from volts to distance in cm

@@ -57,11 +57,11 @@ public class DefaultDriveCommand extends LoggingCommandBase {
         default:
 
             if (boost) {
-                driveSubsystem.setMotorSpeeds(driverController.getLeftX(), driverController.getRightY());
+                driveSubsystem.setMotorSpeeds(driverController.getLeftY(), driverController.getRightY());
             }
             else {
                 // If not in boost mode, then divide the motors speeds in half
-                driveSubsystem.setMotorSpeeds(driverController.getLeftX() / 2.0, driverController.getRightY() / 2.0);
+                driveSubsystem.setMotorSpeeds(driverController.getLeftY() / 2.0, driverController.getRightY() / 2.0);
             }
             break;
         }
