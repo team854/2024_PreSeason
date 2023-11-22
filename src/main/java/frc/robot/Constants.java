@@ -49,6 +49,14 @@ public final class Constants {
 
     }
 
+    public static final class lightConstants {
+
+        public static final int LED_STRIP_ONE_PORT   = 0;
+        public static final int LED_STRIP_ONE_LENGTH = 60;
+
+
+    }
+
     public static final class OperatorConstants {
 
         public static final int    DRIVER_CONTROLLER_PORT         = 0;
