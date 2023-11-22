@@ -8,13 +8,12 @@ package frc.robot;
 import java.util.ArrayList;
 import java.util.List;
 
-// toronto coding collective stuff
-import com.torontocodingcollective.subsystems.TSubsystems;
-
+import edu.wpi.first.networktables.Subscriber;
 // edu.wpi stuff
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 // subsystems
 import frc.robot.subsystems.DriveSubsystem;
 
@@ -27,7 +26,7 @@ import frc.robot.subsystems.DriveSubsystem;
  */
 public class Robot extends TimedRobot {
 
-    public static final List<TSubsystems> subsystemLs    = new ArrayList<TSubsystems>();
+    public static final List<SubsystemBase> subsystemLs    = new ArrayList<SubsystemBase>();
 
     public static final DriveSubsystem    driveSubsystem = new DriveSubsystem();
 
@@ -136,8 +135,8 @@ public class Robot extends TimedRobot {
     private void updatePeriodic() {
 
         // cycles through very subsystem's periodic methods
-        for (TSubsystem subsystem : subsystemLs) {
-            subsystem.updatePeriodic();
+        for (SubsystemBase subsystem : subsystemLs) {
+            subsystem.periodic();
         }
 
     }

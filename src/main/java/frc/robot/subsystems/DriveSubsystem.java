@@ -22,7 +22,6 @@ public class DriveSubsystem extends SubsystemBase {
     private final TalonSRX      rightFollowerMotor       = new TalonSRX(DriveConstants.RIGHT_MOTOR_PORT + 1);
 
     // The gyro sensor
-    // FIXME I think we are going to add the gyro to the MXP expansion port, not the serial port
     private final AHRS          gyroSensorAhrs           = new AHRS(SerialPort.Port.kUSB1);
 
     // Ultrasonic sensor
@@ -130,16 +129,14 @@ public class DriveSubsystem extends SubsystemBase {
 
     }
 
-    // returns the yaw
-    // FIXME What does Real mean?
-    // Maybe this should return a compass heading instead of the yaw value.
-    // Instead of measurements like -185, it might be better to have that show in
-    // the range of 0-360 degrees. As the robot spins, the counter keeps going up (or down)
-    // so you can end up with raw angles of -745deg (which is not particularly human readable).
-    // Try to round the compass heading to .1 deg increments - we do not need a compass heading
-    // with 4 decimal places.
-    public float getYawReal() {
-        return gyroSensorAhrs.getYaw();
+    // returns the yaw, rounded to 1 decimal place
+    // retuens in degrees from 0-360
+    public double getYaw() {
+        double yawAngle = (Math.round(gyroSensorAhrs.getYaw() * 10) / 10) % 360;
+        if (yawAngle < 0) {
+            yawAngle += 360;
+        }
+        return yawAngle;
     }
 
 }
