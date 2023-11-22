@@ -15,6 +15,14 @@ import frc.robot.subsystems.DriveSubsystem;
  */
 public class OperatorInput extends SubsystemBase {
 
+    public enum Stick {
+        LEFT, RIGHT
+    }
+
+    public enum Axis {
+        X, Y
+    }
+
     public final GameController driverController = new GameController(
         OperatorConstants.DRIVER_CONTROLLER_PORT,
         OperatorConstants.GAME_CONTROLLER_STICK_DEADBAND);
@@ -35,6 +43,32 @@ public class OperatorInput extends SubsystemBase {
         return driverController.getStartButton();
     }
 
+    public double getDriverControllerAxis(Stick stick, Axis axis) {
+
+        switch (stick) {
+
+        case LEFT:
+            switch (axis) {
+            case X:
+                return driverController.getLeftX();
+            case Y:
+                return driverController.getLeftY();
+            }
+            break;
+
+        case RIGHT:
+            switch (axis) {
+            case X:
+                return driverController.getRightX();
+            case Y:
+                return driverController.getRightY();
+            }
+            break;
+        }
+
+        return 0;
+    }
+
     /**
      * Use this method to define your robotFunction -> command mappings.
      *
@@ -44,6 +78,8 @@ public class OperatorInput extends SubsystemBase {
 
         new Trigger(() -> isCancel())
             .onTrue(new CancelCommand(this, driveSubsystem));
+
+        new Trigger(() -> getDriverControllerAxis(Stick stick, Axis axis))
 
     }
 

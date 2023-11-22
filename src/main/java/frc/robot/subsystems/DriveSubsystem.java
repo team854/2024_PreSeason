@@ -129,9 +129,14 @@ public class DriveSubsystem extends SubsystemBase {
 
     }
 
-    // returns the yaw
-    public float getYawReal() {
-        return gyroSensorAhrs.getYaw();
+    // returns the yaw, rounded to 1 decimal place
+    // retuens in degrees from 0-360
+    public double getYaw() {
+        double yawAngle = (Math.round(gyroSensorAhrs.getYaw() * 10) / 10) % 360;
+        if (yawAngle < 0) {
+            yawAngle += 360;
+        }
+        return yawAngle;
     }
 
 }
