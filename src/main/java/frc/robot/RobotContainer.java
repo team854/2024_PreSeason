@@ -38,14 +38,12 @@ public class RobotContainer {
      */
     public RobotContainer() {
 
-        // Initialize all Subsystem default commands.
-        driveSubsystem.setDefaultCommand(
-            new DefaultDriveCommand(
-                operatorInput.driverController, driveModeChooser,
-                driveSubsystem));
-
         // Initialize the dashboard choosers
         initDashboardChoosers();
+
+        // Initialize all Subsystem default commands.
+        driveSubsystem.setDefaultCommand(
+            new DefaultDriveCommand(operatorInput, driveModeChooser, driveSubsystem));
 
         // Configure the button bindings
         operatorInput.configureButtonBindings(driveSubsystem);

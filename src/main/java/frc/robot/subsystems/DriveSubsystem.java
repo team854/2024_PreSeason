@@ -110,7 +110,7 @@ public class DriveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Ultrasonic Distance (cm)", getUltrasonicDistanceCm());
 
         // Gets the yaw from the gyro sensor
-        SmartDashboard.putNumber("Gyro Yaw", getYawReal());
+        SmartDashboard.putNumber("Gyro Yaw", getYaw());
 
     }
 

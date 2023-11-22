@@ -3,9 +3,11 @@ package frc.robot.operator;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.DriveConstants.DriveMode;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.CancelCommand;
 import frc.robot.subsystems.DriveSubsystem;
+
 
 /**
  * The Operator input class is used to map buttons to functions and functions to commands
@@ -43,6 +45,10 @@ public class OperatorInput extends SubsystemBase {
         return driverController.getStartButton();
     }
 
+    public boolean getBoost() {
+        return driverController.getRightBumper();
+    }
+
     public double getDriverControllerAxis(Stick stick, Axis axis) {
 
         switch (stick) {
@@ -69,6 +75,38 @@ public class OperatorInput extends SubsystemBase {
         return 0;
     }
 
+    public double getSpeed(DriveMode driveMode) {
+
+        return getDriverControllerAxis(Stick.LEFT, Axis.Y);
+    }
+
+    public double getTurn(DriveMode driveMode) {
+
+        double turn = 0;
+
+        switch (driveMode) {
+
+        case SINGLE_STICK_ARCADE:
+            turn = getDriverControllerAxis(Stick.LEFT, Axis.X);
+            break;
+
+        case DUAL_STICK_ARCADE:
+        default:
+            turn = getDriverControllerAxis(Stick.RIGHT, Axis.X);
+            break;
+        }
+
+        return turn;
+    }
+
+    public double getLeftSpeed() {
+        return getDriverControllerAxis(Stick.LEFT, Axis.Y);
+    }
+
+    public double getRightSpeed() {
+        return getDriverControllerAxis(Stick.RIGHT, Axis.Y);
+    }
+
     /**
      * Use this method to define your robotFunction -> command mappings.
      *
@@ -78,8 +116,6 @@ public class OperatorInput extends SubsystemBase {
 
         new Trigger(() -> isCancel())
             .onTrue(new CancelCommand(this, driveSubsystem));
-
-        new Trigger(() -> getDriverControllerAxis(Stick stick, Axis axis))
 
     }
 
