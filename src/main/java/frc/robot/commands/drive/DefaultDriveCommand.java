@@ -1,16 +1,15 @@
 package frc.robot.commands.drive;
 
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.Constants.DriveConstants.DriveMode;
 import frc.robot.commands.LoggingCommandBase;
-import frc.robot.operator.GameController;
+import frc.robot.operator.OperatorInput;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class DefaultDriveCommand extends LoggingCommandBase {
 
     private final DriveSubsystem             driveSubsystem;
-    private final XboxController             driverController;
+    private final OperatorInput              operatorInput;
     private final SendableChooser<DriveMode> driveModeChooser;
 
     /**
@@ -18,10 +17,10 @@ public class DefaultDriveCommand extends LoggingCommandBase {
      *
      * @param driveSubsystem The subsystem used by this command.
      */
-    public DefaultDriveCommand(GameController driverController, SendableChooser<DriveMode> driveModeChooser,
+    public DefaultDriveCommand(OperatorInput operatorInput, SendableChooser<DriveMode> driveModeChooser,
         DriveSubsystem driveSubsystem) {
 
-        this.driverController = driverController;
+        this.operatorInput    = operatorInput;
         this.driveModeChooser = driveModeChooser;
         this.driveSubsystem   = driveSubsystem;
 
@@ -41,27 +40,30 @@ public class DefaultDriveCommand extends LoggingCommandBase {
 
         DriveMode driveMode = driveModeChooser.getSelected();
 
-        boolean   boost     = driverController.getRightBumper();
+        boolean   boost     = operatorInput.getBoost();
 
         switch (driveMode) {
 
-        case DUAL_STICK_ARCADE:
-            setMotorSpeedsArcade(driverController.getLeftY(), driverController.getRightX(), boost);
-            break;
-
         case SINGLE_STICK_ARCADE:
-            setMotorSpeedsArcade(driverController.getLeftY(), driverController.getLeftX(), boost);
+            // DNE
+        case DUAL_STICK_ARCADE:
+
+            double speed = operatorInput.getSpeed(driveMode);
+            double turn = operatorInput.getTurn(driveMode);
+            setMotorSpeedsArcade(speed, turn, boost);
             break;
 
         case TANK:
         default:
 
+            double leftSpeed = operatorInput.getLeftSpeed();
+            double rightSpeed = operatorInput.getRightSpeed();
             if (boost) {
-                driveSubsystem.setMotorSpeeds(driverController.getLeftY(), driverController.getRightY());
+                driveSubsystem.setMotorSpeeds(leftSpeed, rightSpeed);
             }
             else {
                 // If not in boost mode, then divide the motors speeds in half
-                driveSubsystem.setMotorSpeeds(driverController.getLeftY() / 2.0, driverController.getRightY() / 2.0);
+                driveSubsystem.setMotorSpeeds(leftSpeed / 2.0, rightSpeed / 2.0);
             }
             break;
         }
