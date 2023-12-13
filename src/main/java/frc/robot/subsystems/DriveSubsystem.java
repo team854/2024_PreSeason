@@ -13,12 +13,12 @@ import frc.robot.Constants.DriveConstants;
 public class DriveSubsystem extends SubsystemBase {
 
     // The motors on the left side of the drive.
-    private final TalonSRX      leftPrimaryMotor         = new TalonSRX(DriveConstants.LEFT_MOTOR_PORT);
-    private final VictorSPX     leftFollowerMotor        = new VictorSPX(DriveConstants.LEFT_MOTOR_PORT + 1);
+    private final VictorSPX     leftPrimaryMotor         = new VictorSPX(DriveConstants.LEFT_MOTOR_PORT);
+    private final TalonSRX      leftFollowerMotor        = new TalonSRX(DriveConstants.LEFT_MOTOR_PORT + 1);
 
     // The motors on the right side of the drive.
     private final VictorSPX     rightPrimaryMotor        = new VictorSPX(DriveConstants.RIGHT_MOTOR_PORT);
-    private final VictorSPX     rightFollowerMotor       = new VictorSPX(DriveConstants.RIGHT_MOTOR_PORT + 1);
+    private final TalonSRX      rightFollowerMotor       = new TalonSRX(DriveConstants.RIGHT_MOTOR_PORT + 1);
 
     // Ultrasonic sensor
     // Conversion from volts to distance in cm
