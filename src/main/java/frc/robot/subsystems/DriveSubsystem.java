@@ -65,6 +65,25 @@ public class DriveSubsystem extends SubsystemBase {
 
     }
 
+    // Encoders
+    public double getAverageEncoderCounts() {
+        return (leftFollowerMotor.getSelectedSensorPosition(0) + rightFollowerMotor.getSelectedSensorPosition(0)) / 2;
+    }
+
+    public double getDistanceCm() {
+        return getAverageEncoderCounts() * DriveConstants.CMS_PER_ENCODER_COUNT;
+    }
+
+    public double getLeftEncoder() {
+        return leftFollowerMotor.getSelectedSensorPosition(0);
+    }
+
+    public double getRightEncoder() {
+        return rightFollowerMotor.getSelectedSensorPosition(0);
+    }
+
+
+
     public double getUltrasonicDistanceCm() {
 
         double ultrasonicVoltage = ultrasonicDistanceSensor.getVoltage();
@@ -105,6 +124,12 @@ public class DriveSubsystem extends SubsystemBase {
          */
         SmartDashboard.putNumber("Right Motor", rightSpeed);
         SmartDashboard.putNumber("Left  Motor", leftSpeed);
+
+        // Update Encoder
+        SmartDashboard.putNumber("Left Encoder", Math.round(getLeftEncoder() * 100) / 100d);
+        SmartDashboard.putNumber("Right Encoder", Math.round(getRightEncoder() * 100) / 100d);
+        SmartDashboard.putNumber("Average Encoder", Math.round(getAverageEncoderCounts() * 100) / 100d);
+        SmartDashboard.putNumber("Distance (cm)", Math.round(getDistanceCm() * 10) / 10d);
 
         // Round the ultrasonic voltage to 2 decimals
         SmartDashboard.putNumber("Ultrasonic Voltage",
