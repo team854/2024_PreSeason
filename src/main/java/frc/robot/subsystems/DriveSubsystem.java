@@ -131,6 +131,9 @@ public class DriveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Average Encoder", Math.round(getAverageEncoderCounts() * 100) / 100d);
         SmartDashboard.putNumber("Distance (cm)", Math.round(getDistanceCm() * 10) / 10d);
 
+        // Update gyro
+        SmartDashboard.putNumber("yaw", getYaw());
+
         // Round the ultrasonic voltage to 2 decimals
         SmartDashboard.putNumber("Ultrasonic Voltage",
             Math.round(ultrasonicDistanceSensor.getVoltage() * 100.0d) / 100.0d);

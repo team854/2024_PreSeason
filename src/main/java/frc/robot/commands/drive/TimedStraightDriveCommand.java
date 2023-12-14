@@ -12,7 +12,7 @@ public class TimedStraightDriveCommand extends LoggingCommandBase {
     private long           initialTime, currentTime;
     private long           runTime     = 0;
 
-    private double         K_p         = 0;
+    private double         K_p         = 1;
     private double         K_i         = 0;
     private double         K_d         = 0;
 
