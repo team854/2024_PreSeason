@@ -65,6 +65,7 @@ public class AutonomousCommand extends SequentialCommandGroup {
         case DRIVE_FORWARD:
             // Drive forward for 1 second
             addCommands(new TimedDriveCommand(2000, 0.5, 0.5, driveSubsystem));
+        case DRIVE_FORWARD_PID:
         }
     }
 

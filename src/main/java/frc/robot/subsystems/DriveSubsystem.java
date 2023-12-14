@@ -4,8 +4,10 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
@@ -29,6 +31,10 @@ public class DriveSubsystem extends SubsystemBase {
 
     private static final double ULTRASONIC_M             = (609.6 - 30.5) / (2.245 - .12);
     private static final double ULTRASONIC_B             = 609.6 - ULTRASONIC_M * 2.245;
+
+    // The gyro sensor
+    private final AHRS          gyroSensorAhrs           = new AHRS(SerialPort.Port.kUSB1);
+
 
     // Motor speeds
     private double              leftSpeed                = 0;
@@ -118,6 +124,16 @@ public class DriveSubsystem extends SubsystemBase {
             .append(" ultrasonic dist ").append(getUltrasonicDistanceCm());
 
         return sb.toString();
+    }
+
+    // returns the yaw, rounded to 1 decimal place
+    // retuens in degrees from 0-360
+    public double getYaw() {
+        double yawAngle = (Math.round(gyroSensorAhrs.getYaw() * 10) / 10) % 360;
+        if (yawAngle < 0) {
+            yawAngle += 360;
+        }
+        return yawAngle;
     }
 
 }
