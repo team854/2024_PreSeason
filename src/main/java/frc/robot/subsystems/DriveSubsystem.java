@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.AnalogInput;
@@ -14,11 +15,11 @@ import frc.robot.Constants.DriveConstants;
 public class DriveSubsystem extends SubsystemBase {
 
     // The motors on the left side of the drive.
-    private final TalonSRX      leftPrimaryMotor         = new TalonSRX(DriveConstants.LEFT_MOTOR_PORT);
+    private final VictorSPX     leftPrimaryMotor         = new VictorSPX(DriveConstants.LEFT_MOTOR_PORT);
     private final TalonSRX      leftFollowerMotor        = new TalonSRX(DriveConstants.LEFT_MOTOR_PORT + 1);
 
     // The motors on the right side of the drive.
-    private final TalonSRX      rightPrimaryMotor        = new TalonSRX(DriveConstants.RIGHT_MOTOR_PORT);
+    private final VictorSPX     rightPrimaryMotor        = new VictorSPX(DriveConstants.RIGHT_MOTOR_PORT);
     private final TalonSRX      rightFollowerMotor       = new TalonSRX(DriveConstants.RIGHT_MOTOR_PORT + 1);
 
     // The gyro sensor
@@ -63,6 +64,25 @@ public class DriveSubsystem extends SubsystemBase {
 
     }
 
+    // Encoders
+    public double getAverageEncoderCounts() {
+        return (leftFollowerMotor.getSelectedSensorPosition(0) + rightFollowerMotor.getSelectedSensorPosition(0)) / 2;
+    }
+
+    public double getDistanceCm() {
+        return getAverageEncoderCounts() * DriveConstants.CMS_PER_ENCODER_COUNT;
+    }
+
+    public double getLeftEncoder() {
+        return leftFollowerMotor.getSelectedSensorPosition(0);
+    }
+
+    public double getRightEncoder() {
+        return rightFollowerMotor.getSelectedSensorPosition(0);
+    }
+
+
+
     public double getUltrasonicDistanceCm() {
 
         double ultrasonicVoltage = ultrasonicDistanceSensor.getVoltage();
@@ -103,6 +123,15 @@ public class DriveSubsystem extends SubsystemBase {
          */
         SmartDashboard.putNumber("Right Motor", rightSpeed);
         SmartDashboard.putNumber("Left  Motor", leftSpeed);
+
+        // Update Encoder
+        SmartDashboard.putNumber("Left Encoder", Math.round(getLeftEncoder() * 100) / 100d);
+        SmartDashboard.putNumber("Right Encoder", Math.round(getRightEncoder() * 100) / 100d);
+        SmartDashboard.putNumber("Average Encoder", Math.round(getAverageEncoderCounts() * 100) / 100d);
+        SmartDashboard.putNumber("Distance (cm)", Math.round(getDistanceCm() * 10) / 10d);
+
+        // Update gyro
+        SmartDashboard.putNumber("yaw", getYaw());
 
         // Round the ultrasonic voltage to 2 decimals
         SmartDashboard.putNumber("Ultrasonic Voltage",

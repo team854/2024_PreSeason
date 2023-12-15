@@ -6,6 +6,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.AutoConstants.AutoPattern;
+import frc.robot.commands.drive.TimedDriveCommand;
+import frc.robot.commands.drive.TimedStraightDriveCommand;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class AutonomousCommand extends SequentialCommandGroup {
@@ -59,12 +61,17 @@ public class AutonomousCommand extends SequentialCommandGroup {
         switch (autoPattern) {
 
         case DO_NOTHING:
+        default:
             return;
 
         case DRIVE_FORWARD:
-            // What should we put here?
+            // Drive forward for 2 seconds
+            addCommands(new TimedDriveCommand(2000, 0.5, 0.5, driveSubsystem));
+
+        case DRIVE_FORWARD_PID:
             // Drive forward for 1 second
-            // addCommands(new DriveForwardCommand(1, driveSubsystem));
+            addCommands(new TimedStraightDriveCommand(1000, 0.5, 0.5, driveSubsystem));
+
         }
     }
 
