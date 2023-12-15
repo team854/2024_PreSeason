@@ -12,27 +12,19 @@ import frc.robot.subsystems.DriveSubsystem;
 
 public class AutonomousCommand extends SequentialCommandGroup {
 
-    private AutoPattern          autoPattern = AutoPattern.DRIVE_FORWARD_PID;
-
-    private final DriveSubsystem driveSubsystem;
-
-    private Alliance             alliance    = null;
-
     public AutonomousCommand(DriveSubsystem driveSubsystem,
         SendableChooser<AutoPattern> autoPatternChooser) {
-
-        this.driveSubsystem = driveSubsystem;
 
         // Default is to do nothing.
         // If more commands are added, the instant command will end and
         // the next command will be executed.
         addCommands(new InstantCommand());
 
-        autoPattern = autoPatternChooser.getSelected();
+        AutoPattern   autoPattern = autoPatternChooser.getSelected();
 
-        alliance    = DriverStation.getAlliance();
+        Alliance      alliance    = DriverStation.getAlliance();
 
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb          = new StringBuilder();
         sb.append("Auto Selections");
         sb.append("\n   Auto Pattern  : ").append(autoPattern);
         sb.append("\n   Alliance      : ").append(alliance);
