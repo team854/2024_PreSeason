@@ -12,7 +12,7 @@ import frc.robot.subsystems.DriveSubsystem;
 
 public class AutonomousCommand extends SequentialCommandGroup {
 
-    private AutoPattern          autoPattern = null;
+    private AutoPattern          autoPattern = AutoPattern.DRIVE_FORWARD_PID;
 
     private final DriveSubsystem driveSubsystem;
 
