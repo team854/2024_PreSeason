@@ -17,8 +17,8 @@ public class TimedDriveCommand extends LoggingCommandBase {
 
         /*
          * RM: I like the idea of the brake at end.
-         * FIXME
-         * The breakAtEnd should be a parameter passed into the command on the constructor.
+         * FIXME breakAtEnd should be a parameter
+         * passed into the command on the constructor.
          *
          * If this command returns control to the DefaultDriveCommand (ie. if there is no next
          * command), then the robot will brake at that point unless the driver is manipulating the
@@ -40,7 +40,7 @@ public class TimedDriveCommand extends LoggingCommandBase {
          * RM: This is not really required if you use the corresponding feature in the
          * super().
          *
-         * FIXME
+         * FIXME Log command start
          * You should always log the command start so that it appears in the logs, ideally with
          * all of the parameters that were passed in.
          *
@@ -85,8 +85,8 @@ public class TimedDriveCommand extends LoggingCommandBase {
         runTime     = currentTime - initialTime;
 
         /*
-         * FIXME
-         * BrakeAtEnd is a separate concept that should be passed in.
+         * RM:
+         * FIXME brakeAtEnd should be a command parm
          */
         brakeAtEnd  = false;
 
@@ -97,7 +97,7 @@ public class TimedDriveCommand extends LoggingCommandBase {
          * Using the calculation of the runTime (in ms) above (which is correct), the code should
          * return true if the time has been exceeded or false otherwise.
          *
-         * FIXME
+         * FIXME conflated brakeAtEnd and isFinished()
          *
          * if (runTime > time) {
          * ...return true;
@@ -121,7 +121,7 @@ public class TimedDriveCommand extends LoggingCommandBase {
     /*
      * RM: This code is incorrect.
      *
-     * FIXME
+     * FIXME Cannot override/change parm name
      * The value passed into the end method is always whether or
      * not the command was interrupted. The value is set by the wpilib framework, and cannot
      * be overridden (to indicated brakeAtEnd). It has nothing to do with the brakeAtEnd, and
@@ -138,7 +138,7 @@ public class TimedDriveCommand extends LoggingCommandBase {
          * NOTE: logging of the command start is required in order for the command end to
          * function correctly
          *
-         * FIXME
+         * FIXME log the command end
          * logCommandEnd(interrupted)
          */
         /*

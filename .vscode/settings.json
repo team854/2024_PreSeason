@@ -43,5 +43,6 @@
     "editor.formatOnType": true,
   },
   "git.allowForcePush": true,
-  "java.jdt.ls.vmargs": "-Xmx1500m -Xms200m -Xlog:disable"
+  "java.jdt.ls.vmargs": "-Xmx1500m -Xms200m -Xlog:disable",
+  "todo-tree.regex.regex": "(//|#|<!--|;|/\\*{1,2}|^\\s*\\*|^|^\\s*(-|\\d+.))\\s*($TAGS)"
 }
