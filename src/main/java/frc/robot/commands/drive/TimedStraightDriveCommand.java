@@ -61,7 +61,7 @@ public class TimedStraightDriveCommand extends LoggingCommandBase {
          */
         initialTime = System.currentTimeMillis();
 
-        // FIXME should this variable called initialHeading?
+        // FIXME should the variable errorSignal be called initialHeading?
         errorSignal = driveSubsystem.getYaw();
 
     }
@@ -101,6 +101,11 @@ public class TimedStraightDriveCommand extends LoggingCommandBase {
          * 
          * This code as written adjusts the passed in left and right speed on every loop?
          * HINT: use local variables, not the passed in values
+         * 
+         * HINT: the min/max for the motor speeds are -1.0 to +1.0. Do we want to
+         * rotate at max speed, or is there some maximum rotational speed (max difference between
+         * right and left motor speeds)?
+         * Where should the max rotation speed be governed (here, or in DriveSubsystem)?
          */
         leftSpeed   -= errorSignal;
         rightSpeed  += errorSignal;
