@@ -7,7 +7,6 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
@@ -23,7 +22,7 @@ public class DriveSubsystem extends SubsystemBase {
     private final TalonSRX      rightFollowerMotor       = new TalonSRX(DriveConstants.RIGHT_MOTOR_PORT + 1);
 
     // The gyro sensor
-    private final AHRS          gyroSensorAhrs           = new AHRS(SerialPort.Port.kUSB1);
+    private final AHRS          gyroSensorAhrs           = new AHRS();
 
     // Ultrasonic sensor
     // Conversion from volts to distance in cm
@@ -161,7 +160,7 @@ public class DriveSubsystem extends SubsystemBase {
     // returns the yaw, rounded to 1 decimal place
     // retuens in degrees from 0-360
     public double getYaw() {
-        double yawAngle = (Math.round(gyroSensorAhrs.getYaw() * 10) / 10) % 360;
+        double yawAngle = (Math.round(gyroSensorAhrs.getYaw() * 10) / 10.0d) % 360;
         if (yawAngle < 0) {
             yawAngle += 360;
         }

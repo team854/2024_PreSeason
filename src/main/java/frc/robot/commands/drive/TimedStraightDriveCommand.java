@@ -98,9 +98,9 @@ public class TimedStraightDriveCommand extends LoggingCommandBase {
          * HINT: Start with just a single, simple proportional gain - this should be sufficient for
          * tracking a compass heading
          */
-        pTerm          = DriveConstants.HEADING_PID_KP * errorSignal;
-        iTerm         += DriveConstants.HEADING_PID_KI * errorSignal;
-        dTerm         += DriveConstants.HEADING_PID_KD * diffError;
+        pTerm          = DriveConstants.HEADING_PID_KP * currentError;
+        iTerm         += DriveConstants.HEADING_PID_KI * currentError;
+        dTerm         += DriveConstants.HEADING_PID_KD * currentError;
 
         // FIXME error should be a local variable
         // this code below modifies the initial heading
@@ -117,10 +117,10 @@ public class TimedStraightDriveCommand extends LoggingCommandBase {
          * right and left motor speeds)?
          * Where should the max rotation speed be governed (here, or in DriveSubsystem)?
          */
-        double leftSpeed  = speed - errorSignal;
-        double rightSpeed = speed + errorSignal;
+        double leftSpeed  = Math.min(Math.max(speed - errorSignal, -1.0), 1.0);
+        double rightSpeed = Math.min(Math.max(speed + errorSignal, -1.0), 1.0);
 
-        driveSubsystem.setMotorSpeeds(Math.min(leftSpeed, 1.0), Math.min(rightSpeed, 1.0));
+        driveSubsystem.setMotorSpeeds(leftSpeed, rightSpeed);
 
     }
 
@@ -131,8 +131,8 @@ public class TimedStraightDriveCommand extends LoggingCommandBase {
         // should return true or false - the brakeAtEnd should be passed into the command, see
         // TimedDrive command
 
-        if (isTimeoutExceeded(time)) {
-            setFinishReason(time + " seconds has been exceeded");
+        if (isTimeoutExceeded(time / 1000.0d)) {
+            setFinishReason(time / 1000.0d + " seconds has been exceeded");
             return true;
         }
 
