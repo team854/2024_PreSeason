@@ -1,16 +1,18 @@
 package frc.robot.commands.drive;
 
+import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.LoggingCommandBase;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class TimedStraightDriveCommand extends LoggingCommandBase {
 
     private DriveSubsystem driveSubsystem;
-    private double         time, leftSpeed, rightSpeed;
+    private double         time;
+    private double         speed;
     private boolean        brakeAtEnd;
 
-    private long           initialTime, currentTime;
-    private long           runTime     = 0;
+    // private long initialTime, currentTime;
+    // private long runTime = 0;
 
     /*
      * FIXME: make a constant HEADING_PID_KP in DriveConstants
@@ -20,14 +22,16 @@ public class TimedStraightDriveCommand extends LoggingCommandBase {
      * The units will be %motorOuput/degree. Something in the range of .01 to .05 might be more
      * appropriate.
      */
-    private double         K_p         = 1;
-    private double         K_i         = 0;
-    private double         K_d         = 0;
 
-    private double         errorSignal = 0;
-    private double         pTerm;
-    private double         iTerm;
-    private double         dTerm;
+
+
+    private double errorSignal;
+    private double previousError;
+    private double currentHeading;
+    private double targetHeading;
+    private double pTerm;
+    private double iTerm;
+    private double dTerm;
 
 
     /**
@@ -42,11 +46,13 @@ public class TimedStraightDriveCommand extends LoggingCommandBase {
      * @param rightSpeed
      * @param driveSubsystem
      */
-    public TimedStraightDriveCommand(double time, double leftSpeed, double rightSpeed, DriveSubsystem driveSubsystem) {
+    public TimedStraightDriveCommand(double time, double speed, boolean brakeAtEnd, double targetHeading,
+        DriveSubsystem driveSubsystem) {
         this.time           = time;
-        this.leftSpeed      = leftSpeed;
-        this.rightSpeed     = rightSpeed;
+        this.speed          = speed;
         this.driveSubsystem = driveSubsystem;
+        this.brakeAtEnd     = brakeAtEnd;
+        this.targetHeading  = targetHeading;
 
         addRequirements(driveSubsystem);
     }
@@ -59,10 +65,13 @@ public class TimedStraightDriveCommand extends LoggingCommandBase {
          * FIXME Always log the command start
          * logCommandStart(parms)
          */
-        initialTime = System.currentTimeMillis();
+        String commandParms = "time (ms): " + time + ", speed: " + speed + ", brake: "
+            + brakeAtEnd + ", target heading (deg): " + targetHeading;
+
+        logCommandStart(commandParms);
 
         // FIXME should the variable errorSignal be called initialHeading?
-        errorSignal = driveSubsystem.getYaw();
+        currentHeading = driveSubsystem.getYaw();
 
     }
 
@@ -79,8 +88,9 @@ public class TimedStraightDriveCommand extends LoggingCommandBase {
          * that can pass back a heading error to any command that may need that information.
          */
         // executes every 20ms
-        double currentError = driveSubsystem.getYaw();
-        double diffError    = currentError - errorSignal;
+        double currentError = driveSubsystem.getHeadingError(targetHeading);
+        double diffError    = currentError - previousError;
+        previousError  = currentError;
 
         /*
          * FIXME start with a simple proportional gain
@@ -88,13 +98,13 @@ public class TimedStraightDriveCommand extends LoggingCommandBase {
          * HINT: Start with just a single, simple proportional gain - this should be sufficient for
          * tracking a compass heading
          */
-        pTerm        = K_p * errorSignal;
-        iTerm       += K_i * errorSignal;
-        dTerm       += K_d * diffError;
+        pTerm          = DriveConstants.HEADING_PID_KP * errorSignal;
+        iTerm         += DriveConstants.HEADING_PID_KI * errorSignal;
+        dTerm         += DriveConstants.HEADING_PID_KD * diffError;
 
         // FIXME error should be a local variable
         // this code below modifies the initial heading
-        errorSignal  = pTerm + iTerm + dTerm;
+        errorSignal    = pTerm + iTerm + dTerm;
 
         /*
          * FIXME calculate motor speeds
@@ -107,10 +117,10 @@ public class TimedStraightDriveCommand extends LoggingCommandBase {
          * right and left motor speeds)?
          * Where should the max rotation speed be governed (here, or in DriveSubsystem)?
          */
-        leftSpeed   -= errorSignal;
-        rightSpeed  += errorSignal;
+        double leftSpeed  = speed - errorSignal;
+        double rightSpeed = speed + errorSignal;
 
-        driveSubsystem.setMotorSpeeds(leftSpeed, rightSpeed);
+        driveSubsystem.setMotorSpeeds(Math.min(leftSpeed, 1.0), Math.min(rightSpeed, 1.0));
 
     }
 
@@ -120,18 +130,13 @@ public class TimedStraightDriveCommand extends LoggingCommandBase {
         // FIXME isFinished()
         // should return true or false - the brakeAtEnd should be passed into the command, see
         // TimedDrive command
-        currentTime = System.currentTimeMillis();
-        runTime     = currentTime - initialTime;
-        brakeAtEnd  = false;
 
-        if (runTime <= time) {
-            brakeAtEnd = false;
-        }
-        else {
-            brakeAtEnd = true;
+        if (isTimeoutExceeded(time)) {
+            setFinishReason(time + " seconds has been exceeded");
+            return true;
         }
 
-        return brakeAtEnd;
+        return false;
 
     }
 
@@ -144,13 +149,16 @@ public class TimedStraightDriveCommand extends LoggingCommandBase {
      * 
      */
     @Override
-    public void end(boolean brakeAtEnd) {
+    public void end(boolean interrupted) {
         // FIXME log the command end
         // logCommandEnd(interrupted)
+
 
         if (brakeAtEnd) {
             driveSubsystem.setMotorSpeeds(0, 0);
         }
+
+        logCommandEnd(interrupted);
     }
 
 }

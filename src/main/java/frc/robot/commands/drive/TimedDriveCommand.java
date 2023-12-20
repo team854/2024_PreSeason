@@ -9,11 +9,12 @@ public class TimedDriveCommand extends LoggingCommandBase {
     private double         time, leftSpeed, rightSpeed;
     private boolean        brakeAtEnd;
 
-    private long           initialTime, currentTime;
-    private long           runTime = 0;
+    // private long initialTime, currentTime;
+    // private long runTime = 0;
 
 
-    public TimedDriveCommand(double time, double leftSpeed, double rightSpeed, DriveSubsystem driveSubsystem) {
+    public TimedDriveCommand(double time, double leftSpeed, double rightSpeed, boolean brakeAtEnd,
+        DriveSubsystem driveSubsystem) {
 
         /*
          * RM: I like the idea of the brake at end.
@@ -29,13 +30,14 @@ public class TimedDriveCommand extends LoggingCommandBase {
         this.leftSpeed      = leftSpeed;
         this.rightSpeed     = rightSpeed;
         this.driveSubsystem = driveSubsystem;
+        this.brakeAtEnd     = brakeAtEnd;
 
         addRequirements(driveSubsystem);
     }
 
     @Override
     public void initialize() {
-
+        super.initialize();
         /*
          * RM: This is not really required if you use the corresponding feature in the
          * super().
@@ -48,7 +50,11 @@ public class TimedDriveCommand extends LoggingCommandBase {
          * passed into this command, maybe something like
          * String commandParms = "x ms, [left, right], brake" <- but with the values filled in
          */
-        initialTime = System.currentTimeMillis();
+        // initialTime = System.currentTimeMillis();
+
+        String commandParms = "time (ms): " + time + ", left speed: " + leftSpeed + ", right speed: " + rightSpeed + ", brake: "
+            + brakeAtEnd;
+        logCommandStart(commandParms);
 
     }
 
@@ -81,14 +87,18 @@ public class TimedDriveCommand extends LoggingCommandBase {
          * }
          */
 
-        currentTime = System.currentTimeMillis();
-        runTime     = currentTime - initialTime;
+        if (isTimeoutExceeded(time / 1000.0d)) {
+            setFinishReason(time / 1000.0d + " seconds has been exceeded");
+            return true;
+        }
+
+        return false;
 
         /*
          * RM:
          * FIXME brakeAtEnd should be a command parm
          */
-        brakeAtEnd  = false;
+
 
         /*
          * RM: This is a bit confusing. It seems like the ideas of brake and isFinished are
@@ -106,14 +116,6 @@ public class TimedDriveCommand extends LoggingCommandBase {
          * return false;
          *
          */
-        if (runTime <= time) {
-            brakeAtEnd = false;
-        }
-        else {
-            brakeAtEnd = true;
-        }
-
-        return brakeAtEnd;
 
     }
 
@@ -131,7 +133,7 @@ public class TimedDriveCommand extends LoggingCommandBase {
      * The method signature should always be:
      * public void end(boolean interrupted)
      */
-    public void end(boolean brakeAtEnd) {
+    public void end(boolean interrupted) {
 
         /*
          * RM: Always log the command end
@@ -144,9 +146,13 @@ public class TimedDriveCommand extends LoggingCommandBase {
         /*
          * RM: If brakeAtEnd is a separate passed in concept, then this code is correct
          */
+
+        logCommandEnd(interrupted);
         if (brakeAtEnd) {
             driveSubsystem.setMotorSpeeds(0, 0);
         }
+
+
     }
 
 }

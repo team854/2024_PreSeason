@@ -168,4 +168,20 @@ public class DriveSubsystem extends SubsystemBase {
         return yawAngle;
     }
 
+    public double getHeadingError(double targetHeading) {
+        double currentHeading = getYaw();
+        double error          = currentHeading - targetHeading;
+
+        // ensures that the error signal is not above 180
+        if (error > 180) {
+            error -= 360;
+        }
+        // ensures that the error signal is not below -180
+        if (error < -180) {
+            error += 360;
+        }
+
+        return error;
+    }
+
 }

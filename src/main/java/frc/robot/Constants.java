@@ -47,6 +47,10 @@ public final class Constants {
             // Assumes the encoders are directly mounted on the wheel shafts
             (ROBOT_WHEEL_DIAMETER_CMS * Math.PI) / ENCODER_COUNTS_PER_REVOLUTION;
 
+        public static final double  HEADING_PID_KP                = 1;
+        public static final double  HEADING_PID_KI                = 0;
+        public static final double  HEADING_PID_KD                = 0;
+
     }
 
     public static final class lightConstants {
