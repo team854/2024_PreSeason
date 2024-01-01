@@ -1,9 +1,9 @@
 package frc.robot.commands.drive;
 
-import frc.robot.commands.LoggingCommandBase;
+import frc.robot.commands.LoggingCommand;
 import frc.robot.subsystems.DriveSubsystem;
 
-public class TurnToHeading extends LoggingCommandBase {
+public class TurnToHeading extends LoggingCommand {
 
     private DriveSubsystem driveSubsystem;
     private double         targetHeading;
@@ -38,10 +38,11 @@ public class TurnToHeading extends LoggingCommandBase {
         currentHeading = driveSubsystem.getYaw();
         degreeDiff     = targetHeading - currentHeading;
 
-        
+
         if ((degreeDiff > 0) && (degreeDiff < 180)) {
             // turn cw
-        } else if ((degreeDiff > 0) && (degreeDiff => 180)) {
+        }
+        else if ((degreeDiff > 0) && (degreeDiff >= 180)) {
             // turn ccw
         }
         // add the rest of them later
@@ -53,6 +54,9 @@ public class TurnToHeading extends LoggingCommandBase {
 
         // executes every 20ms
         degreeDiff = currentHeading - targetHeading;
+
+        // FIXME add isFinished logic
+        return false;
 
     }
 

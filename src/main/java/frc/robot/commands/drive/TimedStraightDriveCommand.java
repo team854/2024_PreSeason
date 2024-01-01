@@ -1,10 +1,10 @@
 package frc.robot.commands.drive;
 
 import frc.robot.Constants.DriveConstants;
-import frc.robot.commands.LoggingCommandBase;
+import frc.robot.commands.LoggingCommand;
 import frc.robot.subsystems.DriveSubsystem;
 
-public class TimedStraightDriveCommand extends LoggingCommandBase {
+public class TimedStraightDriveCommand extends LoggingCommand {
 
     private DriveSubsystem driveSubsystem;
     private double         time;
