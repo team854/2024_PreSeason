@@ -40,12 +40,12 @@ public class TurnToHeading extends LoggingCommand {
 
 
         if ((degreeDiff > 0) && (degreeDiff < 180)) {
-            // turn cw
+            // TODO turn cw
         }
         else if ((degreeDiff > 0) && (degreeDiff >= 180)) {
-            // turn ccw
+            // TODO turn ccw
         }
-        // add the rest of them later
+        // TODO add the rest of them later
 
     }
 
@@ -55,7 +55,7 @@ public class TurnToHeading extends LoggingCommand {
         // executes every 20ms
         degreeDiff = currentHeading - targetHeading;
 
-        // FIXME add isFinished logic
+        // TODO add isFinished logic
         return false;
 
     }
