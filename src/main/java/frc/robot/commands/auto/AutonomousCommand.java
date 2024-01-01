@@ -1,5 +1,7 @@
 package frc.robot.commands.auto;
 
+import java.util.Optional;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -20,14 +22,14 @@ public class AutonomousCommand extends SequentialCommandGroup {
         // the next command will be executed.
         addCommands(new InstantCommand());
 
-        AutoPattern   autoPattern = autoPatternChooser.getSelected();
+        AutoPattern        autoPattern = autoPatternChooser.getSelected();
 
-        Alliance      alliance    = DriverStation.getAlliance();
+        Optional<Alliance> alliance    = DriverStation.getAlliance();
 
-        StringBuilder sb          = new StringBuilder();
+        StringBuilder      sb          = new StringBuilder();
         sb.append("Auto Selections");
         sb.append("\n   Auto Pattern  : ").append(autoPattern);
-        sb.append("\n   Alliance      : ").append(alliance);
+        sb.append("\n   Alliance      : ").append(alliance.orElseGet(() -> null));
 
         System.out.println(sb.toString());
 
@@ -38,12 +40,8 @@ public class AutonomousCommand extends SequentialCommandGroup {
         }
 
         // Print an error if the alliance is not set
-        if (alliance == null) {
+        if (!alliance.isPresent()) {
             System.out.println("*** ERROR **** null Alliance ");
-            return;
-        }
-        else if (alliance == Alliance.Invalid) {
-            System.out.println("*** ERROR *** Invalid alliance");
             return;
         }
 
