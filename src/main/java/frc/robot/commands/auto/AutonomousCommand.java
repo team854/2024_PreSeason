@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.AutoConstants.AutoPattern;
+import frc.robot.commands.drive.MeasuredStraightDriveCommand;
 import frc.robot.commands.drive.TimedDriveCommand;
 import frc.robot.commands.drive.TimedStraightDriveCommand;
 import frc.robot.subsystems.DriveSubsystem;
@@ -61,11 +62,14 @@ public class AutonomousCommand extends SequentialCommandGroup {
             addCommands(new TimedDriveCommand(2000, 0.5, 0.5, true, driveSubsystem));
             break;
 
-        case DRIVE_FORWARD_PID:
-            // Drive forward for 1 second
+        case DRIVE_FORWARD_PID_TIMED:
+            // Drive forward for 30 seconds
             addCommands(new TimedStraightDriveCommand(30000, 0.5, true, 0, driveSubsystem));
             break;
 
+        case DRIVE_FORWARD_PID_MEASURED:
+            // Drive forward for 10 meters
+            addCommands(new MeasuredStraightDriveCommand(1000, 0.5, true, driveSubsystem));
         }
     }
 
