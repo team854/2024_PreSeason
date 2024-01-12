@@ -51,6 +51,8 @@ public final class Constants {
         public static final double  HEADING_PID_KI                = 0;
         public static final double  HEADING_PID_KD                = 0;
 
+        public static final double  HEADING_ERROR_BUFFER          = 0.5;
+
     }
 
     public static final class lightConstants {

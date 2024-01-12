@@ -15,7 +15,6 @@ public class TimedStraightDriveCommand extends LoggingCommandBase {
 
     private double         errorSignal;
     private double         previousError;
-    private double         currentHeading;
     private double         targetHeading;
     private double         pTerm;
     private double         iTerm;
@@ -41,7 +40,6 @@ public class TimedStraightDriveCommand extends LoggingCommandBase {
 
         logCommandStart(commandParms);
 
-        currentHeading = driveSubsystem.getYaw();
 
     }
 
@@ -55,7 +53,7 @@ public class TimedStraightDriveCommand extends LoggingCommandBase {
 
         pTerm          = DriveConstants.HEADING_PID_KP * currentError;
         iTerm         += DriveConstants.HEADING_PID_KI * currentError;
-        dTerm         += DriveConstants.HEADING_PID_KD * currentError;
+        dTerm         += DriveConstants.HEADING_PID_KD * diffError;
 
 
         errorSignal    = pTerm + iTerm + dTerm;
