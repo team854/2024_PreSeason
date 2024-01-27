@@ -1,10 +1,10 @@
 package frc.robot.commands.drive;
 
 import frc.robot.Constants;
-import frc.robot.commands.LoggingCommandBase;
+import frc.robot.commands.LoggingCommand;
 import frc.robot.subsystems.DriveSubsystem;
 
-public class TurnToHeading extends LoggingCommandBase {
+public class TurnToHeading extends LoggingCommand {
 
     private DriveSubsystem driveSubsystem;
     private double         targetHeading;

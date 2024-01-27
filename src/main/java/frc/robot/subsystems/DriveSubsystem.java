@@ -13,33 +13,37 @@ import frc.robot.Constants.DriveConstants;
 
 public class DriveSubsystem extends SubsystemBase {
 
+    private final LightsSubsystem lightsSubsystem;
+
     // The motors on the left side of the drive.
-    private final VictorSPX     leftPrimaryMotor         = new VictorSPX(DriveConstants.LEFT_MOTOR_PORT);
-    private final TalonSRX      leftFollowerMotor        = new TalonSRX(DriveConstants.LEFT_MOTOR_PORT + 1);
+    private final VictorSPX       leftPrimaryMotor         = new VictorSPX(DriveConstants.LEFT_MOTOR_PORT);
+    private final TalonSRX        leftFollowerMotor        = new TalonSRX(DriveConstants.LEFT_MOTOR_PORT + 1);
 
     // The motors on the right side of the drive.
-    private final VictorSPX     rightPrimaryMotor        = new VictorSPX(DriveConstants.RIGHT_MOTOR_PORT);
-    private final TalonSRX      rightFollowerMotor       = new TalonSRX(DriveConstants.RIGHT_MOTOR_PORT + 1);
+    private final VictorSPX       rightPrimaryMotor        = new VictorSPX(DriveConstants.RIGHT_MOTOR_PORT);
+    private final TalonSRX        rightFollowerMotor       = new TalonSRX(DriveConstants.RIGHT_MOTOR_PORT + 1);
 
     // The gyro sensor
-    private final AHRS          gyroSensorAhrs           = new AHRS();
+    private final AHRS            gyroSensorAhrs           = new AHRS();
 
     // Ultrasonic sensor
     // Conversion from volts to distance in cm
     // Volts distance
     // 0.12 30.5 cm
     // 2.245 609.6 cm
-    private final AnalogInput   ultrasonicDistanceSensor = new AnalogInput(0);
+    private final AnalogInput     ultrasonicDistanceSensor = new AnalogInput(0);
 
-    private static final double ULTRASONIC_M             = (609.6 - 30.5) / (2.245 - .12);
-    private static final double ULTRASONIC_B             = 609.6 - ULTRASONIC_M * 2.245;
+    private static final double   ULTRASONIC_M             = (609.6 - 30.5) / (2.245 - .12);
+    private static final double   ULTRASONIC_B             = 609.6 - ULTRASONIC_M * 2.245;
 
     // Motor speeds
-    private double              leftSpeed                = 0;
-    private double              rightSpeed               = 0;
+    private double                leftSpeed                = 0;
+    private double                rightSpeed               = 0;
 
     /** Creates a new DriveSubsystem. */
-    public DriveSubsystem() {
+    public DriveSubsystem(LightsSubsystem lightsSubsystem) {
+
+        this.lightsSubsystem = lightsSubsystem;
 
         // We need to invert one side of the drivetrain so that positive voltages
         // result in both sides moving forward. Depending on how your robot's

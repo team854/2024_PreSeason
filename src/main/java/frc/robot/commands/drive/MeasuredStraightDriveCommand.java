@@ -1,11 +1,11 @@
 package frc.robot.commands.drive;
 
 import frc.robot.Constants.DriveConstants;
-import frc.robot.commands.LoggingCommandBase;
+import frc.robot.commands.LoggingCommand;
 import frc.robot.subsystems.DriveSubsystem;
 
 // This command doesn't perfectly account for encoders being overmeasured because of slight correction turns that the PID needs to make
-public class MeasuredStraightDriveCommand extends LoggingCommandBase {
+public class MeasuredStraightDriveCommand extends LoggingCommand {
 
     private DriveSubsystem driveSubsystem;
     private double         dist;
