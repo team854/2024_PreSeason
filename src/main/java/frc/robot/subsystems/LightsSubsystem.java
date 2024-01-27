@@ -11,16 +11,21 @@ import frc.robot.Constants.LightConstants;
 public class LightsSubsystem extends SubsystemBase {
 
     // define lights
-    private final AddressableLED              ledStrip      = new AddressableLED(LightConstants.LED_STRIP_PWM_PORT);
-    private final AddressableLEDBuffer        ledBuffer     = new AddressableLEDBuffer(LightConstants.LED_STRIP_LENGTH);
+    private final AddressableLED              ledStrip        = new AddressableLED(LightConstants.LED_STRIP_PWM_PORT);
+    private final AddressableLEDBuffer        ledBuffer       = new AddressableLEDBuffer(LightConstants.LED_STRIP_LENGTH);
 
-    private static final AddressableLEDBuffer RSL_OFF       = new AddressableLEDBuffer(LightConstants.LED_STRIP_LENGTH);
-    private static final AddressableLEDBuffer RSL_ON        = new AddressableLEDBuffer(LightConstants.LED_STRIP_LENGTH);
+    private static final AddressableLEDBuffer RSL_OFF         = new AddressableLEDBuffer(LightConstants.LED_STRIP_LENGTH);
+    private static final AddressableLEDBuffer RSL_ON          = new AddressableLEDBuffer(LightConstants.LED_STRIP_LENGTH);
 
-    private static final Color                RSL_COLOR     = Color.kOrange;
+    // Colours
+    private static final Color                RSL_COLOR       = new Color(250, 21, 0);
+    private static final Color                BOOST_COLOR     = new Color(0, 0, 127);
+    private static final Color                NON_BOOST_COLOR = new Color(0, 0, 255);
+    private static final Color                NO_SPEED_COLOR  = new Color(255, 255, 255);
 
-    private int                               rslFlashCount = -1;
-    private boolean                           prevRSLOn     = false;
+
+    private int                               rslFlashCount   = -1;
+    private boolean                           prevRSLOn       = false;
 
     static {
         // Initialize the RSL buffers
@@ -33,7 +38,8 @@ public class LightsSubsystem extends SubsystemBase {
     public LightsSubsystem() {
 
         // Start with all LEDs at a medium grey (not too blinding)
-        setAllLEDs(new Color(60, 60, 60));
+        ledStrip.setLength(LightConstants.LED_STRIP_LENGTH);
+        setAllLEDs(new Color(250, 21, 0));
         ledStrip.start();
     }
 
@@ -91,6 +97,24 @@ public class LightsSubsystem extends SubsystemBase {
         else {
             ledStrip.setData(RSL_OFF);
         }
+    }
+
+    private void ledStick(double leftSpeed, double rightSpeed, boolean boost) {
+
+        if (boost) {
+            
+            if (leftSpeed > 0) {
+            }
+            if else (leftSpeed < 0) {
+            }
+            else {
+                ledBuffer.setLED(14, )
+            }
+
+        } else {
+
+        }
+
     }
 
 
