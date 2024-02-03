@@ -49,6 +49,22 @@ public class OperatorInput extends SubsystemBase {
         return driverController.getRightBumper();
     }
 
+    public double getLeftY() {
+        return driverController.getLeftY();
+    }
+
+    public double getLeftX() {
+        return driverController.getLeftX();
+    }
+
+    public double getRightY() {
+        return driverController.getRightY();
+    }
+
+    public double getRightX() {
+        return driverController.getRightX();
+    }
+
     public double getDriverControllerAxis(Stick stick, Axis axis) {
 
         switch (stick) {
@@ -126,6 +142,24 @@ public class OperatorInput extends SubsystemBase {
         // Display any operator input values on the smart dashboard.
 
         SmartDashboard.putString("Driver Controller", driverController.toString());
-    }
 
+        // Displays the axis and button readings.
+
+        SmartDashboard.putNumber("Left Y", Math.round(100 * getLeftX()) / 100.0);
+        SmartDashboard.putNumber("Left X", Math.round(100 * getLeftX()) / 100.0);
+        SmartDashboard.putNumber("Right Y", Math.round(100 * getRightY()) / 100.0);
+        SmartDashboard.putNumber("Right X", Math.round(100 * getRightX()) / 100.0);
+
+        SmartDashboard.putBoolean("A Button", driverController.getAButton());
+        SmartDashboard.putBoolean("B Button", driverController.getBButton());
+        SmartDashboard.putBoolean("X Button", driverController.getXButton());
+        SmartDashboard.putBoolean("Y Button", driverController.getYButton());
+        SmartDashboard.putBoolean("R1", driverController.getRightBumper());
+        SmartDashboard.putNumber("R2", Math.round(100 * driverController.getRightTriggerAxis()) / 100.0);
+        SmartDashboard.putBoolean("R1", driverController.getLeftBumper());
+        SmartDashboard.putNumber("R1", Math.round(100 * driverController.getLeftTriggerAxis()) / 100.0);
+
+        SmartDashboard.putBoolean("Start Button", driverController.getStartButton());
+        SmartDashboard.putBoolean("Back Button", driverController.getBackButton());
+    }
 }
