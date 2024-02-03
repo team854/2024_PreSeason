@@ -53,7 +53,7 @@ public class RobotContainer {
         // Configure the button bindings
         operatorInput.configureButtonBindings(driveSubsystem);
 
-        // Add a trigger to fla sh the lights when the robot goes from disabled to enabled
+        // Add a trigger to flash the lights when the robot goes from disabled to enabled
         new Trigger(() -> RobotController.isSysActive())
             .onTrue(new InstantCommand(() -> lightsSubsystem.setEnabled()));
     }

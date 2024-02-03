@@ -35,7 +35,7 @@ public class DefaultDriveCommand extends LoggingCommand {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        logCommandStart();
+        logCommandStart("default drive command");
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -46,14 +46,22 @@ public class DefaultDriveCommand extends LoggingCommand {
 
         boolean   boost     = operatorInput.getBoost();
 
+        double    speed;
+        double    turn;
+
         switch (driveMode) {
 
         case SINGLE_STICK_ARCADE:
-            // DNE
+            speed = operatorInput.getSpeed(driveMode);
+            turn = operatorInput.getTurn(driveMode);
+            setMotorSpeedsArcade(speed, turn, boost);
+            break;
+
         case DUAL_STICK_ARCADE:
 
-            double speed = operatorInput.getSpeed(driveMode);
-            double turn = operatorInput.getTurn(driveMode);
+            speed = operatorInput.getSpeed(driveMode);
+            turn = operatorInput.getTurn(driveMode);
+            lightsSubsystem.ledStick(boost, driveMode);
             setMotorSpeedsArcade(speed, turn, boost);
             break;
 
