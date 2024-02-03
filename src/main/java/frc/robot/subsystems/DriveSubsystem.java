@@ -123,7 +123,7 @@ public class DriveSubsystem extends SubsystemBase {
          * Update all dashboard values in the periodic routine
          */
         SmartDashboard.putNumber("Right Motor", rightSpeed);
-        SmartDashboard.putNumber("Left  Motor", leftSpeed);
+        SmartDashboard.putNumber("Left Motor", leftSpeed);
 
         // Update Encoder
         SmartDashboard.putNumber("Left Encoder", Math.round(getLeftEncoder() * 100) / 100d);
