@@ -32,7 +32,7 @@ public class RobotContainer {
 
     // The robot's subsystems and commands are defined here...
     private final LightsSubsystem              lightsSubsystem    = new LightsSubsystem();
-    private final DriveSubsystem               driveSubsystem     = new DriveSubsystem(lightsSubsystem);
+    private final DriveSubsystem               driveSubsystem     = new DriveSubsystem();
 
     // All dashboard choosers are defined here...
     private final SendableChooser<DriveMode>   driveModeChooser   = new SendableChooser<>();
@@ -48,12 +48,12 @@ public class RobotContainer {
 
         // Initialize all Subsystem default commands.
         driveSubsystem.setDefaultCommand(
-            new DefaultDriveCommand(operatorInput, driveModeChooser, driveSubsystem));
+            new DefaultDriveCommand(operatorInput, driveModeChooser, driveSubsystem, lightsSubsystem));
 
         // Configure the button bindings
         operatorInput.configureButtonBindings(driveSubsystem);
 
-        // Add a trigger to flash the lights when the robot goes from disabled to enabled
+        // Add a trigger to fla sh the lights when the robot goes from disabled to enabled
         new Trigger(() -> RobotController.isSysActive())
             .onTrue(new InstantCommand(() -> lightsSubsystem.setEnabled()));
     }

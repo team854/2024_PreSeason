@@ -115,6 +115,7 @@ public class OperatorInput extends SubsystemBase {
     public void configureButtonBindings(DriveSubsystem driveSubsystem) {
 
         new Trigger(() -> isCancel())
+
             .onTrue(new CancelCommand(this, driveSubsystem));
 
     }

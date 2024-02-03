@@ -1,3 +1,4 @@
+
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.AddressableLED;
@@ -5,117 +6,187 @@ import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.DriveConstants.DriveMode;
 import frc.robot.Constants.LightConstants;
+import frc.robot.Constants.OperatorConstants;
+import frc.robot.operator.GameController;
 
 
 public class LightsSubsystem extends SubsystemBase {
 
-    // define lights
-    private final AddressableLED              ledStrip        = new AddressableLED(LightConstants.LED_STRIP_PWM_PORT);
-    private final AddressableLEDBuffer        ledBuffer       = new AddressableLEDBuffer(LightConstants.LED_STRIP_LENGTH);
+   // define lights
+   private final AddressableLED              ledStrip           = new AddressableLED(LightConstants.LED_STRIP_PWM_PORT);
+   private final AddressableLEDBuffer        ledBuffer          = new AddressableLEDBuffer(LightConstants.LED_STRIP_LENGTH);
 
-    private static final AddressableLEDBuffer RSL_OFF         = new AddressableLEDBuffer(LightConstants.LED_STRIP_LENGTH);
-    private static final AddressableLEDBuffer RSL_ON          = new AddressableLEDBuffer(LightConstants.LED_STRIP_LENGTH);
+   private static final AddressableLEDBuffer RSL_OFF            = new AddressableLEDBuffer(LightConstants.LED_STRIP_LENGTH);
+   private static final AddressableLEDBuffer RSL_ON             = new AddressableLEDBuffer(LightConstants.LED_STRIP_LENGTH);
 
-    // Colours
-    private static final Color                RSL_COLOR       = new Color(250, 21, 0);
-    private static final Color                BOOST_COLOR     = new Color(0, 0, 127);
-    private static final Color                NON_BOOST_COLOR = new Color(0, 0, 255);
-    private static final Color                NO_SPEED_COLOR  = new Color(255, 255, 255);
+   // Colours
+   private static final Color                RSL_COLOR          = new Color(250, 21, 0);
+   private static final Color                BOOST_COLOR        = new Color(0, 0, 127);
+   private static final Color                TANK_COLOR         = new Color(0, 255, 0);
+   private static final Color                DUAL_STICK_COLOR   = new Color(0, 255, 255);
+   private static final Color                SINGLE_STICK_COLOR = new Color(255, 255, 0);
+   private static final Color                NON_BOOST_COLOR    = new Color(0, 0, 255);
+   private static final Color                NO_SPEED_COLOR     = new Color(255, 255, 255);
+   private static final Color                NOTHING_COLOR      = new Color(0, 0, 0);
 
 
-    private int                               rslFlashCount   = -1;
-    private boolean                           prevRSLOn       = false;
+   private int                               rslFlashCount      = -1;
+   private boolean                           prevRSLOn          = false;
 
-    static {
-        // Initialize the RSL buffers
-        for (int i = 0; i < LightConstants.LED_STRIP_LENGTH; i++) {
-            RSL_ON.setLED(i, RSL_COLOR);
-            RSL_OFF.setLED(i, Color.kBlack);
-        }
-    }
+   // game controller
+   public final GameController               driverController   = new GameController(
+      OperatorConstants.DRIVER_CONTROLLER_PORT,
+      OperatorConstants.GAME_CONTROLLER_STICK_DEADBAND);
 
-    public LightsSubsystem() {
+   static {
+      // Initialize the RSL buffers
+      for (int i = 0; i < LightConstants.LED_STRIP_LENGTH; i++) {
+         RSL_ON.setLED(i, RSL_COLOR);
+         RSL_OFF.setLED(i, Color.kBlack);
+      }
+   }
 
-        // Start with all LEDs at a medium grey (not too blinding)
-        ledStrip.setLength(LightConstants.LED_STRIP_LENGTH);
-        setAllLEDs(new Color(250, 21, 0));
-        ledStrip.start();
-    }
+   public LightsSubsystem() {
 
-    public void setEnabled() {
+      // Start with all LEDs at a medium grey (not too blinding)
+      ledStrip.setLength(LightConstants.LED_STRIP_LENGTH);
+      setAllLEDs(new Color(250, 21, 0));
+      ledStrip.start();
+   }
 
-        // When the robot is first enabled flash the LEDs with the robot RSL for 5 flashes
-        rslFlashCount = 5;
-    }
+   public void setEnabled() {
 
-    @Override
-    public void periodic() {
+      // When the robot is first enabled flash the LEDs with the robot RSL for 5 flashes
+      rslFlashCount = 5;
+   }
 
-        // Flash all lights in time with the RLS when the robot is first enabled
-        if (rslFlashCount >= 0) {
-            flashRSL();
-        }
-        else {
-            ledStrip.setData(ledBuffer);
-        }
-    }
+   @Override
+   public void periodic() {
 
-    private void clear() {
-        for (int i = 0; i < LightConstants.LED_STRIP_LENGTH; i++) {
-            ledBuffer.setLED(i, RSL_COLOR);
-        }
-    }
+      // Flash all lights in time with the RLS when the robot is first enabled
+      if (rslFlashCount >= 0) {
+         flashRSL();
+      }
+      else {
+         ledStrip.setData(ledBuffer);
+      }
+   }
 
-    private void setAllLEDs(Color color) {
+   private void clear() {
+      for (int i = 0; i < LightConstants.LED_STRIP_LENGTH; i++) {
+         ledBuffer.setLED(i, RSL_COLOR);
+      }
+   }
 
-        for (int i = 0; i < LightConstants.LED_STRIP_LENGTH; i++) {
-            ledBuffer.setLED(i, color);
-        }
-    }
+   private void setAllLEDs(Color color) {
 
-    private void setLED(int index, Color color) {
-        ledBuffer.setLED(index, color);
-    }
+      for (int i = 0; i < LightConstants.LED_STRIP_LENGTH; i++) {
+         ledBuffer.setLED(i, color);
+      }
+   }
 
-    private void flashRSL() {
+   private void setLED(int index, Color color) {
+      ledBuffer.setLED(index, color);
+   }
 
-        // Flash in time with the RSL light
-        boolean rslOn = RobotController.getRSLState();
+   private void flashRSL() {
 
-        // when the RSL changes from on to off, then
-        // update the RSL count.
-        if (prevRSLOn && !rslOn) {
-            rslFlashCount--;
-        }
-        prevRSLOn = rslOn;
+      // Flash in time with the RSL light
+      boolean rslOn = RobotController.getRSLState();
 
-        // Set the LEDs based on the RSL state
-        if (rslOn) {
-            ledStrip.setData(RSL_ON);
-        }
-        else {
-            ledStrip.setData(RSL_OFF);
-        }
-    }
+      // when the RSL changes from on to off, then
+      // update the RSL count.
+      if (prevRSLOn && !rslOn) {
+         rslFlashCount--;
+      }
+      prevRSLOn = rslOn;
 
-    private void ledStick(double leftSpeed, double rightSpeed, boolean boost) {
+      // Set the LEDs based on the RSL state
+      if (rslOn) {
+         ledStrip.setData(RSL_ON);
+      }
+      else {
+         ledStrip.setData(RSL_OFF);
+      }
+   }
 
-        if (boost) {
-            
-            if (leftSpeed > 0) {
-            }
-            if else (leftSpeed < 0) {
-            }
-            else {
-                ledBuffer.setLED(14, )
-            }
 
-        } else {
+   public void ledStick(boolean boost, DriveMode driveMode) {
 
-        }
 
-    }
+      int    leftMidPoint  = (int) Math.floor(LightConstants.LED_STICK_TAKEN_LENGTH / 2.0);
+      int    rightMidPoint = LightConstants.LED_STRIP_LENGTH - (int) Math.ceil(LightConstants.LED_STICK_TAKEN_LENGTH / 2.0);
+
+      double leftStickY    = driverController.getLeftY();
+      double leftStickX    = driverController.getLeftX();
+      double rightStickY   = driverController.getRightY();
+      double rightStickX   = driverController.getRightX();
+
+      int    upToLeft;
+      int    upToRight;
+      switch (driveMode) {
+
+      case SINGLE_STICK_ARCADE:
+         upToLeft = (int) Math.round(leftMidPoint * (1 - leftStickY));
+         upToRight = (int) Math.round(rightMidPoint + leftMidPoint * leftStickX);
+
+         for (int i = Math.min(upToLeft, leftMidPoint); i == Math.max(upToLeft, leftMidPoint); i++) {
+            ledBuffer.setLED(i, SINGLE_STICK_COLOR);
+         }
+
+
+         if (boost) {
+            ledBuffer.setLED(LightConstants.BOOST_INDEX, BOOST_COLOR);
+         }
+         else {
+            ledBuffer.setLED(upToRight, NOTHING_COLOR);
+         }
+
+         ledStrip.setData(ledBuffer);
+
+      case DUAL_STICK_ARCADE:
+         upToLeft = (int) Math.round(leftMidPoint * (1 - leftStickY));
+         upToRight = (int) Math.round(rightMidPoint + leftMidPoint * rightStickX);
+
+         for (int i = Math.min(upToLeft, leftMidPoint); i == Math.max(upToLeft, leftMidPoint); i++) {
+            ledBuffer.setLED(i, DUAL_STICK_COLOR);
+         }
+
+
+         if (boost) {
+            ledBuffer.setLED(LightConstants.BOOST_INDEX, BOOST_COLOR);
+         }
+         else {
+            ledBuffer.setLED(upToRight, NOTHING_COLOR);
+         }
+
+         ledStrip.setData(ledBuffer);
+
+      case TANK:
+      default:
+
+         upToLeft = (int) Math.round(leftMidPoint * (1 - leftStickY));
+         upToRight = (int) Math.round(rightMidPoint + leftMidPoint * rightStickY);
+
+         for (int i = Math.min(upToLeft, leftMidPoint); i == Math.max(upToLeft, leftMidPoint); i++) {
+            ledBuffer.setLED(i, TANK_COLOR);
+         }
+
+
+         if (boost) {
+            ledBuffer.setLED(LightConstants.BOOST_INDEX, BOOST_COLOR);
+         }
+         else {
+            ledBuffer.setLED(upToRight, NOTHING_COLOR);
+         }
+
+         ledStrip.setData(ledBuffer);
+
+      }
+   }
 
 
 }
+
