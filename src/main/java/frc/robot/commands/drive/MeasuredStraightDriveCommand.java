@@ -26,10 +26,11 @@ public class MeasuredStraightDriveCommand extends LoggingCommand {
 
 
 
-    public MeasuredStraightDriveCommand(double dist, double speed, boolean brakeAtEnd,
+    public MeasuredStraightDriveCommand(double dist, double speed, boolean brakeAtEnd, double targetHeading,
         DriveSubsystem driveSubsystem) {
         this.dist           = dist;
         this.speed          = speed;
+        this.targetHeading  = targetHeading;
         this.driveSubsystem = driveSubsystem;
         this.brakeAtEnd     = brakeAtEnd;
 
@@ -39,12 +40,11 @@ public class MeasuredStraightDriveCommand extends LoggingCommand {
     @Override
     public void initialize() {
 
-        String commandParms = "distance (cm): " + dist + ", speed: " + speed + ", brake: "
+        String commandParms = "distance (cm): " + dist + ", speed: " + speed + ", target heading: " + targetHeading + ", brake: "
             + brakeAtEnd;
 
         logCommandStart(commandParms);
 
-        targetHeading       = driveSubsystem.getYaw();
         initialLeftEncoder  = driveSubsystem.getLeftEncoder();
         initialRightEncoder = driveSubsystem.getRightEncoder();
 

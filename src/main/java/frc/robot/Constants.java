@@ -24,7 +24,8 @@ public final class Constants {
             DO_NOTHING,
             DRIVE_FORWARD,
             DRIVE_FORWARD_PID_TIMED,
-            DRIVE_FORWARD_PID_MEASURED
+            DRIVE_FORWARD_PID_MEASURED,
+            DRIVE_TO_COORDINATE_PID_MEASURED
         };
     }
 
@@ -54,7 +55,11 @@ public final class Constants {
         public static final double  HEADING_PID_KI                = 0;
         public static final double  HEADING_PID_KD                = 0;
 
-        public static final double  HEADING_ERROR_BUFFER          = 0.5;
+        public static final double  TURN_TO_HEADING_PID_KP        = 0.002;
+        public static final double  TURN_TO_HEADING_PID_KI        = 0.1;
+        public static final double  TURN_TO_HEADING_PID_KD        = 0;
+
+        public static final double  HEADING_ERROR_BUFFER          = 3;
 
     }
 
@@ -62,7 +67,7 @@ public final class Constants {
 
         public static final int LED_STRIP_PWM_PORT     = 0;
         public static final int LED_STRIP_LENGTH       = 60;
-        public static final int LED_STICK_TAKEN_LENGTH = 0;
+        public static final int LED_STICK_TAKEN_LENGTH = 5;
 
         public static final int BOOST_INDEX            = 0;
 
@@ -71,7 +76,7 @@ public final class Constants {
     public static final class OperatorConstants {
 
         public static final int    DRIVER_CONTROLLER_PORT         = 0;
-        public static final double GAME_CONTROLLER_STICK_DEADBAND = 0.2;
+        public static final double GAME_CONTROLLER_STICK_DEADBAND = 3;
     }
 
 }

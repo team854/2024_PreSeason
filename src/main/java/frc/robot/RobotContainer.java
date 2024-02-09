@@ -53,7 +53,7 @@ public class RobotContainer {
         // Configure the button bindings
         operatorInput.configureButtonBindings(driveSubsystem);
 
-        // Add a trigger to fla sh the lights when the robot goes from disabled to enabled
+        // Add a trigger to flash the lights when the robot goes from disabled to enabled
         new Trigger(() -> RobotController.isSysActive())
             .onTrue(new InstantCommand(() -> lightsSubsystem.setEnabled()));
     }
@@ -70,6 +70,7 @@ public class RobotContainer {
         autoPatternChooser.addOption("Drive Forward", AutoPattern.DRIVE_FORWARD);
         autoPatternChooser.addOption("Drive Forward PID Timed", AutoPattern.DRIVE_FORWARD_PID_TIMED);
         autoPatternChooser.addOption("Drive Forward PID Measured", AutoPattern.DRIVE_FORWARD_PID_MEASURED);
+        autoPatternChooser.addOption("Drive To Coordinate PID Measured", AutoPattern.DRIVE_TO_COORDINATE_PID_MEASURED);
     }
 
     /**

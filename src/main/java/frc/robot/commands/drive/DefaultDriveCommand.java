@@ -54,7 +54,9 @@ public class DefaultDriveCommand extends LoggingCommand {
 
             double speed = operatorInput.getSpeed(driveMode);
             double turn = operatorInput.getTurn(driveMode);
+
             setMotorSpeedsArcade(speed, turn, boost);
+            lightsSubsystem.ledStick(boost, driveMode);
             break;
 
         case TANK:

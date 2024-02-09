@@ -131,12 +131,9 @@ public class DriveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Average Encoder", Math.round(getAverageEncoderCounts() * 100) / 100d);
         SmartDashboard.putNumber("Distance (cm)", Math.round(getDistanceCm() * 10) / 10d);
 
-        // Update gyro
-        SmartDashboard.putNumber("yaw", getYaw());
-
         // Round the ultrasonic voltage to 2 decimals
-        SmartDashboard.putNumber("Ultrasonic Voltage",
-            Math.round(ultrasonicDistanceSensor.getVoltage() * 100.0d) / 100.0d);
+        // SmartDashboard.putNumber("Ultrasonic Voltage",
+        // Math.round(ultrasonicDistanceSensor.getVoltage() * 100.0d) / 100.0d);
         SmartDashboard.putNumber("Ultrasonic Distance (cm)", getUltrasonicDistanceCm());
 
         // Gets the yaw from the gyro sensor
@@ -171,15 +168,12 @@ public class DriveSubsystem extends SubsystemBase {
 
     public double getHeadingError(double targetHeading) {
         double currentHeading = getYaw();
-        double error          = currentHeading - targetHeading;
-
-        // ensures that the error signal is not above 180
-        if (error > 180) {
-            error -= 360;
-        }
-        // ensures that the error signal is not below -180
-        if (error < -180) {
+        double error          = targetHeading - currentHeading;
+        if (error < 0) {
             error += 360;
+        }
+        if (error > 180) {
+            error = error - 360;
         }
 
         return error;
