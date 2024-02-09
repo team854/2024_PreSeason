@@ -41,11 +41,11 @@ public final class Constants {
         public static final boolean LEFT_ENCODER_REVERSED         = false;
         public static final boolean RIGHT_ENCODER_REVERSED        = true;
 
-        public static final double  MAX_WHEEL_SPEED_MPS           = 0;
+        public static final double  MAX_WHEEL_SPEED_MPS;
 
         // encoder stuff
         public static final int     ENCODER_COUNTS_PER_REVOLUTION = 1024;
-        public static final double  ROBOT_WHEEL_DIAMETER_CMS      = 6 * 2.54;
+        public static final double  ROBOT_WHEEL_DIAMETER_M        = 6 * 2.54 / 100d;
 
         public static final double  CMS_PER_ENCODER_COUNT         =
             // Assumes the encoders are directly mounted on the wheel shafts
@@ -60,7 +60,22 @@ public final class Constants {
         public static final double  HEADING_ERROR_BUFFER          = 0.5;
 
         // Physical parms
-        public static final double  WIDTH_WHEEL_TO_WHEEL          = 0;
+        public static final double  WIDTH_WHEEL_TO_WHEEL;
+
+        // Characterization gains
+        public static final double  KS_VOLTS;
+        public static final double  KV_VOLT_SECONDS_PER_METER;
+        public static final double  KA_VOLT_SECONDS_SQUARED_PER_METER;
+
+        public static final double  KP_DRIVE_VELO;
+
+        public static final double  MAX_ROBOT_VELO;
+        public static final double  MAX_ROBOT_ACCEL;
+
+        public static final double  K_RAMSETE_B;
+        public static final double  K_RAMSETE_ZETA;
+
+
 
     }
 

@@ -2,6 +2,7 @@ package frc.robot.commands.drive;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.Constants.DriveConstants.DriveMode;
 import frc.robot.Constants.DriveConstants;
@@ -56,68 +57,21 @@ public class GoToCoordCommand extends LoggingCommandBase {
     @Override
     public void execute() {
 
-        DriveMode driveMode = driveModeChooser.getSelected();
+        double ang             = driveSubsystem.gyroSensorAhrs();
+        double leftDistMeters  = driveSubsystem.getLeftEncoder() / DriveConstants.ENCODER_COUNTS_PER_REVOLUTION * Math.PI
+            * DriveConstants.ROBOT_WHEEL_DIAMETER_M;
+        double rightDistMeters = driveSubsystem.getRightEncoder() / DriveConstants.ENCODER_COUNTS_PER_REVOLUTION * Math.PI
+            * DriveConstants.ROBOT_WHEEL_DIAMETER_M;
+        ;
+        DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(ang, leftDistMeters, rightDistMeters);
 
-        boolean   boost     = operatorInput.getBoost();
-
-        switch (driveMode) {
-
-        case SINGLE_STICK_ARCADE:
-            veloX = DriveConstants.MAX_WHEEL_SPEED_MPS * operatorInput.getLeftY();
-            veloY = 0;
-            angVelo = Math.PI / 2 * operatorInput.getLeftX();
-
-            movingFrameSpeeds = new ChassisSpeeds(veloX, veloY, angVelo);
-            wheelSpeeds = new DifferentialDriveKinematics(DriveConstants.WIDTH_WHEEL_TO_WHEEL);
-
-            leftVelo = wheelSpeeds.leftMetersPerSecond();
-            rightVelo = wheelSpeeds.rightMetersPerSecond();
-            setMotorSpeedsArcade(leftVelo, rightVelo, boost);
-
-            break;
-
-        case DUAL_STICK_ARCADE:
-        default:
-
-            veloX = DriveConstants.MAX_WHEEL_SPEED_MPS * operatorInput.getLeftY();
-            veloY = 0;
-            angVelo = Math.asin(operatorInput.getRightX());
-
-            movingFrameSpeeds = new ChassisSpeeds(veloX, veloY, angVelo);
-            wheelSpeeds = new DifferentialDriveKinematics(DriveConstants.WIDTH_WHEEL_TO_WHEEL);
-
-            leftVelo = wheelSpeeds.leftMetersPerSecond();
-            rightVelo = wheelSpeeds.rightMetersPerSecond();
-            if (boost) {
-                driveSubsystem.setMotorSpeeds(leftVelo / DriveConstants.MAX_WHEEL_SPEED_MPS,
-                    rightVelo / DriveConstants.MAX_WHEEL_SPEED_MPS);
-            }
-            else {
-                driveSubsystem.setMotorSpeeds(0.5 * leftVelo / DriveConstants.MAX_WHEEL_SPEED_MPS, 0.5 *
-                    rightVelo / DriveConstants.MAX_WHEEL_SPEED_MPS);
-            }
-
-
-            break;
-
-        case TANK:
-
-            leftVelo = operatorInput.getLeftSpeed();
-            rightVelo = operatorInput.getRightSpeed();
-            setMotorSpeedsArcade(leftVelo / DriveConstants.MAX_WHEEL_SPEED_MPS, rightVelo / DriveConstants.MAX_WHEEL_SPEED_MPS,
-                boost);
-
-            break;
-
-        }
 
     }
 
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        // The default drive command never ends, but can be interrupted by other commands.
-        return false;
+
     }
 
     // Called once the command ends or is interrupted.
