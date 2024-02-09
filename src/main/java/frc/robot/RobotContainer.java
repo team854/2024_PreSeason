@@ -32,7 +32,7 @@ public class RobotContainer {
 
     // The robot's subsystems and commands are defined here...
     private final LightsSubsystem              lightsSubsystem    = new LightsSubsystem();
-    private final DriveSubsystem               driveSubsystem     = new DriveSubsystem(lightsSubsystem);
+    private final DriveSubsystem               driveSubsystem     = new DriveSubsystem();
 
     // All dashboard choosers are defined here...
     private final SendableChooser<DriveMode>   driveModeChooser   = new SendableChooser<>();
@@ -48,7 +48,7 @@ public class RobotContainer {
 
         // Initialize all Subsystem default commands.
         driveSubsystem.setDefaultCommand(
-            new DefaultDriveCommand(operatorInput, driveModeChooser, driveSubsystem));
+            new DefaultDriveCommand(operatorInput, driveModeChooser, driveSubsystem, lightsSubsystem));
 
         // Configure the button bindings
         operatorInput.configureButtonBindings(driveSubsystem);
@@ -70,6 +70,7 @@ public class RobotContainer {
         autoPatternChooser.addOption("Drive Forward", AutoPattern.DRIVE_FORWARD);
         autoPatternChooser.addOption("Drive Forward PID Timed", AutoPattern.DRIVE_FORWARD_PID_TIMED);
         autoPatternChooser.addOption("Drive Forward PID Measured", AutoPattern.DRIVE_FORWARD_PID_MEASURED);
+        autoPatternChooser.addOption("Drive To Coordinate PID Measured", AutoPattern.DRIVE_TO_COORDINATE_PID_MEASURED);
     }
 
     /**

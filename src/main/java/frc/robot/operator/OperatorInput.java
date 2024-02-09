@@ -49,6 +49,23 @@ public class OperatorInput extends SubsystemBase {
         return driverController.getRightBumper();
     }
 
+    public double getLeftY() {
+        return driverController.getLeftY();
+    }
+
+    public double getLeftX() {
+        return driverController.getLeftX();
+    }
+
+    public double getRightY() {
+        return driverController.getRightY();
+    }
+
+    public double getRightX() {
+        return driverController.getRightX();
+    }
+
+
     public double getDriverControllerAxis(Stick stick, Axis axis) {
 
         switch (stick) {
@@ -115,6 +132,7 @@ public class OperatorInput extends SubsystemBase {
     public void configureButtonBindings(DriveSubsystem driveSubsystem) {
 
         new Trigger(() -> isCancel())
+
             .onTrue(new CancelCommand(this, driveSubsystem));
 
     }
