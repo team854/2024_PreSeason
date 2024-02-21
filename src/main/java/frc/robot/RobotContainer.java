@@ -4,15 +4,19 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.AutoConstants.AutoPattern;
 import frc.robot.Constants.DriveConstants.DriveMode;
 import frc.robot.commands.auto.AutonomousCommand;
 import frc.robot.commands.drive.DefaultDriveCommand;
 import frc.robot.operator.OperatorInput;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.LightsSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -27,6 +31,7 @@ public class RobotContainer {
     private final OperatorInput                operatorInput      = new OperatorInput();
 
     // The robot's subsystems and commands are defined here...
+    private final LightsSubsystem              lightsSubsystem    = new LightsSubsystem();
     private final DriveSubsystem               driveSubsystem     = new DriveSubsystem();
 
     // All dashboard choosers are defined here...
@@ -43,10 +48,14 @@ public class RobotContainer {
 
         // Initialize all Subsystem default commands.
         driveSubsystem.setDefaultCommand(
-            new DefaultDriveCommand(operatorInput, driveModeChooser, driveSubsystem));
+            new DefaultDriveCommand(operatorInput, driveModeChooser, driveSubsystem, lightsSubsystem));
 
         // Configure the button bindings
         operatorInput.configureButtonBindings(driveSubsystem);
+
+        // Add a trigger to flash the lights when the robot goes from disabled to enabled
+        new Trigger(() -> RobotController.isSysActive())
+            .onTrue(new InstantCommand(() -> lightsSubsystem.setEnabled()));
     }
 
     private void initDashboardChoosers() {
@@ -59,7 +68,9 @@ public class RobotContainer {
         autoPatternChooser.setDefaultOption("Do Nothing", AutoPattern.DO_NOTHING);
         SmartDashboard.putData("Auto Pattern", autoPatternChooser);
         autoPatternChooser.addOption("Drive Forward", AutoPattern.DRIVE_FORWARD);
-        autoPatternChooser.addOption("Drive Forward PID", AutoPattern.DRIVE_FORWARD_PID);
+        autoPatternChooser.addOption("Drive Forward PID Timed", AutoPattern.DRIVE_FORWARD_PID_TIMED);
+        autoPatternChooser.addOption("Drive Forward PID Measured", AutoPattern.DRIVE_FORWARD_PID_MEASURED);
+        autoPatternChooser.addOption("Drive To Coordinate PID Measured", AutoPattern.DRIVE_TO_COORDINATE_PID_MEASURED);
     }
 
     /**

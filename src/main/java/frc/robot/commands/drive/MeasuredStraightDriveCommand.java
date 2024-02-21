@@ -4,10 +4,11 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.LoggingCommand;
 import frc.robot.subsystems.DriveSubsystem;
 
-public class TimedStraightDriveCommand extends LoggingCommand {
+// This command doesn't perfectly account for encoders being overmeasured because of slight correction turns that the PID needs to make
+public class MeasuredStraightDriveCommand extends LoggingCommand {
 
     private DriveSubsystem driveSubsystem;
-    private double         time;
+    private double         dist;
     private double         speed;
     private boolean        brakeAtEnd;
 
@@ -17,17 +18,21 @@ public class TimedStraightDriveCommand extends LoggingCommand {
     private double         previousError;
     private double         targetHeading;
     private double         pTerm;
-    private double         iTerm;
+    private double         iTerm = 0;
     private double         dTerm;
+    private double         initialLeftEncoder;
+    private double         initialRightEncoder;
+    private double         cmToEncoderUnits;
 
 
-    public TimedStraightDriveCommand(double time, double speed, boolean brakeAtEnd, double targetHeading,
+
+    public MeasuredStraightDriveCommand(double dist, double speed, boolean brakeAtEnd, double targetHeading,
         DriveSubsystem driveSubsystem) {
-        this.time           = time;
+        this.dist           = dist;
         this.speed          = speed;
+        this.targetHeading  = targetHeading;
         this.driveSubsystem = driveSubsystem;
         this.brakeAtEnd     = brakeAtEnd;
-        this.targetHeading  = targetHeading;
 
         addRequirements(driveSubsystem);
     }
@@ -35,12 +40,15 @@ public class TimedStraightDriveCommand extends LoggingCommand {
     @Override
     public void initialize() {
 
-        String commandParms = "time (ms): " + time + ", speed: " + speed + ", brake: "
-            + brakeAtEnd + ", target heading (deg): " + targetHeading;
+        String commandParms = "distance (cm): " + dist + ", speed: " + speed + ", target heading: " + targetHeading + ", brake: "
+            + brakeAtEnd;
 
         logCommandStart(commandParms);
 
-        previousError = driveSubsystem.getHeadingError(targetHeading);
+        initialLeftEncoder  = driveSubsystem.getLeftEncoder();
+        initialRightEncoder = driveSubsystem.getRightEncoder();
+
+        cmToEncoderUnits    = dist * frc.robot.Constants.DriveConstants.ENCODER_COUNTS_PER_REVOLUTION;
 
     }
 
@@ -53,8 +61,8 @@ public class TimedStraightDriveCommand extends LoggingCommand {
         previousError  = currentError;
 
         pTerm          = DriveConstants.HEADING_PID_KP * currentError;
-        iTerm         += DriveConstants.HEADING_PID_KI * currentError;
-        dTerm         += DriveConstants.HEADING_PID_KD * diffError;
+        iTerm         += DriveConstants.HEADING_PID_KI * diffError;
+        dTerm          = DriveConstants.HEADING_PID_KD * diffError;
 
 
         errorSignal    = pTerm + iTerm + dTerm;
@@ -69,10 +77,17 @@ public class TimedStraightDriveCommand extends LoggingCommand {
     @Override
     public boolean isFinished() {
 
-        if (isTimeoutExceeded(time / 1000.0d)) {
-            setFinishReason(time / 1000.0d + " seconds has been exceeded");
+        double currentLeftEncoder   = driveSubsystem.getLeftEncoder();
+        double currentRigthtEncoder = driveSubsystem.getRightEncoder();
+
+        double countedLeft          = currentLeftEncoder - initialLeftEncoder;
+        double countedRight         = currentRigthtEncoder - initialRightEncoder;
+
+        if ((countedLeft + countedRight) / 2 >= cmToEncoderUnits) {
             return true;
         }
+
+
 
         return false;
 
