@@ -6,6 +6,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -38,6 +39,13 @@ public class DriveSubsystem extends SubsystemBase {
     // Motor speeds
     private double              leftSpeed                = 0;
     private double              rightSpeed               = 0;
+
+    // Odometry Parameters
+    double                      ang                      = 0;
+    double                      leftDistMeters           = 0;
+    double                      rightDistMeters          = 0;
+
+    DifferentialDriveOdometry   odometry                 = new DifferentialDriveOdometry(ang, leftDistMeters, rightDistMeters);
 
     /** Creates a new DriveSubsystem. */
     public DriveSubsystem() {
@@ -78,8 +86,18 @@ public class DriveSubsystem extends SubsystemBase {
         return leftFollowerMotor.getSelectedSensorPosition(0);
     }
 
+    public double getLeftWheelMeters() {
+        return getLeftEncoder() / DriveConstants.ENCODER_COUNTS_PER_REVOLUTION * Math.PI
+            * DriveConstants.ROBOT_WHEEL_DIAMETER_CMS;
+    }
+
     public double getRightEncoder() {
         return rightFollowerMotor.getSelectedSensorPosition(0);
+    }
+
+    public double getRightWheelMeters() {
+        return getRightEncoder() / DriveConstants.ENCODER_COUNTS_PER_REVOLUTION * Math.PI
+            * DriveConstants.ROBOT_WHEEL_DIAMETER_CMS;
     }
 
 
@@ -138,6 +156,15 @@ public class DriveSubsystem extends SubsystemBase {
 
         // Gets the yaw from the gyro sensor
         SmartDashboard.putNumber("Gyro Yaw", getYaw());
+
+        // updating odometry parameters
+        ang             = driveSubsystem.gyroSensorAhrs();
+        leftDistMeters  = getLeftWheelMeters();
+        rightDistMeters = getRightWheelMeters();
+
+
+        // updating odometry
+        odometry.update(ang, leftDistMeters, rightDistMeters);
 
     }
 

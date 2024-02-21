@@ -40,8 +40,8 @@ public class MeasuredStraightDriveCommand extends LoggingCommand {
     @Override
     public void initialize() {
 
-        String commandParms = "distance (cm): " + dist + ", speed: " + speed + ", target heading: " + targetHeading + ", brake: "
-            + brakeAtEnd;
+
+        String commandParms = "MeasuredStraightDriveCommand. distance (cm): " + dist + ", speed: " + speed + ", target heading: " + targetHeading + ", brake: " + brakeAtEnd;
 
         logCommandStart(commandParms);
 
