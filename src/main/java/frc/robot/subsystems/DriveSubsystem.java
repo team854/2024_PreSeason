@@ -3,26 +3,28 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 
 public class DriveSubsystem extends SubsystemBase {
 
+
     // The motors on the left side of the drive.
-    private final TalonSRX      leftPrimaryMotor         = new TalonSRX(DriveConstants.LEFT_MOTOR_PORT);
+    private final VictorSPX     leftPrimaryMotor         = new VictorSPX(DriveConstants.LEFT_MOTOR_PORT);
     private final TalonSRX      leftFollowerMotor        = new TalonSRX(DriveConstants.LEFT_MOTOR_PORT + 1);
 
     // The motors on the right side of the drive.
-    private final TalonSRX      rightPrimaryMotor        = new TalonSRX(DriveConstants.RIGHT_MOTOR_PORT);
+    private final VictorSPX     rightPrimaryMotor        = new VictorSPX(DriveConstants.RIGHT_MOTOR_PORT);
     private final TalonSRX      rightFollowerMotor       = new TalonSRX(DriveConstants.RIGHT_MOTOR_PORT + 1);
 
     // The gyro sensor
-    private final AHRS          gyroSensorAhrs           = new AHRS(SerialPort.Port.kUSB1);
+    private final AHRS          gyroSensorAhrs           = new AHRS();
 
     // Ultrasonic sensor
     // Conversion from volts to distance in cm
@@ -38,8 +40,16 @@ public class DriveSubsystem extends SubsystemBase {
     private double              leftSpeed                = 0;
     private double              rightSpeed               = 0;
 
+    // Odometry Parameters
+    double                      ang                      = 0;
+    double                      leftDistMeters           = 0;
+    double                      rightDistMeters          = 0;
+
+    DifferentialDriveOdometry   odometry                 = new DifferentialDriveOdometry(ang, leftDistMeters, rightDistMeters);
+
     /** Creates a new DriveSubsystem. */
     public DriveSubsystem() {
+
 
         // We need to invert one side of the drivetrain so that positive voltages
         // result in both sides moving forward. Depending on how your robot's
@@ -62,6 +72,35 @@ public class DriveSubsystem extends SubsystemBase {
         rightFollowerMotor.follow(rightPrimaryMotor);
 
     }
+
+    // Encoders
+    public double getAverageEncoderCounts() {
+        return (leftFollowerMotor.getSelectedSensorPosition(0) + rightFollowerMotor.getSelectedSensorPosition(0)) / 2;
+    }
+
+    public double getDistanceCm() {
+        return getAverageEncoderCounts() * DriveConstants.CMS_PER_ENCODER_COUNT;
+    }
+
+    public double getLeftEncoder() {
+        return leftFollowerMotor.getSelectedSensorPosition(0);
+    }
+
+    public double getLeftWheelMeters() {
+        return getLeftEncoder() / DriveConstants.ENCODER_COUNTS_PER_REVOLUTION * Math.PI
+            * DriveConstants.ROBOT_WHEEL_DIAMETER_CMS;
+    }
+
+    public double getRightEncoder() {
+        return rightFollowerMotor.getSelectedSensorPosition(0);
+    }
+
+    public double getRightWheelMeters() {
+        return getRightEncoder() / DriveConstants.ENCODER_COUNTS_PER_REVOLUTION * Math.PI
+            * DriveConstants.ROBOT_WHEEL_DIAMETER_CMS;
+    }
+
+
 
     public double getUltrasonicDistanceCm() {
 
@@ -102,15 +141,30 @@ public class DriveSubsystem extends SubsystemBase {
          * Update all dashboard values in the periodic routine
          */
         SmartDashboard.putNumber("Right Motor", rightSpeed);
-        SmartDashboard.putNumber("Left  Motor", leftSpeed);
+        SmartDashboard.putNumber("Left Motor", leftSpeed);
+
+        // Update Encoder
+        SmartDashboard.putNumber("Left Encoder", Math.round(getLeftEncoder() * 100) / 100d);
+        SmartDashboard.putNumber("Right Encoder", Math.round(getRightEncoder() * 100) / 100d);
+        SmartDashboard.putNumber("Average Encoder", Math.round(getAverageEncoderCounts() * 100) / 100d);
+        SmartDashboard.putNumber("Distance (cm)", Math.round(getDistanceCm() * 10) / 10d);
 
         // Round the ultrasonic voltage to 2 decimals
-        SmartDashboard.putNumber("Ultrasonic Voltage",
-            Math.round(ultrasonicDistanceSensor.getVoltage() * 100.0d) / 100.0d);
+        // SmartDashboard.putNumber("Ultrasonic Voltage",
+        // Math.round(ultrasonicDistanceSensor.getVoltage() * 100.0d) / 100.0d);
         SmartDashboard.putNumber("Ultrasonic Distance (cm)", getUltrasonicDistanceCm());
 
         // Gets the yaw from the gyro sensor
-        SmartDashboard.putNumber("Gyro Yaw", getYawReal());
+        SmartDashboard.putNumber("Gyro Yaw", getYaw());
+
+        // updating odometry parameters
+        ang             = driveSubsystem.gyroSensorAhrs();
+        leftDistMeters  = getLeftWheelMeters();
+        rightDistMeters = getRightWheelMeters();
+
+
+        // updating odometry
+        odometry.update(ang, leftDistMeters, rightDistMeters);
 
     }
 
@@ -132,11 +186,24 @@ public class DriveSubsystem extends SubsystemBase {
     // returns the yaw, rounded to 1 decimal place
     // retuens in degrees from 0-360
     public double getYaw() {
-        double yawAngle = (Math.round(gyroSensorAhrs.getYaw() * 10) / 10) % 360;
+        double yawAngle = (Math.round(gyroSensorAhrs.getYaw() * 10) / 10.0d) % 360;
         if (yawAngle < 0) {
             yawAngle += 360;
         }
         return yawAngle;
+    }
+
+    public double getHeadingError(double targetHeading) {
+        double currentHeading = getYaw();
+        double error          = targetHeading - currentHeading;
+        if (error < 0) {
+            error += 360;
+        }
+        if (error > 180) {
+            error = error - 360;
+        }
+
+        return error;
     }
 
 }

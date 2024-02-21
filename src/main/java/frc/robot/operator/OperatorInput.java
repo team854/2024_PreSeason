@@ -3,9 +3,11 @@ package frc.robot.operator;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.DriveConstants.DriveMode;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.CancelCommand;
 import frc.robot.subsystems.DriveSubsystem;
+
 
 /**
  * The Operator input class is used to map buttons to functions and functions to commands
@@ -43,6 +45,30 @@ public class OperatorInput extends SubsystemBase {
         return driverController.getStartButton();
     }
 
+    public boolean getBoost() {
+        return driverController.getRightBumper();
+    }
+
+    public double getLeftY() {
+        return driverController.getLeftY();
+    }
+
+    public double getLeftX() {
+        return driverController.getLeftX();
+    }
+
+    public double getRightY() {
+        return driverController.getRightY();
+    }
+
+    public double getRightX() {
+        return driverController.getRightX();
+    }
+
+<<<<<<< HEAD
+
+=======
+>>>>>>> f03747e39d88951744c32b1403f9d4c348b02199
     public double getDriverControllerAxis(Stick stick, Axis axis) {
 
         switch (stick) {
@@ -69,6 +95,38 @@ public class OperatorInput extends SubsystemBase {
         return 0;
     }
 
+    public double getSpeed(DriveMode driveMode) {
+
+        return getDriverControllerAxis(Stick.LEFT, Axis.Y);
+    }
+
+    public double getTurn(DriveMode driveMode) {
+
+        double turn = 0;
+
+        switch (driveMode) {
+
+        case SINGLE_STICK_ARCADE:
+            turn = getDriverControllerAxis(Stick.LEFT, Axis.X);
+            break;
+
+        case DUAL_STICK_ARCADE:
+        default:
+            turn = getDriverControllerAxis(Stick.RIGHT, Axis.X);
+            break;
+        }
+
+        return turn;
+    }
+
+    public double getLeftSpeed() {
+        return getDriverControllerAxis(Stick.LEFT, Axis.Y);
+    }
+
+    public double getRightSpeed() {
+        return getDriverControllerAxis(Stick.RIGHT, Axis.Y);
+    }
+
     /**
      * Use this method to define your robotFunction -> command mappings.
      *
@@ -77,9 +135,8 @@ public class OperatorInput extends SubsystemBase {
     public void configureButtonBindings(DriveSubsystem driveSubsystem) {
 
         new Trigger(() -> isCancel())
-            .onTrue(new CancelCommand(this, driveSubsystem));
 
-        new Trigger(() -> getDriverControllerAxis(Stick stick, Axis axis))
+            .onTrue(new CancelCommand(this, driveSubsystem));
 
     }
 
@@ -89,6 +146,24 @@ public class OperatorInput extends SubsystemBase {
         // Display any operator input values on the smart dashboard.
 
         SmartDashboard.putString("Driver Controller", driverController.toString());
-    }
 
+        // Displays the axis and button readings.
+
+        SmartDashboard.putNumber("Left Y", Math.round(100 * getLeftX()) / 100.0);
+        SmartDashboard.putNumber("Left X", Math.round(100 * getLeftX()) / 100.0);
+        SmartDashboard.putNumber("Right Y", Math.round(100 * getRightY()) / 100.0);
+        SmartDashboard.putNumber("Right X", Math.round(100 * getRightX()) / 100.0);
+
+        SmartDashboard.putBoolean("A Button", driverController.getAButton());
+        SmartDashboard.putBoolean("B Button", driverController.getBButton());
+        SmartDashboard.putBoolean("X Button", driverController.getXButton());
+        SmartDashboard.putBoolean("Y Button", driverController.getYButton());
+        SmartDashboard.putBoolean("R1", driverController.getRightBumper());
+        SmartDashboard.putNumber("R2", Math.round(100 * driverController.getRightTriggerAxis()) / 100.0);
+        SmartDashboard.putBoolean("R1", driverController.getLeftBumper());
+        SmartDashboard.putNumber("R1", Math.round(100 * driverController.getLeftTriggerAxis()) / 100.0);
+
+        SmartDashboard.putBoolean("Start Button", driverController.getStartButton());
+        SmartDashboard.putBoolean("Back Button", driverController.getBackButton());
+    }
 }

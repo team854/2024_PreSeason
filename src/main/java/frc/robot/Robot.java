@@ -4,18 +4,9 @@
 
 package frc.robot;
 
-// lang stuf
-import java.util.ArrayList;
-import java.util.List;
-
-import edu.wpi.first.networktables.Subscriber;
-// edu.wpi stuff
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-// subsystems
-import frc.robot.subsystems.DriveSubsystem;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -25,14 +16,9 @@ import frc.robot.subsystems.DriveSubsystem;
  * project.
  */
 public class Robot extends TimedRobot {
+    private Command        m_autonomousCommand;
 
-    public static final List<SubsystemBase> subsystemLs    = new ArrayList<SubsystemBase>();
-
-    public static final DriveSubsystem    driveSubsystem = new DriveSubsystem();
-
-    private Command                       m_autonomousCommand;
-
-    private RobotContainer                m_robotContainer;
+    private RobotContainer m_robotContainer;
 
     /**
      * This function is run when the robot is first started up and should be used
@@ -130,14 +116,5 @@ public class Robot extends TimedRobot {
     /** This function is called periodically whilst in simulation. */
     @Override
     public void simulationPeriodic() {
-    }
-
-    private void updatePeriodic() {
-
-        // cycles through very subsystem's periodic methods
-        for (SubsystemBase subsystem : subsystemLs) {
-            subsystem.periodic();
-        }
-
     }
 }
