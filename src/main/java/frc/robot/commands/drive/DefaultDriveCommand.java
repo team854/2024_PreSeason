@@ -1,16 +1,30 @@
 package frc.robot.commands.drive;
 
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.DriveConstants.DriveMode;
-import frc.robot.commands.LoggingCommandBase;
+import frc.robot.commands.LoggingCommand;
 import frc.robot.operator.OperatorInput;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.LightsSubsystem;
 
-public class DefaultDriveCommand extends LoggingCommandBase {
+public class DefaultDriveCommand extends LoggingCommand {
 
     private final DriveSubsystem             driveSubsystem;
     private final OperatorInput              operatorInput;
+    private final LightsSubsystem            lightsSubsystem;
+
     private final SendableChooser<DriveMode> driveModeChooser;
+
+    double                                   veloX;
+    double                                   veloY;
+    double                                   angVelo;
+    double                                   leftSpeed;
+    double                                   rightSpeed;
+    ChassicSpeeds                            movingFrameSpeeds;
+    DifferentialDriveKinematics              wheelSpeeds;
 
     /**
      * Creates a new ExampleCommand.
@@ -18,11 +32,12 @@ public class DefaultDriveCommand extends LoggingCommandBase {
      * @param driveSubsystem The subsystem used by this command.
      */
     public DefaultDriveCommand(OperatorInput operatorInput, SendableChooser<DriveMode> driveModeChooser,
-        DriveSubsystem driveSubsystem) {
+        DriveSubsystem driveSubsystem, LightsSubsystem lightsSubsystem) {
 
         this.operatorInput    = operatorInput;
         this.driveModeChooser = driveModeChooser;
         this.driveSubsystem   = driveSubsystem;
+        this.lightsSubsystem  = lightsSubsystem;
 
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(driveSubsystem);
@@ -31,7 +46,7 @@ public class DefaultDriveCommand extends LoggingCommandBase {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        logCommandStart();
+        logCommandStart("default drive command");
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -45,26 +60,50 @@ public class DefaultDriveCommand extends LoggingCommandBase {
         switch (driveMode) {
 
         case SINGLE_STICK_ARCADE:
-            // DNE
+
+            veloX = DriveConstants.MAX_WHEEL_SPEED_MPS * operatorInput.getLeftY();
+            veloY = 0;
+            angVelo = Math.asin(operatorInput.getLeftX());
+
+            movingFrameSpeeds = new ChassisSpeeds(veloX, veloY, angVelo);
+            wheelSpeeds = new DifferentialDriveKinematics(DriveConstants.WIDTH_WHEEL_TO_WHEEL);
+
+            leftSpeed = wheelSpeeds.leftMetersPerSecond();
+            rightSpeed = wheelSpeeds.rightMetersPerSecond();
+
+            if (boost) {
+                driveSubsystem.setMotorSpeeds(leftSpeed, rightSpeed);
+            }
+            else {
+                driveSubsystem.setMotorSpeeds(0.5 * leftSpeed, 0.5 * rightSpeed);
+            }
+
+            break;
+
         case DUAL_STICK_ARCADE:
 
             double speed = operatorInput.getSpeed(driveMode);
             double turn = operatorInput.getTurn(driveMode);
+
             setMotorSpeedsArcade(speed, turn, boost);
+            lightsSubsystem.ledStick(boost, driveMode);
             break;
 
         case TANK:
         default:
 
-            double leftSpeed = operatorInput.getLeftSpeed();
-            double rightSpeed = operatorInput.getRightSpeed();
+            leftSpeed = operatorInput.getLeftSpeed();
+            rightSpeed = operatorInput.getRightSpeed();
             if (boost) {
+                lightsSubsystem.ledStick(boost, driveMode);
                 driveSubsystem.setMotorSpeeds(leftSpeed, rightSpeed);
             }
             else {
                 // If not in boost mode, then divide the motors speeds in half
+                lightsSubsystem.ledStick(boost, driveMode);
                 driveSubsystem.setMotorSpeeds(leftSpeed / 2.0, rightSpeed / 2.0);
             }
+
             break;
         }
 
@@ -81,53 +120,6 @@ public class DefaultDriveCommand extends LoggingCommandBase {
     @Override
     public void end(boolean interrupted) {
         logCommandEnd(interrupted);
-    }
-
-    private void setMotorSpeedsArcade(double speed, double turn, boolean boost) {
-
-        double maxSpeed = 1.0;
-
-        if (!boost) {
-            speed    /= 2.0;
-            turn     /= 2.0;
-            maxSpeed /= 2.0;
-        }
-
-        // The basic algorithm for arcade is to add the turn and the speed
-
-        double leftSpeed  = speed + turn;
-        double rightSpeed = speed - turn;
-
-        // If the speed + turn exceeds the max speed, then keep the differential
-        // and reduce the speed of the other motor appropriately
-
-        if (Math.abs(leftSpeed) > maxSpeed || Math.abs(rightSpeed) > maxSpeed) {
-
-            if (Math.abs(leftSpeed) > maxSpeed) {
-
-                if (leftSpeed > 0) {
-                    leftSpeed = maxSpeed;
-                }
-                else {
-                    leftSpeed = -maxSpeed;
-                }
-                rightSpeed = leftSpeed - turn;
-
-            }
-            else {
-
-                if (rightSpeed > 0) {
-                    rightSpeed = maxSpeed;
-                }
-                else {
-                    rightSpeed = -maxSpeed;
-                }
-
-                leftSpeed = rightSpeed + turn;
-            }
-        }
-
-        driveSubsystem.setMotorSpeeds(leftSpeed, rightSpeed);
     }
 
 
