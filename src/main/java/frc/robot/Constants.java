@@ -79,7 +79,7 @@ public final class Constants {
         public static final double  TURN_TO_HEADING_PID_KI        = 0.1;
         public static final double  TURN_TO_HEADING_PID_KD        = 0;
 
-        public static final double  HEADING_ERROR_BUFFER          = 3;
+        public static final double  HEADING_ERROR_BUFFER          = 10;
 
         public static enum HeadingStates {
             CLOSE,

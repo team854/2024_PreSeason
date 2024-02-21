@@ -73,7 +73,9 @@ public class AutonomousCommand extends SequentialCommandGroup {
 
         case OUTSIDE_ONE_SHOT:
             // From outside position, backs up and makes a speaker shot
+
             addCommands(new MeasuredStraightDriveCommand(100, 0.2, true, driveSubsystem));
+
             // Shoot arm, no command made yet
 
             break;
@@ -82,7 +84,9 @@ public class AutonomousCommand extends SequentialCommandGroup {
             // From outside position, backs up and makes a speaker shot
             // then it turns goes backwards to get a note, goes forward and turns back to make
             // another shot
+
             startHeading = driveSubsystem.getHeading();
+
             addCommands(new MeasuredStraightDriveCommand(100, -0.2, true, driveSubsystem));
 
             // Shoot arm, no command made yet
@@ -111,11 +115,11 @@ public class AutonomousCommand extends SequentialCommandGroup {
 
             // Shoot arm, no command made yet
 
-            addCommands(new TurnToHeadingCommand(0.2, startHeading + 90, true, 3, driveSubsystem));
+            addCommands(new TurnToHeadingCommand(0.2, startHeading + 90, true, 3000, driveSubsystem));
 
             addCommands(new MeasuredStraightDriveCommand(100, -0.2, true, driveSubsystem));
 
-            addCommands(new TurnToHeadingCommand(0.2, startHeading + 45, true, 3, driveSubsystem));
+            addCommands(new TurnToHeadingCommand(0.2, startHeading + 30, true, 3000, driveSubsystem));
 
             // Shoot arm, no command made yet
 
@@ -137,7 +141,7 @@ public class AutonomousCommand extends SequentialCommandGroup {
 
             addCommands(new MeasuredStraightDriveCommand(100, -0.2, true, driveSubsystem));
 
-            addCommands(new TurnToHeadingCommand(0.2, startHeading + 45, true, 3, driveSubsystem));
+            addCommands(new TurnToHeadingCommand(0.2, startHeading + 30, true, 3, driveSubsystem));
 
             // Shoot arm, no command made yet
 
@@ -145,25 +149,102 @@ public class AutonomousCommand extends SequentialCommandGroup {
 
             addCommands(new MeasuredStraightDriveCommand(200, -0.2, true, driveSubsystem));
 
-            addCommands(new TurnToHeadingCommand(0.2, startHeading - 45, true, 3, driveSubsystem));
+            addCommands(new TurnToHeadingCommand(0.2, startHeading - 30, true, 3, driveSubsystem));
 
             // Shoot arm, no command made yet
 
             break;
 
         case AMP_ONE_SHOT:
+
+            startHeading = driveSubsystem.getHeading();
+
+            addCommands(new MeasuredStraightDriveCommand(100, -0.2, true, driveSubsystem));
+
+            // Shoot arm, no command made yet
+
+            addCommands(new TurnToHeadingCommand(0.2, startHeading + 45, true, 3, driveSubsystem));
+
+            addCommands(new MeasuredStraightDriveCommand(100, -0.2, true, driveSubsystem));
+
             break;
 
         case AMP_TWO_SHOT:
+
+            startHeading = driveSubsystem.getHeading();
+
+            addCommands(new MeasuredStraightDriveCommand(100, -0.2, true, driveSubsystem));
+
+            // Shoot arm, no command made yet
+
+            addCommands(new TurnToHeadingCommand(0.2, startHeading + 45, true, 3, driveSubsystem));
+
+            addCommands(new MeasuredStraightDriveCommand(200, -0.2, true, driveSubsystem));
+
+            addCommands(new TurnToHeadingCommand(0.2, startHeading + 22.5, true, 3, driveSubsystem));
+
+            // Shoot arm, no command made yet
+
             break;
 
         case AMP_ONE_SHOT_ONE_AMP:
+
+            startHeading = driveSubsystem.getHeading();
+
+            addCommands(new MeasuredStraightDriveCommand(100, -0.2, true, driveSubsystem));
+
+            // Shoot arm, no command made yet
+
+            addCommands(new TurnToHeadingCommand(0.2, startHeading + 45, true, 3, driveSubsystem));
+
+            addCommands(new MeasuredStraightDriveCommand(200, -0.2, true, driveSubsystem));
+
+            addCommands(new TurnToHeadingCommand(0.2, startHeading + 135, true, 3, driveSubsystem));
+
+            addCommands(new MeasuredStraightDriveCommand(100, 0.2, true, driveSubsystem));
+
+            // Shoot arm into amp, no command made yet
+
             break;
 
         case AMP_ONE_AMP:
+
+            startHeading = driveSubsystem.getHeading();
+
+            addCommands(new MeasuredStraightDriveCommand(100, -0.2, true, driveSubsystem));
+
+            addCommands(new TurnToHeadingCommand(0.2, startHeading + 31, true, 3, driveSubsystem));
+
+            addCommands(new MeasuredStraightDriveCommand(206, -0.2, true, driveSubsystem));
+
+            addCommands(new TurnToHeadingCommand(0.2, startHeading + 135, true, 3, driveSubsystem));
+
+            addCommands(new MeasuredStraightDriveCommand(50, 0.2, true, driveSubsystem));
+
+            // Shoot arm into amp, no command made yet
+
             break;
 
         case AMP_TWO_AMP:
+
+            startHeading = driveSubsystem.getHeading();
+
+            addCommands(new MeasuredStraightDriveCommand(100, -0.2, true, driveSubsystem));
+
+            addCommands(new TurnToHeadingCommand(0.2, startHeading + 31, true, 3, driveSubsystem));
+
+            addCommands(new MeasuredStraightDriveCommand(206, -0.2, true, driveSubsystem));
+
+            addCommands(new TurnToHeadingCommand(0.2, startHeading + 135, true, 3, driveSubsystem));
+
+            addCommands(new MeasuredStraightDriveCommand(50, 0.2, true, driveSubsystem));
+
+            // Shoot arm into amp, no command made yet
+
+            addCommands(new MeasuredStraightDriveCommand(100, -0.2, true, driveSubsystem));
+
+            // Shoot arm into amp, no command made yet
+
             break;
 
         }
