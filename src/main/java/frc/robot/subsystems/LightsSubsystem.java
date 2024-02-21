@@ -116,8 +116,8 @@ public class LightsSubsystem extends SubsystemBase {
    public void ledStick(boolean boost, DriveMode driveMode) {
 
 
-      int    leftMidPoint  = (int) Math.floor(LightConstants.LED_STICK_TAKEN_LENGTH / 2.0);
-      int    rightMidPoint = LightConstants.LED_STRIP_LENGTH - (int) Math.ceil(LightConstants.LED_STICK_TAKEN_LENGTH / 2.0);
+      int    leftMidPoint  = (int) 15;
+      int    rightMidPoint = (int) 45;
 
       double leftStickY    = driverController.getLeftY();
       double leftStickX    = driverController.getLeftX();
@@ -141,48 +141,52 @@ public class LightsSubsystem extends SubsystemBase {
             ledBuffer.setLED(LightConstants.BOOST_INDEX, BOOST_COLOR);
          }
          else {
-            ledBuffer.setLED(upToRight, NOTHING_COLOR);
+            ledBuffer.setLED(LightConstants.BOOST_INDEX, NOTHING_COLOR);
          }
-
-         ledStrip.setData(ledBuffer);
 
       case DUAL_STICK_ARCADE:
-         upToLeft = (int) Math.round(leftMidPoint * (1 - leftStickY));
-         upToRight = (int) Math.round(rightMidPoint + leftMidPoint * rightStickX);
-
-         for (int i = Math.min(upToLeft, leftMidPoint); i == Math.max(upToLeft, leftMidPoint); i++) {
-            ledBuffer.setLED(i, DUAL_STICK_COLOR);
-         }
-
-
-         if (boost) {
-            ledBuffer.setLED(LightConstants.BOOST_INDEX, BOOST_COLOR);
-         }
-         else {
-            ledBuffer.setLED(upToRight, NOTHING_COLOR);
-         }
-
-         ledStrip.setData(ledBuffer);
-
-      case TANK:
       default:
 
-         upToLeft = (int) Math.round(leftMidPoint * (1 - leftStickY));
-         upToRight = (int) Math.round(rightMidPoint + leftMidPoint * rightStickY);
 
-         for (int i = Math.min(upToLeft, leftMidPoint); i == Math.max(upToLeft, leftMidPoint); i++) {
-            ledBuffer.setLED(i, TANK_COLOR);
+         upToLeft = (int) Math.round(leftMidPoint - (leftStickY * LightConstants.LED_STICK_TAKEN_LENGTH));
+         upToRight = (int) Math.round(rightMidPoint + (rightStickX * LightConstants.LED_STICK_TAKEN_LENGTH));
+         // System.out.println(upToLeft);
+
+         for (int i = (leftMidPoint - LightConstants.LED_STICK_TAKEN_LENGTH + 1); i < leftMidPoint
+            + LightConstants.LED_STICK_TAKEN_LENGTH; i++) {
+            ledBuffer.setLED(i, NOTHING_COLOR);
+         }
+         int Adder;
+         Adder = (leftMidPoint - upToLeft);
+         if (Adder != 0) {
+            for (int i = leftMidPoint; i != upToLeft; i = i - (Adder / Math.abs(Adder))) {
+               // System.out.println(i);
+               ledBuffer.setLED(i, DUAL_STICK_COLOR);
+            }
          }
 
+         for (int i = (rightMidPoint - LightConstants.LED_STICK_TAKEN_LENGTH + 1); i < rightMidPoint
+            + LightConstants.LED_STICK_TAKEN_LENGTH; i++) {
+            ledBuffer.setLED(i - 1, NOTHING_COLOR);
+         }
+
+         Adder = (rightMidPoint - upToRight);
+         if (Adder != 0) {
+            for (int i = rightMidPoint; i != upToRight; i = i - (Adder / Math.abs(Adder))) {
+               // System.out.println(i);
+               ledBuffer.setLED(i - 1, DUAL_STICK_COLOR);
+            }
+         }
 
          if (boost) {
             ledBuffer.setLED(LightConstants.BOOST_INDEX, BOOST_COLOR);
          }
          else {
-            ledBuffer.setLED(upToRight, NOTHING_COLOR);
+            ledBuffer.setLED(LightConstants.BOOST_INDEX, NOTHING_COLOR);
          }
 
-         ledStrip.setData(ledBuffer);
+      case TANK:
+
 
       }
    }

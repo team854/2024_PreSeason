@@ -9,6 +9,7 @@ import frc.robot.Constants.AutoConstants.AutoPattern;
 import frc.robot.commands.drive.MeasuredStraightDriveCommand;
 import frc.robot.commands.drive.TimedDriveCommand;
 import frc.robot.commands.drive.TimedStraightDriveCommand;
+import frc.robot.commands.drive.TurnToHeadingCommand;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class AutonomousCommand extends SequentialCommandGroup {
@@ -65,7 +66,21 @@ public class AutonomousCommand extends SequentialCommandGroup {
 
         case DRIVE_FORWARD_PID_MEASURED:
             // Drive forward for 10 meters
-            addCommands(new MeasuredStraightDriveCommand(1000, 0.5, true, driveSubsystem));
+            addCommands(new MeasuredStraightDriveCommand(1000, 0.5, true, 0, driveSubsystem));
+            break;
+
+        case DRIVE_TO_COORDINATE_PID_MEASURED:
+            // Turns to the required heading, then drives a calculated distance to arrive at a
+            // certain coordinate
+            // (Relative to the robot being at the origin and facing in the direction of +y)
+            double x = 1;
+            double y = 1;
+
+            double r = Math.sqrt(x * x + y * y);
+            double theta = 45;
+
+            addCommands(new TurnToHeadingCommand(0.2, theta, true, 10000, driveSubsystem));
+            // addCommands(new MeasuredStraightDriveCommand(r, 0.2, true, driveSubsystem));
         }
     }
 

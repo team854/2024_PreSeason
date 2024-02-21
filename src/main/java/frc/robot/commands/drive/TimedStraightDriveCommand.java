@@ -40,6 +40,7 @@ public class TimedStraightDriveCommand extends LoggingCommand {
 
         logCommandStart(commandParms);
 
+        previousError = driveSubsystem.getHeadingError(targetHeading);
 
     }
 

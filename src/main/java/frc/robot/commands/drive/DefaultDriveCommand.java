@@ -82,19 +82,11 @@ public class DefaultDriveCommand extends LoggingCommand {
 
         case DUAL_STICK_ARCADE:
 
-            veloX = DriveConstants.MAX_WHEEL_SPEED_MPS * operatorInput.getLeftY();
-            veloY = 0;
-            angVelo = Math.asin(operatorInput.getRightX());
+            double speed = operatorInput.getSpeed(driveMode);
+            double turn = operatorInput.getTurn(driveMode);
 
-            movingFrameSpeeds = new ChassisSpeeds(veloX, veloY, angVelo);
-            wheelSpeeds = new DifferentialDriveKinematics(DriveConstants.WIDTH_WHEEL_TO_WHEEL);
-
-            leftSpeed = wheelSpeeds.leftMetersPerSecond();
-            rightSpeed = wheelSpeeds.rightMetersPerSecond();
-
-            driveSubsystem.setMotorSpeeds(leftSpeed, rightSpeed);
-
-
+            setMotorSpeedsArcade(speed, turn, boost);
+            lightsSubsystem.ledStick(boost, driveMode);
             break;
 
         case TANK:

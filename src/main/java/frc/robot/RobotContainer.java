@@ -70,6 +70,7 @@ public class RobotContainer {
         autoPatternChooser.addOption("Drive Forward", AutoPattern.DRIVE_FORWARD);
         autoPatternChooser.addOption("Drive Forward PID Timed", AutoPattern.DRIVE_FORWARD_PID_TIMED);
         autoPatternChooser.addOption("Drive Forward PID Measured", AutoPattern.DRIVE_FORWARD_PID_MEASURED);
+        autoPatternChooser.addOption("Drive To Coordinate PID Measured", AutoPattern.DRIVE_TO_COORDINATE_PID_MEASURED);
     }
 
     /**
