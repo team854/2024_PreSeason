@@ -1,63 +1,70 @@
 package frc.robot.commands.drive;
 
-import frc.robot.commands.LoggingCommandBase;
+import frc.robot.commands.LoggingCommand;
 import frc.robot.subsystems.DriveSubsystem;
 
-public class TimedDriveCommand extends LoggingCommandBase {
+public class TimedDriveCommand extends LoggingCommand {
 
     private DriveSubsystem driveSubsystem;
     private double         time, leftSpeed, rightSpeed;
     private boolean        brakeAtEnd;
 
-    private long           initialTime, currentTime;
-    private long           runTime = 0;
 
 
-    public TimedDriveCommand(double time, double leftSpeed, double rightSpeed, DriveSubsystem driveSubsystem) {
+    public TimedDriveCommand(double time, double leftSpeed, double rightSpeed, boolean brakeAtEnd,
+        DriveSubsystem driveSubsystem) {
+
         this.time           = time;
         this.leftSpeed      = leftSpeed;
         this.rightSpeed     = rightSpeed;
         this.driveSubsystem = driveSubsystem;
+        this.brakeAtEnd     = brakeAtEnd;
 
         addRequirements(driveSubsystem);
     }
 
     @Override
     public void initialize() {
+        super.initialize();
 
-        initialTime = System.currentTimeMillis();
+        String commandParms = "time (ms): " + time + ", left speed: " + leftSpeed + ", right speed: " + rightSpeed + ", brake: "
+            + brakeAtEnd;
+        logCommandStart(commandParms);
 
     }
 
     @Override
     public void execute() {
-        // executes every 20ms
+
         driveSubsystem.setMotorSpeeds(leftSpeed, rightSpeed);
 
     }
 
     @Override
     public boolean isFinished() {
-        currentTime = System.currentTimeMillis();
-        runTime     = currentTime - initialTime;
-        brakeAtEnd  = false;
 
-        if (runTime <= time) {
-            brakeAtEnd = false;
-        }
-        else {
-            brakeAtEnd = true;
+
+        if (isTimeoutExceeded(time / 1000.0d)) {
+            setFinishReason(time / 1000.0d + " seconds has been exceeded");
+            return true;
         }
 
-        return brakeAtEnd;
+        return false;
 
     }
 
     @Override
-    public void end(boolean brakeAtEnd) {
+
+    public void end(boolean interrupted) {
+
+
+
+        logCommandEnd(interrupted);
         if (brakeAtEnd) {
             driveSubsystem.setMotorSpeeds(0, 0);
         }
+
+
     }
 
 }
