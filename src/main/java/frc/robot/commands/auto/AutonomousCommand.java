@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.AutoConstants.AutoPattern;
+import frc.robot.commands.drive.MeasuredDriveAtHeadingCommand;
 import frc.robot.commands.drive.MeasuredStraightDriveCommand;
 import frc.robot.commands.drive.TimedDriveCommand;
 import frc.robot.commands.drive.TimedStraightDriveCommand;
@@ -45,6 +46,7 @@ public class AutonomousCommand extends SequentialCommandGroup {
             return;
         }
 
+        double startHeading;
         /*
          * Compose the appropriate auto commands
          */
@@ -61,26 +63,109 @@ public class AutonomousCommand extends SequentialCommandGroup {
 
         case DRIVE_FORWARD_PID_TIMED:
             // Drive forward for 30 seconds
-            addCommands(new TimedStraightDriveCommand(30000, 0.5, true, 0, driveSubsystem));
+            addCommands(new TimedStraightDriveCommand(1000, 1, true, 186, driveSubsystem));
             break;
 
         case DRIVE_FORWARD_PID_MEASURED:
             // Drive forward for 10 meters
-            addCommands(new MeasuredStraightDriveCommand(1000, 0.5, true, 0, driveSubsystem));
+            addCommands(new MeasuredDriveAtHeadingCommand(100, 0.1, true, 355, driveSubsystem));
             break;
 
-        case DRIVE_TO_COORDINATE_PID_MEASURED:
-            // Turns to the required heading, then drives a calculated distance to arrive at a
-            // certain coordinate
-            // (Relative to the robot being at the origin and facing in the direction of +y)
-            double x = 1;
-            double y = 1;
+        case OUTSIDE_ONE_SHOT:
+            // From outside position, backs up and makes a speaker shot
+            addCommands(new MeasuredStraightDriveCommand(100, 0.2, true, driveSubsystem));
+            // Shoot arm, no command made yet
 
-            double r = Math.sqrt(x * x + y * y);
-            double theta = 45;
+            break;
 
-            addCommands(new TurnToHeadingCommand(0.2, theta, true, 10000, driveSubsystem));
-            // addCommands(new MeasuredStraightDriveCommand(r, 0.2, true, driveSubsystem));
+        case OUTSIDE_TWO_SHOT:
+            // From outside position, backs up and makes a speaker shot
+            // then it turns goes backwards to get a note, goes forward and turns back to make
+            // another shot
+            startHeading = driveSubsystem.getHeading();
+            addCommands(new MeasuredStraightDriveCommand(100, -0.2, true, driveSubsystem));
+
+            // Shoot arm, no command made yet
+
+            addCommands(new TurnToHeadingCommand(0.2, startHeading - 60, true, 3, driveSubsystem));
+
+            addCommands(new MeasuredStraightDriveCommand(30, -0.2, true, driveSubsystem));
+
+            addCommands(new MeasuredStraightDriveCommand(30, 0.2, true, driveSubsystem));
+
+            addCommands(new TurnToHeadingCommand(0.2, startHeading, true, 3, driveSubsystem));
+
+            // Shoot arm, no command made yet
+
+            break;
+
+        case SPEAKER_THREE_SHOT:
+
+            startHeading = driveSubsystem.getHeading();
+
+            addCommands(new MeasuredStraightDriveCommand(100, -0.2, true, driveSubsystem));
+
+            // Shoot arm, no command made yet
+
+            addCommands(new MeasuredStraightDriveCommand(100, -0.2, true, driveSubsystem));
+
+            // Shoot arm, no command made yet
+
+            addCommands(new TurnToHeadingCommand(0.2, startHeading + 90, true, 3, driveSubsystem));
+
+            addCommands(new MeasuredStraightDriveCommand(100, -0.2, true, driveSubsystem));
+
+            addCommands(new TurnToHeadingCommand(0.2, startHeading + 45, true, 3, driveSubsystem));
+
+            // Shoot arm, no command made yet
+
+            break;
+
+        case SPEAKER_FOUR_SHOT:
+
+            startHeading = driveSubsystem.getHeading();
+
+            addCommands(new MeasuredStraightDriveCommand(100, -0.2, true, driveSubsystem));
+
+            // Shoot arm, no command made yet
+
+            addCommands(new MeasuredStraightDriveCommand(100, -0.2, true, driveSubsystem));
+
+            // Shoot arm, no command made yet
+
+            addCommands(new TurnToHeadingCommand(0.2, startHeading + 90, true, 3, driveSubsystem));
+
+            addCommands(new MeasuredStraightDriveCommand(100, -0.2, true, driveSubsystem));
+
+            addCommands(new TurnToHeadingCommand(0.2, startHeading + 45, true, 3, driveSubsystem));
+
+            // Shoot arm, no command made yet
+
+            addCommands(new TurnToHeadingCommand(0.2, startHeading - 90, true, 3, driveSubsystem));
+
+            addCommands(new MeasuredStraightDriveCommand(200, -0.2, true, driveSubsystem));
+
+            addCommands(new TurnToHeadingCommand(0.2, startHeading - 45, true, 3, driveSubsystem));
+
+            // Shoot arm, no command made yet
+
+            break;
+
+        case AMP_ONE_SHOT:
+            break;
+
+        case AMP_TWO_SHOT:
+            break;
+
+        case AMP_ONE_SHOT_ONE_AMP:
+            break;
+
+        case AMP_ONE_AMP:
+            break;
+
+        case AMP_TWO_AMP:
+            break;
+
         }
     }
 

@@ -24,13 +24,13 @@ public class MeasuredStraightDriveCommand extends LoggingCommand {
     private double         initialRightEncoder;
     private double         cmToEncoderUnits;
 
+    private String         reason;
 
 
-    public MeasuredStraightDriveCommand(double dist, double speed, boolean brakeAtEnd, double targetHeading,
-        DriveSubsystem driveSubsystem) {
+
+    public MeasuredStraightDriveCommand(double dist, double speed, boolean brakeAtEnd, DriveSubsystem driveSubsystem) {
         this.dist           = dist;
         this.speed          = speed;
-        this.targetHeading  = targetHeading;
         this.driveSubsystem = driveSubsystem;
         this.brakeAtEnd     = brakeAtEnd;
 
@@ -48,7 +48,9 @@ public class MeasuredStraightDriveCommand extends LoggingCommand {
         initialLeftEncoder  = driveSubsystem.getLeftEncoder();
         initialRightEncoder = driveSubsystem.getRightEncoder();
 
-        cmToEncoderUnits    = dist * frc.robot.Constants.DriveConstants.ENCODER_COUNTS_PER_REVOLUTION;
+        cmToEncoderUnits    = Math.abs(dist / frc.robot.Constants.DriveConstants.CMS_PER_ENCODER_COUNT);
+
+        targetHeading       = driveSubsystem.getHeading();
 
     }
 
@@ -67,8 +69,9 @@ public class MeasuredStraightDriveCommand extends LoggingCommand {
 
         errorSignal    = pTerm + iTerm + dTerm;
 
-        double leftSpeed  = Math.min(Math.max(speed - errorSignal, -1.0), 1.0);
-        double rightSpeed = Math.min(Math.max(speed + errorSignal, -1.0), 1.0);
+        double sgnSpeed   = Math.abs(speed) / speed;
+        double leftSpeed  = Math.min(Math.max(speed - errorSignal * sgnSpeed, -1.0), 1.0);
+        double rightSpeed = Math.min(Math.max(speed + errorSignal * sgnSpeed, -1.0), 1.0);
 
         driveSubsystem.setMotorSpeeds(leftSpeed, rightSpeed);
 
@@ -80,10 +83,11 @@ public class MeasuredStraightDriveCommand extends LoggingCommand {
         double currentLeftEncoder   = driveSubsystem.getLeftEncoder();
         double currentRigthtEncoder = driveSubsystem.getRightEncoder();
 
-        double countedLeft          = currentLeftEncoder - initialLeftEncoder;
-        double countedRight         = currentRigthtEncoder - initialRightEncoder;
+        double countedLeft          = Math.abs(currentLeftEncoder - initialLeftEncoder);
+        double countedRight         = Math.abs(currentRigthtEncoder - initialRightEncoder);
 
         if ((countedLeft + countedRight) / 2 >= cmToEncoderUnits) {
+            reason = "passed a distance of " + dist + " cm";
             return true;
         }
 
@@ -99,7 +103,7 @@ public class MeasuredStraightDriveCommand extends LoggingCommand {
         if (brakeAtEnd) {
             driveSubsystem.setMotorSpeeds(0, 0);
         }
-
+        setFinishReason(reason);
         logCommandEnd(interrupted);
     }
 

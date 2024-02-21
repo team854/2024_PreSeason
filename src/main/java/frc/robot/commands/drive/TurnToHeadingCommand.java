@@ -1,28 +1,38 @@
 package frc.robot.commands.drive;
 
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.DriveConstants.HeadingStates;
 import frc.robot.commands.LoggingCommand;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class TurnToHeadingCommand extends LoggingCommand {
 
     private DriveSubsystem driveSubsystem;
-    private double         speed;
-    private boolean        brakeAtEnd;
 
 
-    private double         targetHeading;
-    private double         currentError;
-    private double         previousError;
-    private double         diffError;
-    private double         errorSignal;
-    private double         pTerm;
-    private double         iTerm = 0;
-    private double         dTerm;
 
-    private double         initTime;
-    private double         passedTime;
-    private double         timeoutTime;
+    // PID
+    private double        currentError;
+    private double        previousError;
+    private double        diffError;
+    private double        errorSignal;
+    private double        pTerm;
+    private double        iTerm = 0;
+    private double        dTerm;
+
+    // Time measure
+    private double        initTime;
+    private double        passedTime;
+    private double        timeoutTime;
+
+    private HeadingStates headingState;
+
+    // Logging
+    private double        speed;
+    private boolean       brakeAtEnd;
+    private String        reason;
+    private double        targetHeading;
+
 
 
     public TurnToHeadingCommand(double speed, double targetHeading, boolean brakeAtEnd, double timeoutTime,
@@ -45,7 +55,15 @@ public class TurnToHeadingCommand extends LoggingCommand {
 
         previousError = driveSubsystem.getHeadingError(targetHeading);
 
+
         initTime      = System.currentTimeMillis();
+
+        if (Math.abs(previousError) > 10) {
+            headingState = HeadingStates.FAR;
+        }
+        else {
+            headingState = HeadingStates.CLOSE;
+        }
 
 
     }
@@ -58,17 +76,37 @@ public class TurnToHeadingCommand extends LoggingCommand {
         currentError  = driveSubsystem.getHeadingError(targetHeading);
         diffError     = currentError - previousError;
         previousError = currentError;
-        System.out.println(currentError);
 
-        pTerm        = DriveConstants.TURN_TO_HEADING_PID_KP * currentError;
-        iTerm       += DriveConstants.TURN_TO_HEADING_PID_KI * currentError;
-        dTerm       += DriveConstants.TURN_TO_HEADING_PID_KD * diffError;
+        switch (headingState) {
 
-        errorSignal  = pTerm + iTerm + dTerm;
+        case FAR:
+        default:
+            double sgnError = Math.abs(currentError) / currentError;
+            driveSubsystem.setMotorSpeeds(speed * sgnError, -speed * sgnError);
+            break;
 
-        Math.max(Math.min(errorSignal + Math.abs(errorSignal) / errorSignal * 0.2, 1), -1);
+        case CLOSE:
 
-        driveSubsystem.setMotorSpeeds(speed, -speed);
+            pTerm = DriveConstants.TURN_TO_HEADING_PID_KP * currentError;
+            iTerm += DriveConstants.TURN_TO_HEADING_PID_KI * currentError;
+            dTerm += DriveConstants.TURN_TO_HEADING_PID_KD * diffError;
+
+            errorSignal = pTerm + iTerm + dTerm;
+
+            Math.max(Math.min(errorSignal + Math.abs(errorSignal) / errorSignal * 0.2, 1), -1);
+
+            driveSubsystem.setMotorSpeeds(speed, -speed);
+
+            break;
+        }
+
+        if (Math.abs(previousError) > 10) {
+            headingState = HeadingStates.FAR;
+        }
+        else {
+            headingState = HeadingStates.CLOSE;
+        }
+
 
     }
 
@@ -81,12 +119,14 @@ public class TurnToHeadingCommand extends LoggingCommand {
 
 
         if (Math.abs(currentError) <= DriveConstants.HEADING_ERROR_BUFFER) {
+            reason = "Within buffer accuracy";
             return true;
         }
 
 
         passedTime = System.currentTimeMillis();
         if (passedTime - initTime > timeoutTime) {
+            reason = "timeout";
             return true;
         }
 
@@ -101,6 +141,8 @@ public class TurnToHeadingCommand extends LoggingCommand {
             driveSubsystem.setMotorSpeeds(0, 0);
         }
 
+
+        setFinishReason(reason);
         logCommandEnd(interrupted);
     }
 

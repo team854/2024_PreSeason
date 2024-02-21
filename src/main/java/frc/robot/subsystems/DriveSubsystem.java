@@ -129,15 +129,16 @@ public class DriveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Left Encoder", Math.round(getLeftEncoder() * 100) / 100d);
         SmartDashboard.putNumber("Right Encoder", Math.round(getRightEncoder() * 100) / 100d);
         SmartDashboard.putNumber("Average Encoder", Math.round(getAverageEncoderCounts() * 100) / 100d);
-        SmartDashboard.putNumber("Distance (cm)", Math.round(getDistanceCm() * 10) / 10d);
+        SmartDashboard.putNumber("Distance (m)", Math.round(getDistanceCm() * 10) / 1000d);
 
         // Round the ultrasonic voltage to 2 decimals
         // SmartDashboard.putNumber("Ultrasonic Voltage",
         // Math.round(ultrasonicDistanceSensor.getVoltage() * 100.0d) / 100.0d);
-        SmartDashboard.putNumber("Ultrasonic Distance (cm)", getUltrasonicDistanceCm());
+        SmartDashboard.putNumber("Ultrasonic Distance (m)", getUltrasonicDistanceCm() / 100d);
 
         // Gets the yaw from the gyro sensor
-        SmartDashboard.putNumber("Gyro Yaw", getYaw());
+        SmartDashboard.putNumber("Heading", getHeading());
+        SmartDashboard.putNumber("Gyro Yaw", gyroSensorAhrs.getYaw());
 
     }
 
@@ -158,7 +159,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     // returns the yaw, rounded to 1 decimal place
     // retuens in degrees from 0-360
-    public double getYaw() {
+    public double getHeading() {
         double yawAngle = (Math.round(gyroSensorAhrs.getYaw() * 10) / 10.0d) % 360;
         if (yawAngle < 0) {
             yawAngle += 360;
@@ -167,7 +168,7 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public double getHeadingError(double targetHeading) {
-        double currentHeading = getYaw();
+        double currentHeading = getHeading();
         double error          = targetHeading - currentHeading;
         if (error < 0) {
             error += 360;

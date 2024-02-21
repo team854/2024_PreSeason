@@ -25,7 +25,17 @@ public final class Constants {
             DRIVE_FORWARD,
             DRIVE_FORWARD_PID_TIMED,
             DRIVE_FORWARD_PID_MEASURED,
-            DRIVE_TO_COORDINATE_PID_MEASURED
+            // the below autopatterns assume that were on blue i.e. when facing the speaker the amp
+            // is on the left
+            OUTSIDE_ONE_SHOT,
+            OUTSIDE_TWO_SHOT,
+            SPEAKER_THREE_SHOT,
+            SPEAKER_FOUR_SHOT,
+            AMP_ONE_SHOT,
+            AMP_TWO_SHOT,
+            AMP_ONE_SHOT_ONE_AMP,
+            AMP_ONE_AMP,
+            AMP_TWO_AMP
         };
     }
 
@@ -44,11 +54,21 @@ public final class Constants {
         public static final boolean LEFT_ENCODER_REVERSED         = false;
         public static final boolean RIGHT_ENCODER_REVERSED        = true;
 
-        public static final int     ENCODER_COUNTS_PER_REVOLUTION = 1024;
+        public static final int     ENCODER_COUNTS_PER_REVOLUTION = 5505;        // this
+                                                                                 // value
+                                                                                 // used
+                                                                                 // to
+                                                                                 // read
+                                                                                 // 1024
+                                                                                 // but
+                                                                                 // i
+                                                                                 // changed
+                                                                                 // it
         public static final double  ROBOT_WHEEL_DIAMETER_CMS      = 6 * 2.54;
 
         public static final double  CMS_PER_ENCODER_COUNT         =
-            // Assumes the encoders are directly mounted on the wheel shafts
+            // Assumes the encoders are directly mounted on the wheel shafts, supposed to be
+            // 0.04675573
             (ROBOT_WHEEL_DIAMETER_CMS * Math.PI) / ENCODER_COUNTS_PER_REVOLUTION;
 
         public static final double  HEADING_PID_KP                = 0.02;
@@ -60,6 +80,11 @@ public final class Constants {
         public static final double  TURN_TO_HEADING_PID_KD        = 0;
 
         public static final double  HEADING_ERROR_BUFFER          = 3;
+
+        public static enum HeadingStates {
+            CLOSE,
+            FAR
+        }
 
     }
 
