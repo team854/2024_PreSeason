@@ -79,6 +79,11 @@ public class RobotContainer {
         autoPatternChooser.addOption("One shot amp, one shot into speaker, from amo", AutoPattern.AMP_ONE_SHOT_ONE_AMP);
         autoPatternChooser.addOption("One shot into amp", AutoPattern.AMP_ONE_AMP);
         autoPatternChooser.addOption("Two shots into amp", AutoPattern.AMP_TWO_AMP);
+        autoPatternChooser.addOption("SysId Quasistatic forward configuration", AutoPattern.SYS_ID_QUASISTATIC_FORWARD);
+        autoPatternChooser.addOption("SysId Quasistatic reverse configuration", AutoPattern.SYS_ID_QUASISTATIC_REVERSE);
+        autoPatternChooser.addOption("SysId Dynamic forward configuration", AutoPattern.SYS_ID_DYNAMIC_FORWARD);
+        autoPatternChooser.addOption("SysId Dynamic reverse configuration", AutoPattern.SYS_ID_DYNAMIC_REVERSE);
+
 
     }
 

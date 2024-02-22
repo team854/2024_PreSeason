@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.AutoConstants.AutoPattern;
 import frc.robot.commands.drive.MeasuredDriveAtHeadingCommand;
 import frc.robot.commands.drive.MeasuredStraightDriveCommand;
@@ -12,6 +13,7 @@ import frc.robot.commands.drive.TimedDriveCommand;
 import frc.robot.commands.drive.TimedStraightDriveCommand;
 import frc.robot.commands.drive.TurnToHeadingCommand;
 import frc.robot.subsystems.DriveSubsystem;
+
 
 public class AutonomousCommand extends SequentialCommandGroup {
 
@@ -246,6 +248,32 @@ public class AutonomousCommand extends SequentialCommandGroup {
             // Shoot arm into amp, no command made yet
 
             break;
+
+        case SYS_ID_QUASISTATIC_FORWARD:
+
+            addCommands(driveSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+
+            break;
+
+        case SYS_ID_QUASISTATIC_REVERSE:
+
+            addCommands(driveSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+
+            break;
+
+        case SYS_ID_DYNAMIC_FORWARD:
+
+            addCommands(driveSubsystem.sysIdDynamic(SysIdRoutine.Direction.kForward));
+
+            break;
+
+
+        case SYS_ID_DYNAMIC_REVERSE:
+
+            addCommands(driveSubsystem.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+
+            break;
+
 
         }
     }

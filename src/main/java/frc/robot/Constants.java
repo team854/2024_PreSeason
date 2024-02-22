@@ -35,7 +35,12 @@ public final class Constants {
             AMP_TWO_SHOT,
             AMP_ONE_SHOT_ONE_AMP,
             AMP_ONE_AMP,
-            AMP_TWO_AMP
+            AMP_TWO_AMP,
+            // For SysId data gathering
+            SYS_ID_QUASISTATIC_FORWARD,
+            SYS_ID_QUASISTATIC_REVERSE,
+            SYS_ID_DYNAMIC_FORWARD,
+            SYS_ID_DYNAMIC_REVERSE
         };
     }
 
@@ -54,17 +59,18 @@ public final class Constants {
         public static final boolean LEFT_ENCODER_REVERSED         = false;
         public static final boolean RIGHT_ENCODER_REVERSED        = true;
 
-        public static final int     ENCODER_COUNTS_PER_REVOLUTION = 5505;        // this
-                                                                                 // value
-                                                                                 // used
-                                                                                 // to
-                                                                                 // read
-                                                                                 // 1024
-                                                                                 // but
-                                                                                 // i
-                                                                                 // changed
-                                                                                 // it
+        public static final int     ENCODER_COUNTS_PER_REVOLUTION = 5505;                              // this
+                                                                                                       // value
+                                                                                                       // used
+                                                                                                       // to
+                                                                                                       // read
+                                                                                                       // 1024
+                                                                                                       // but
+                                                                                                       // i
+                                                                                                       // changed
+                                                                                                       // it
         public static final double  ROBOT_WHEEL_DIAMETER_CMS      = 6 * 2.54;
+        public static final double  ROBOT_WHEEL_CIRCUMFERENCE_CMS = Math.PI * ROBOT_WHEEL_DIAMETER_CMS;
 
         public static final double  CMS_PER_ENCODER_COUNT         =
             // Assumes the encoders are directly mounted on the wheel shafts, supposed to be
