@@ -5,13 +5,14 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.AutoConstants.AutoPattern;
 import frc.robot.commands.drive.MeasuredDriveAtHeadingCommand;
 import frc.robot.commands.drive.MeasuredStraightDriveCommand;
 import frc.robot.commands.drive.TimedDriveCommand;
 import frc.robot.commands.drive.TimedStraightDriveCommand;
 import frc.robot.commands.drive.TurnToHeadingCommand;
+import frc.robot.commands.sysId.QuasistaticForwardCommand;
+import frc.robot.commands.sysId.QuasistaticReverseCommand;
 import frc.robot.subsystems.DriveSubsystem;
 
 
@@ -65,7 +66,7 @@ public class AutonomousCommand extends SequentialCommandGroup {
 
         case DRIVE_FORWARD_PID_TIMED:
             // Drive forward for 30 seconds
-            addCommands(new TimedStraightDriveCommand(1000, 1, true, 186, driveSubsystem));
+            addCommands(new TimedStraightDriveCommand(1000, 0.3, true, 0, driveSubsystem));
             break;
 
         case DRIVE_FORWARD_PID_MEASURED:
@@ -93,13 +94,13 @@ public class AutonomousCommand extends SequentialCommandGroup {
 
             // Shoot arm, no command made yet
 
-            addCommands(new TurnToHeadingCommand(0.2, startHeading - 60, true, 3, driveSubsystem));
+            addCommands(new TurnToHeadingCommand(0.2, startHeading - 60, true, 3000, driveSubsystem));
 
             addCommands(new MeasuredStraightDriveCommand(30, -0.2, true, driveSubsystem));
 
             addCommands(new MeasuredStraightDriveCommand(30, 0.2, true, driveSubsystem));
 
-            addCommands(new TurnToHeadingCommand(0.2, startHeading, true, 3, driveSubsystem));
+            addCommands(new TurnToHeadingCommand(0.2, startHeading, true, 3000, driveSubsystem));
 
             // Shoot arm, no command made yet
 
@@ -139,19 +140,19 @@ public class AutonomousCommand extends SequentialCommandGroup {
 
             // Shoot arm, no command made yet
 
-            addCommands(new TurnToHeadingCommand(0.2, startHeading + 90, true, 3, driveSubsystem));
+            addCommands(new TurnToHeadingCommand(0.2, startHeading + 90, true, 3000, driveSubsystem));
 
             addCommands(new MeasuredStraightDriveCommand(100, -0.2, true, driveSubsystem));
 
-            addCommands(new TurnToHeadingCommand(0.2, startHeading + 30, true, 3, driveSubsystem));
+            addCommands(new TurnToHeadingCommand(0.2, startHeading + 30, true, 3000, driveSubsystem));
 
             // Shoot arm, no command made yet
 
-            addCommands(new TurnToHeadingCommand(0.2, startHeading - 90, true, 3, driveSubsystem));
+            addCommands(new TurnToHeadingCommand(0.2, startHeading - 90, true, 3000, driveSubsystem));
 
             addCommands(new MeasuredStraightDriveCommand(200, -0.2, true, driveSubsystem));
 
-            addCommands(new TurnToHeadingCommand(0.2, startHeading - 30, true, 3, driveSubsystem));
+            addCommands(new TurnToHeadingCommand(0.2, startHeading - 30, true, 3000, driveSubsystem));
 
             // Shoot arm, no command made yet
 
@@ -165,7 +166,7 @@ public class AutonomousCommand extends SequentialCommandGroup {
 
             // Shoot arm, no command made yet
 
-            addCommands(new TurnToHeadingCommand(0.2, startHeading + 45, true, 3, driveSubsystem));
+            addCommands(new TurnToHeadingCommand(0.2, startHeading + 45, true, 3000, driveSubsystem));
 
             addCommands(new MeasuredStraightDriveCommand(100, -0.2, true, driveSubsystem));
 
@@ -179,11 +180,11 @@ public class AutonomousCommand extends SequentialCommandGroup {
 
             // Shoot arm, no command made yet
 
-            addCommands(new TurnToHeadingCommand(0.2, startHeading + 45, true, 3, driveSubsystem));
+            addCommands(new TurnToHeadingCommand(0.2, startHeading + 45, true, 3000, driveSubsystem));
 
             addCommands(new MeasuredStraightDriveCommand(200, -0.2, true, driveSubsystem));
 
-            addCommands(new TurnToHeadingCommand(0.2, startHeading + 22.5, true, 3, driveSubsystem));
+            addCommands(new TurnToHeadingCommand(0.2, startHeading + 22.5, true, 3000, driveSubsystem));
 
             // Shoot arm, no command made yet
 
@@ -197,11 +198,11 @@ public class AutonomousCommand extends SequentialCommandGroup {
 
             // Shoot arm, no command made yet
 
-            addCommands(new TurnToHeadingCommand(0.2, startHeading + 45, true, 3, driveSubsystem));
+            addCommands(new TurnToHeadingCommand(0.2, startHeading + 45, true, 3000, driveSubsystem));
 
             addCommands(new MeasuredStraightDriveCommand(200, -0.2, true, driveSubsystem));
 
-            addCommands(new TurnToHeadingCommand(0.2, startHeading + 135, true, 3, driveSubsystem));
+            addCommands(new TurnToHeadingCommand(0.2, startHeading + 135, true, 3000, driveSubsystem));
 
             addCommands(new MeasuredStraightDriveCommand(100, 0.2, true, driveSubsystem));
 
@@ -215,11 +216,11 @@ public class AutonomousCommand extends SequentialCommandGroup {
 
             addCommands(new MeasuredStraightDriveCommand(100, -0.2, true, driveSubsystem));
 
-            addCommands(new TurnToHeadingCommand(0.2, startHeading + 31, true, 3, driveSubsystem));
+            addCommands(new TurnToHeadingCommand(0.2, startHeading + 31, true, 3000, driveSubsystem));
 
             addCommands(new MeasuredStraightDriveCommand(206, -0.2, true, driveSubsystem));
 
-            addCommands(new TurnToHeadingCommand(0.2, startHeading + 135, true, 3, driveSubsystem));
+            addCommands(new TurnToHeadingCommand(0.2, startHeading + 135, true, 3000, driveSubsystem));
 
             addCommands(new MeasuredStraightDriveCommand(50, 0.2, true, driveSubsystem));
 
@@ -233,11 +234,11 @@ public class AutonomousCommand extends SequentialCommandGroup {
 
             addCommands(new MeasuredStraightDriveCommand(100, -0.2, true, driveSubsystem));
 
-            addCommands(new TurnToHeadingCommand(0.2, startHeading + 31, true, 3, driveSubsystem));
+            addCommands(new TurnToHeadingCommand(0.2, startHeading + 31, true, 3000, driveSubsystem));
 
             addCommands(new MeasuredStraightDriveCommand(206, -0.2, true, driveSubsystem));
 
-            addCommands(new TurnToHeadingCommand(0.2, startHeading + 135, true, 3, driveSubsystem));
+            addCommands(new TurnToHeadingCommand(0.2, startHeading + 135, true, 3000, driveSubsystem));
 
             addCommands(new MeasuredStraightDriveCommand(50, 0.2, true, driveSubsystem));
 
@@ -251,26 +252,30 @@ public class AutonomousCommand extends SequentialCommandGroup {
 
         case SYS_ID_QUASISTATIC_FORWARD:
 
-            addCommands(driveSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+            addCommands(new QuasistaticForwardCommand(5, driveSubsystem.m_mechanism, driveSubsystem.m_config,
+                driveSubsystem));
 
             break;
 
         case SYS_ID_QUASISTATIC_REVERSE:
 
-            addCommands(driveSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+            addCommands(new QuasistaticReverseCommand(5, driveSubsystem.m_mechanism, driveSubsystem.m_config,
+                driveSubsystem));
 
             break;
 
         case SYS_ID_DYNAMIC_FORWARD:
 
-            addCommands(driveSubsystem.sysIdDynamic(SysIdRoutine.Direction.kForward));
+            // addCommands(new DynamicForwardCommand(m_timeoutDForward, driveSubsystem.m_mechanism,
+            // driveSubsystem.m_config, driveSubsystem));
 
             break;
 
 
         case SYS_ID_DYNAMIC_REVERSE:
 
-            addCommands(driveSubsystem.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+            // addCommands(new DynamicReverseCommand(m_timeoutDReverse, driveSubsystem.m_mechanism,
+            // driveSubsystem.m_config, driveSubsystem));
 
             break;
 

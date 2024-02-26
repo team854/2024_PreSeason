@@ -3,7 +3,10 @@ package frc.robot.subsystems;
 import static edu.wpi.first.units.MutableMeasure.mutable;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.Volts;
+
+import java.util.function.Consumer;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -14,89 +17,143 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.MutableMeasure;
+import edu.wpi.first.units.Time;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog.State;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Mechanism;
 import frc.robot.Constants.DriveConstants;
 
 public class DriveSubsystem extends SubsystemBase {
 
 
     // The motors on the left side of the drive.
-    private final WPI_VictorSPX m_leftPrimaryMotor   = new WPI_VictorSPX(DriveConstants.LEFT_MOTOR_PORT);
-    private final WPI_TalonSRX  m_leftFollowerMotor  = new WPI_TalonSRX(DriveConstants.LEFT_MOTOR_PORT + 1);
+    public final WPI_VictorSPX m_leftPrimaryMotor   = new WPI_VictorSPX(DriveConstants.LEFT_MOTOR_PORT);
+    private final WPI_TalonSRX m_leftFollowerMotor  = new WPI_TalonSRX(DriveConstants.LEFT_MOTOR_PORT + 1);
 
     // The motors on the right side of the drive.
-    private final WPI_VictorSPX m_rightPrimaryMotor  = new WPI_VictorSPX(DriveConstants.RIGHT_MOTOR_PORT);
-    private final WPI_TalonSRX  m_rightFollowerMotor = new WPI_TalonSRX(DriveConstants.RIGHT_MOTOR_PORT + 1);
+    public final WPI_VictorSPX m_rightPrimaryMotor  = new WPI_VictorSPX(DriveConstants.RIGHT_MOTOR_PORT);
+    private final WPI_TalonSRX m_rightFollowerMotor = new WPI_TalonSRX(DriveConstants.RIGHT_MOTOR_PORT + 1);
 
 
 
     // The gyro sensor
-    private final AHRS                               m_gyroSensorAhrs           = new AHRS();
+    private final AHRS          m_gyroSensorAhrs           = new AHRS();
 
     // Ultrasonic sensor
     // Conversion from volts to distance in cm
     // Volts distance
     // 0.12 30.5 cm
     // 2.245 609.6 cm
-    private final AnalogInput                        m_ultrasonicDistanceSensor = new AnalogInput(0);
+    private final AnalogInput   m_ultrasonicDistanceSensor = new AnalogInput(0);
 
-    private static final double                      k_ultrasonicM              = (609.6 - 30.5) / (2.245 - .12);
-    private static final double                      k_ultrasonicB              = 609.6 - k_ultrasonicM * 2.245;
+    private static final double k_ultrasonicM              = (609.6 - 30.5) / (2.245 - .12);
+    private static final double k_ultrasonicB              = 609.6 - k_ultrasonicM * 2.245;
 
     // Motor speeds
-    private double                                   m_leftSpeed                = 0;
-    private double                                   m_rightSpeed               = 0;
+    private double              m_leftSpeed                = 0;
+    private double              m_rightSpeed               = 0;
 
     // Drive
-    private final DifferentialDrive                  m_drive                    = new DifferentialDrive(m_leftPrimaryMotor::set,
-        m_rightPrimaryMotor::set);
+    /*
+     * private final DifferentialDrive m_differentialDrive = new
+     * DifferentialDrive(m_leftPrimaryMotor::set,
+     * m_rightPrimaryMotor::set);
+     */
 
 
     // SysId Routine
-    private final MutableMeasure<Distance>           m_distance                 = mutable(Meters.of(0));
-    private final MutableMeasure<Voltage>            m_appliedVoltage           = mutable(Volts.of(0));
-    private final MutableMeasure<Velocity<Distance>> m_velocity                 = mutable(MetersPerSecond.of(0));
+    public final MutableMeasure<Distance>           m_distance          = mutable(Meters.of(0));
+    public final MutableMeasure<Voltage>            m_appliedVoltage    = mutable(Volts.of(0));
+    public final MutableMeasure<Velocity<Distance>> m_velocity          = mutable(MetersPerSecond.of(0));
 
-    private final SysIdRoutine                       m_sysIdRoutine             = new SysIdRoutine(
-        new SysIdRoutine.Config(),
-        new SysIdRoutine.Mechanism(
-            (Measure<Voltage> volts) -> {
-                                                                                            m_leftPrimaryMotor
-                                                                                                .setVoltage(volts.in(Volts));
-                                                                                            m_rightPrimaryMotor
-                                                                                                .setVoltage(volts.in(Volts));
-                                                                                        },
-            log -> {
-                // Record a frame for the left motors. Since these share an encoder, we consider
-                // the entire group to be one motor.
-                log.motor("drive-left")
-                    .voltage(
-                        m_appliedVoltage.mut_replace(
-                            m_leftPrimaryMotor.get() * RobotController.getBatteryVoltage(), Volts))
-                    .linearPosition(m_distance.mut_replace(getLeftDistanceM(), Meters))
-                    .linearVelocity(
-                        m_velocity.mut_replace(getLeftVelocityMPS(), MetersPerSecond));
-                // Record a frame for the right motors. Since these share an encoder, we consider
-                // the entire group to be one motor.
-                log.motor("drive-right")
-                    .voltage(
-                        m_appliedVoltage.mut_replace(
-                            m_rightPrimaryMotor.get() * RobotController.getBatteryVoltage(), Volts))
-                    .linearPosition(m_distance.mut_replace(getRightDistanceM(), Meters))
-                    .linearVelocity(
-                        m_velocity.mut_replace(getRightVelocityMPS(), MetersPerSecond));
-            },
-            // Tell SysId to make generated commands require this subsystem, suffix test state in
-            // WPILog with this subsystem's name ("drive")
-            this));
+    public final Consumer<Measure<Voltage>>         m_drive             = (Measure<Voltage> volts) -> {
+                                                                            m_leftPrimaryMotor
+                                                                                .setVoltage(volts.in(Volts));
+                                                                            m_rightPrimaryMotor
+                                                                                .setVoltage(volts.in(Volts));
+                                                                        };
+
+    public final Consumer<SysIdRoutineLog>          m_logging           = log -> {
+                                                                            // Record a
+                                                                            // frame for
+                                                                            // the left
+                                                                            // motors.
+                                                                            // Since
+                                                                            // these
+                                                                            // share an
+                                                                            // encoder,
+                                                                            // we
+                                                                            // consider
+                                                                            // the entire
+                                                                            // group to
+                                                                            // be one
+                                                                            // motor.
+                                                                            log.motor("drive-left")
+                                                                                .voltage(
+                                                                                    m_appliedVoltage.mut_replace(
+                                                                                        m_leftPrimaryMotor.get()
+                                                                                            * RobotController
+                                                                                                .getBatteryVoltage(),
+                                                                                        Volts))
+                                                                                .linearPosition(m_distance.mut_replace(
+                                                                                    getLeftDistanceM(), Meters))
+                                                                                .linearVelocity(
+                                                                                    m_velocity.mut_replace(
+                                                                                        getLeftVelocityMPS(),
+                                                                                        MetersPerSecond));
+                                                                            // Record a
+                                                                            // frame for
+                                                                            // the right
+                                                                            // motors.
+                                                                            // Since
+                                                                            // these
+                                                                            // share an
+                                                                            // encoder,
+                                                                            // we
+                                                                            // consider
+                                                                            // the entire
+                                                                            // group to
+                                                                            // be one
+                                                                            // motor.
+                                                                            log.motor("drive-right")
+                                                                                .voltage(
+                                                                                    m_appliedVoltage.mut_replace(
+                                                                                        m_rightPrimaryMotor.get()
+                                                                                            * RobotController
+                                                                                                .getBatteryVoltage(),
+                                                                                        Volts))
+                                                                                .linearPosition(m_distance.mut_replace(
+                                                                                    getRightDistanceM(), Meters))
+                                                                                .linearVelocity(
+                                                                                    m_velocity.mut_replace(
+                                                                                        getRightVelocityMPS(),
+                                                                                        MetersPerSecond));
+                                                                        };
+
+    public final Mechanism                          m_mechanism         = new SysIdRoutine.Mechanism(m_drive, m_logging,
+        this);
+
+    Measure<Velocity<Voltage>>                      m_configRampRate;
+    Measure<Voltage>                                m_configStepVoltage = Volts.of(7);
+    Measure<Time>                                   m_configTimeout     = Seconds.of(5);
+    Consumer<State>                                 m_configQForward    = state -> System.out.println("QForward");
+    public final Config                             m_config            = new SysIdRoutine.Config(null, m_configStepVoltage,
+        m_configTimeout, m_configQForward);
+    // Measure < Velocity < Voltage >> rampRate = 1 volt/s,
+    // Measure < Voltage > stepVoltage = 7 volt,
+    // Seconds.of(5),
+    // Consumer < State > recordState = kQuasistaticForward
+
+    public final SysIdRoutine                       m_sysIdRoutine      = new SysIdRoutine(m_config, m_mechanism);
 
 
     /** Creates a new DriveSubsystem. */
@@ -221,11 +278,13 @@ public class DriveSubsystem extends SubsystemBase {
         // NOTE: The follower motors are set to follow the primary motors
     }
 
-    public void arcadeDriveCommand(double xSpeed, double zRot) {
-        // A split-stick arcade command, with forward/backward controlled by the left
-        // hand, and turning controlled by the right.
-        m_drive.arcadeDrive(xSpeed, zRot);
-    }
+    /*
+     * public void arcadeDriveCommand(double xSpeed, double zRot) {
+     * // A split-stick arcade command, with forward/backward controlled by the left
+     * // hand, and turning controlled by the right.
+     * m_differentialDrive.arcadeDrive(xSpeed, zRot);
+     * }
+     */
 
     /** Safely stop the subsystem from moving */
     public void stop() {
