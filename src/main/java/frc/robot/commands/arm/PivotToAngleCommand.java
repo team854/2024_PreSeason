@@ -1,13 +1,13 @@
-package frc.robot.commands.drive;
+package frc.robot.commands.arm;
 
-import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.DriveConstants.HeadingStates;
+import frc.robot.Constants.ArmConstants;
+import frc.robot.Constants.ArmConstants.HeadingStates;
 import frc.robot.commands.LoggingCommand;
-import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.ArmSubsystem;
 
-public class TurnToHeadingCommand extends LoggingCommand {
+public class PivotToAngleCommand extends LoggingCommand {
 
-    private DriveSubsystem driveSubsystem;
+    private ArmSubsystem armSubsystem;
 
 
 
@@ -27,33 +27,33 @@ public class TurnToHeadingCommand extends LoggingCommand {
 
     private HeadingStates headingState;
 
-    // Logging
+    // Logging skibidi
     private double        speed;
     private boolean       brakeAtEnd;
     private String        reason;
-    private double        targetHeading;
+    private double        targetAngle;
 
 
 
-    public TurnToHeadingCommand(double speed, double targetHeading, boolean brakeAtEnd, double timeoutTimeMS,
-        DriveSubsystem driveSubsystem) {
-        this.speed          = speed;
-        this.brakeAtEnd     = brakeAtEnd;
-        this.targetHeading  = targetHeading;
-        this.timeoutTimeMS  = timeoutTimeMS;
-        this.driveSubsystem = driveSubsystem;
+    public PivotToAngleCommand(double speed, double targetAngle, boolean brakeAtEnd, double timeoutTimeMS,
+        ArmSubsystem armSubsystem) {
+        this.speed         = speed;
+        this.brakeAtEnd    = brakeAtEnd;
+        this.targetAngle   = targetAngle;
+        this.timeoutTimeMS = timeoutTimeMS;
+        this.armSubsystem  = armSubsystem;
 
-        addRequirements(driveSubsystem);
+        addRequirements(armSubsystem);
     }
 
     @Override
     public void initialize() {
 
-        String commandParms = "speed: " + speed + ", brake: " + brakeAtEnd + ", target heading: " + targetHeading
+        String commandParms = "speed: " + speed + ", brake: " + brakeAtEnd + ", target heading: " + targetAngle
             + ", timeout time (ms): " + timeoutTimeMS;
         logCommandStart(commandParms);
 
-        previousError = driveSubsystem.getHeadingError(targetHeading);
+        previousError = armSubsystem.getAngleErrorPivot(targetAngle);
 
 
         initTime      = System.currentTimeMillis();
@@ -73,34 +73,36 @@ public class TurnToHeadingCommand extends LoggingCommand {
 
         // executes every 20ms
 
-        currentError  = driveSubsystem.getHeadingError(targetHeading);
+        currentError  = armSubsystem.getAngleErrorPivot(targetAngle);
         diffError     = currentError - previousError;
         previousError = currentError;
+
+        double sgnError = Math.abs(currentError) / currentError;
 
         switch (headingState) {
 
         case FAR:
         default:
-            double sgnError = Math.abs(currentError) / currentError;
-            driveSubsystem.setMotorSpeeds(speed * sgnError, -speed * sgnError);
+
+            armSubsystem.pivotRotSetSpeed(speed * sgnError);
             break;
 
         case CLOSE:
 
-            pTerm = DriveConstants.TURN_TO_HEADING_PID_KP * currentError;
-            iTerm += DriveConstants.TURN_TO_HEADING_PID_KI * currentError;
-            dTerm += DriveConstants.TURN_TO_HEADING_PID_KD * diffError;
+            pTerm = ArmConstants.PIVOT_TO_ANGLE_PID_KP * currentError;
+            iTerm += ArmConstants.PIVOT_TO_ANGLE_PID_KI * currentError;
+            dTerm += ArmConstants.PIVOT_TO_ANGLE_PID_KD * diffError;
 
             errorSignal = pTerm + iTerm + dTerm;
 
             Math.max(Math.min(errorSignal + Math.abs(errorSignal) / errorSignal * 0.2, 1), -1);
 
-            driveSubsystem.setMotorSpeeds(speed, -speed);
+            armSubsystem.pivotRotSetSpeed(speed * sgnError);
 
             break;
         }
 
-        if (Math.abs(previousError) > 10) {
+        if (Math.abs(previousError) > ArmConstants.PIVOT_FAR_TO_CLOSE) {
             headingState = HeadingStates.FAR;
         }
         else {
@@ -115,10 +117,10 @@ public class TurnToHeadingCommand extends LoggingCommand {
 
         // executes every 20ms
 
-        currentError = driveSubsystem.getHeadingError(targetHeading);
+        currentError = armSubsystem.getAngleErrorPivot(targetAngle);
 
 
-        if (Math.abs(currentError) <= DriveConstants.HEADING_ERROR_BUFFER) {
+        if (Math.abs(currentError) <= ArmConstants.PIVOT_ROT_BUFFER) {
             reason = "Within buffer accuracy";
             return true;
         }
@@ -138,7 +140,7 @@ public class TurnToHeadingCommand extends LoggingCommand {
     public void end(boolean interrupted) {
 
         if (brakeAtEnd) {
-            driveSubsystem.setMotorSpeeds(0, 0);
+            armSubsystem.pivotRotSetSpeed(0);
         }
 
 

@@ -36,7 +36,7 @@ public final class Constants {
             AMP_ONE_SHOT_ONE_AMP,
             AMP_ONE_AMP,
             AMP_TWO_AMP
-        };
+        }
     }
 
     public static final class DriveConstants {
@@ -45,45 +45,39 @@ public final class Constants {
             TANK, SINGLE_STICK_ARCADE, DUAL_STICK_ARCADE;
         }
 
-        public static final int     LEFT_MOTOR_PORT               = 10;
-        public static final int     RIGHT_MOTOR_PORT              = 20;
+        // motor stuff
+        public static final int     LEFT_MOTOR_PORT        = 10;
+        public static final int     RIGHT_MOTOR_PORT       = 20;
 
-        public static final boolean LEFT_MOTOR_REVERSED           = false;
-        public static final boolean RIGHT_MOTOR_REVERSED          = true;
+        public static final boolean LEFT_MOTOR_REVERSED    = false;
+        public static final boolean RIGHT_MOTOR_REVERSED   = true;
 
-        public static final boolean LEFT_ENCODER_REVERSED         = false;
-        public static final boolean RIGHT_ENCODER_REVERSED        = true;
+        public static final boolean LEFT_ENCODER_REVERSED  = false;
+        public static final boolean RIGHT_ENCODER_REVERSED = true;
 
-        public static final int     ENCODER_COUNTS_PER_REVOLUTION = 5505;        // this
-                                                                                 // value
-                                                                                 // used
-                                                                                 // to
-                                                                                 // read
-                                                                                 // 1024
-                                                                                 // but
-                                                                                 // i
-                                                                                 // changed
-                                                                                 // it
-        public static final double  ROBOT_WHEEL_DIAMETER_CMS      = 6 * 2.54;
+        // public static final double MAX_WHEEL_SPEED_MPS;
 
-        public static final double  CMS_PER_ENCODER_COUNT         =
-            // Assumes the encoders are directly mounted on the wheel shafts, supposed to be
-            // 0.04675573
-            (ROBOT_WHEEL_DIAMETER_CMS * Math.PI) / ENCODER_COUNTS_PER_REVOLUTION;
+        // encoder stuff
+        public static final int    ENCODER_COUNTS_PER_REVOLUTION = 1024;
+        public static final double ROBOT_WHEEL_DIAMETER_M        = 6 * 2.54 / 100d;
 
-        public static final double  HEADING_PID_KP                = 0.02;
-        public static final double  HEADING_PID_KI                = 0;
-        public static final double  HEADING_PID_KD                = 0;
+        public static final double CMS_PER_ENCODER_COUNT         =
+            // Assumes the encoders are directly mounted on the wheel shafts
+            (ROBOT_WHEEL_DIAMETER_M * Math.PI) / ENCODER_COUNTS_PER_REVOLUTION / 100d;
 
-        public static final double  TURN_TO_HEADING_PID_KP        = 0.002;
-        public static final double  TURN_TO_HEADING_PID_KI        = 0.1;
-        public static final double  TURN_TO_HEADING_PID_KD        = 0;
+        // PID gains
+        public static final double HEADING_PID_KP                = 0.02;
+        public static final double HEADING_PID_KI                = 0;
+        public static final double HEADING_PID_KD                = 0;
 
-        public static final double  HEADING_ERROR_BUFFER          = 10;
+        public static final double TURN_TO_HEADING_PID_KP        = 0.002;
+        public static final double TURN_TO_HEADING_PID_KI        = 0.1;
+        public static final double TURN_TO_HEADING_PID_KD        = 0;
+
+        public static final double HEADING_ERROR_BUFFER          = 3;
 
         public static enum HeadingStates {
-            CLOSE,
-            FAR
+            FAR, CLOSE
         }
 
     }
@@ -93,8 +87,33 @@ public final class Constants {
         public static final int LED_STRIP_PWM_PORT     = 0;
         public static final int LED_STRIP_LENGTH       = 60;
         public static final int LED_STICK_TAKEN_LENGTH = 5;
-
         public static final int BOOST_INDEX            = 0;
+
+
+    }
+
+    public static final class ArmConstants {
+
+        public static final int PIVOT_PORT                           = 0;
+        public static final int SHOOTER_PORT                         = 0;
+        public static final int PROXIMITY_PORT                       = 0;
+        public static final int INTAKE_LOWER_PORT                    = 0;
+        public static final int INTAKE_HIGHER_PORT                   = 0;
+
+        public static final int PIVOT_ARM_ENCODER_COUNT_PER_ROTATION = 0;
+
+        public static enum HeadingStates {
+            FAR, CLOSE
+        }
+
+        public static final int PIVOT_TO_ANGLE_PID_KP = 0;
+        public static final int PIVOT_TO_ANGLE_PID_KI = 0;
+        public static final int PIVOT_TO_ANGLE_PID_KD = 0;
+
+        public static final int PIVOT_FAR_TO_CLOSE    = 0;
+        public static final int PIVOT_ROT_BUFFER      = 0;
+
+
 
     }
 
@@ -102,6 +121,14 @@ public final class Constants {
 
         public static final int    DRIVER_CONTROLLER_PORT         = 0;
         public static final double GAME_CONTROLLER_STICK_DEADBAND = 3;
+
+    }
+
+    public static final class CameraConstants {
+
+        public static final int CAMERA_PORT      = 0;
+        public static final int MJPEGSERVER_PORT = 0;
+
     }
 
 }

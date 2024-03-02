@@ -6,6 +6,10 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.DriveConstants.DriveMode;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.CancelCommand;
+import frc.robot.commands.arm.IntakeCommand;
+import frc.robot.commands.arm.PivotToAngleCommand;
+import frc.robot.commands.arm.ShooterCommand;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 
 
@@ -44,6 +48,8 @@ public class OperatorInput extends SubsystemBase {
     public boolean isCancel() {
         return driverController.getStartButton();
     }
+
+    // drive methods
 
     public boolean getBoost() {
         return driverController.getRightBumper();
@@ -124,16 +130,44 @@ public class OperatorInput extends SubsystemBase {
         return getDriverControllerAxis(Stick.RIGHT, Axis.Y);
     }
 
+    // arm methods
+
+    public boolean isIntake() {
+        return driverController.getXButton();
+    }
+
+    public boolean isShoot() {
+        return driverController.getYButton();
+    }
+
+    public boolean isPivot() {
+        return driverController.getRightBumper();
+    }
+
     /**
      * Use this method to define your robotFunction -> command mappings.
      *
      * NOTE: all subsystems should be passed into this method.
      */
-    public void configureButtonBindings(DriveSubsystem driveSubsystem) {
+    public void configureButtonBindings(DriveSubsystem driveSubsystem, ArmSubsystem armSubsystem) {
 
         new Trigger(() -> isCancel())
 
             .onTrue(new CancelCommand(this, driveSubsystem));
+
+        new Trigger(() -> isIntake())
+
+            .onTrue(new IntakeCommand(0.5, 5000, armSubsystem));
+
+        new Trigger(() -> isShoot())
+
+            .onTrue(new ShooterCommand(1, 2000, armSubsystem));
+
+        new Trigger(() -> isPivot())
+
+            .onTrue(new PivotToAngleCommand(0.3, 90, true, 5000, armSubsystem));
+
+
 
     }
 

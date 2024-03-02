@@ -1,10 +1,8 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
+import com.revrobotics.CANSparkLowLevel;
+import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -15,12 +13,16 @@ public class DriveSubsystem extends SubsystemBase {
 
 
     // The motors on the left side of the drive.
-    private final VictorSPX     leftPrimaryMotor         = new VictorSPX(DriveConstants.LEFT_MOTOR_PORT);
-    private final TalonSRX      leftFollowerMotor        = new TalonSRX(DriveConstants.LEFT_MOTOR_PORT + 1);
+    private final CANSparkMax   leftPrimaryMotor         = new CANSparkMax(DriveConstants.LEFT_MOTOR_PORT,
+        CANSparkLowLevel.MotorType.kBrushless);
+    private final CANSparkMax   leftFollowerMotor        = new CANSparkMax(DriveConstants.LEFT_MOTOR_PORT + 1,
+        CANSparkLowLevel.MotorType.kBrushless);
 
     // The motors on the right side of the drive.
-    private final VictorSPX     rightPrimaryMotor        = new VictorSPX(DriveConstants.RIGHT_MOTOR_PORT);
-    private final TalonSRX      rightFollowerMotor       = new TalonSRX(DriveConstants.RIGHT_MOTOR_PORT + 1);
+    private final CANSparkMax   rightPrimaryMotor        = new CANSparkMax(DriveConstants.RIGHT_MOTOR_PORT,
+        CANSparkLowLevel.MotorType.kBrushless);
+    private final CANSparkMax   rightFollowerMotor       = new CANSparkMax(DriveConstants.RIGHT_MOTOR_PORT + 1,
+        CANSparkLowLevel.MotorType.kBrushless);
 
     // The gyro sensor
     private final AHRS          gyroSensorAhrs           = new AHRS();
@@ -30,10 +32,12 @@ public class DriveSubsystem extends SubsystemBase {
     // Volts distance
     // 0.12 30.5 cm
     // 2.245 609.6 cm
+
     private final AnalogInput   ultrasonicDistanceSensor = new AnalogInput(0);
 
     private static final double ULTRASONIC_M             = (609.6 - 30.5) / (2.245 - .12);
     private static final double ULTRASONIC_B             = 609.6 - ULTRASONIC_M * 2.245;
+
 
     // Motor speeds
     private double              leftSpeed                = 0;
@@ -49,8 +53,10 @@ public class DriveSubsystem extends SubsystemBase {
         leftPrimaryMotor.setInverted(DriveConstants.LEFT_MOTOR_REVERSED);
         leftFollowerMotor.setInverted(DriveConstants.LEFT_MOTOR_REVERSED);
 
-        leftPrimaryMotor.setNeutralMode(NeutralMode.Brake);
-        leftFollowerMotor.setNeutralMode(NeutralMode.Brake);
+        /*
+         * leftPrimaryMotor.setNeutralMode(NeutralMode.Brake);
+         * leftFollowerMotor.setNeutralMode(NeutralMode.Brake);
+         */
 
         leftFollowerMotor.follow(leftPrimaryMotor);
 
@@ -58,8 +64,10 @@ public class DriveSubsystem extends SubsystemBase {
         rightPrimaryMotor.setInverted(DriveConstants.RIGHT_MOTOR_REVERSED);
         rightFollowerMotor.setInverted(DriveConstants.RIGHT_MOTOR_REVERSED);
 
-        rightPrimaryMotor.setNeutralMode(NeutralMode.Brake);
-        rightFollowerMotor.setNeutralMode(NeutralMode.Brake);
+        /*
+         * rightPrimaryMotor.setNeutralMode(NeutralMode.Brake);
+         * rightFollowerMotor.setNeutralMode(NeutralMode.Brake);
+         */
 
         rightFollowerMotor.follow(rightPrimaryMotor);
 
@@ -67,7 +75,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     // Encoders
     public double getAverageEncoderCounts() {
-        return (leftFollowerMotor.getSelectedSensorPosition(0) + rightFollowerMotor.getSelectedSensorPosition(0)) / 2;
+        return (getLeftEncoder() + getRightEncoder()) / 2;
     }
 
     public double getDistanceCm() {
@@ -75,11 +83,11 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public double getLeftEncoder() {
-        return leftFollowerMotor.getSelectedSensorPosition(0);
+        return leftFollowerMotor.getAlternateEncoder(DriveConstants.ENCODER_COUNTS_PER_REVOLUTION).getPosition();
     }
 
     public double getRightEncoder() {
-        return rightFollowerMotor.getSelectedSensorPosition(0);
+        return rightFollowerMotor.getAlternateEncoder(DriveConstants.ENCODER_COUNTS_PER_REVOLUTION).getPosition();
     }
 
 
@@ -94,6 +102,7 @@ public class DriveSubsystem extends SubsystemBase {
         return Math.round(distanceCm);
     }
 
+
     /**
      * Set the left and right speed of the primary and follower motors
      *
@@ -105,8 +114,8 @@ public class DriveSubsystem extends SubsystemBase {
         this.leftSpeed  = leftSpeed;
         this.rightSpeed = rightSpeed;
 
-        leftPrimaryMotor.set(ControlMode.PercentOutput, leftSpeed);
-        rightPrimaryMotor.set(ControlMode.PercentOutput, rightSpeed);
+        leftPrimaryMotor.set(leftSpeed);
+        rightPrimaryMotor.set(rightSpeed);
 
         // NOTE: The follower motors are set to follow the primary motors
     }

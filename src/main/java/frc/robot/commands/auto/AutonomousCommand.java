@@ -6,17 +6,21 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.AutoConstants.AutoPattern;
+import frc.robot.commands.arm.IntakeCommand;
+import frc.robot.commands.arm.PivotToAngleCommand;
+import frc.robot.commands.arm.ShooterCommand;
 import frc.robot.commands.drive.MeasuredDriveAtHeadingCommand;
 import frc.robot.commands.drive.MeasuredStraightDriveCommand;
 import frc.robot.commands.drive.TimedDriveCommand;
 import frc.robot.commands.drive.TimedStraightDriveCommand;
 import frc.robot.commands.drive.TurnToHeadingCommand;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class AutonomousCommand extends SequentialCommandGroup {
 
     public AutonomousCommand(DriveSubsystem driveSubsystem,
-        SendableChooser<AutoPattern> autoPatternChooser) {
+        SendableChooser<AutoPattern> autoPatternChooser, ArmSubsystem armSubsystem) {
 
         // Default is to do nothing.
         // If more commands are added, the instant command will end and
@@ -74,9 +78,15 @@ public class AutonomousCommand extends SequentialCommandGroup {
         case OUTSIDE_ONE_SHOT:
             // From outside position, backs up and makes a speaker shot
 
-            addCommands(new MeasuredStraightDriveCommand(100, 0.2, true, driveSubsystem));
+            // moves backwards to make first shot
 
-            // Shoot arm, no command made yet
+            addCommands(new MeasuredStraightDriveCommand(100, -0.2, true, driveSubsystem));
+
+            addCommands(new PivotToAngleCommand(0.3, 90, true, 3000, armSubsystem));
+
+            // first shot
+
+            addCommands(new ShooterCommand(1, 2000, armSubsystem));
 
             break;
 
@@ -87,71 +97,172 @@ public class AutonomousCommand extends SequentialCommandGroup {
 
             startHeading = driveSubsystem.getHeading();
 
+            // moving arm while backign up for first shot
+
+            addCommands(new PivotToAngleCommand(0.2, 90, true, 3000, armSubsystem));
+
             addCommands(new MeasuredStraightDriveCommand(100, -0.2, true, driveSubsystem));
 
-            // Shoot arm, no command made yet
+            // first shot
 
-            addCommands(new TurnToHeadingCommand(0.2, startHeading - 60, true, 3, driveSubsystem));
+            addCommands(new ShooterCommand(0.5, 2000, armSubsystem));
 
-            addCommands(new MeasuredStraightDriveCommand(30, -0.2, true, driveSubsystem));
+            // turns and drives towards first note while intaking
+
+            addCommands(new TurnToHeadingCommand(0.2, startHeading + 120, true, 3000, driveSubsystem));
+
+            addCommands(new PivotToAngleCommand(0.2, 0, true, 3000, armSubsystem));
+
+            addCommands(new IntakeCommand(0.2, 10000, armSubsystem));
 
             addCommands(new MeasuredStraightDriveCommand(30, 0.2, true, driveSubsystem));
 
-            addCommands(new TurnToHeadingCommand(0.2, startHeading, true, 3, driveSubsystem));
 
-            // Shoot arm, no command made yet
+            // getting ready to shoot while turning to correct angle
+
+            addCommands(new PivotToAngleCommand(0.2, 90, true, 3000, armSubsystem));
+
+            addCommands(new TurnToHeadingCommand(0.2, startHeading - 102, true, 3, driveSubsystem));
+
+            // second shot
+
+            addCommands(new ShooterCommand(0.5, 2000, armSubsystem));
 
             break;
 
         case SPEAKER_THREE_SHOT:
+            /*
+             * Facing Directly towards the speaker, robot backs up to make first shot,
+             * Makes a full turn and goes forward to get the last note,
+             * full turns again and makes the second shot,
+             * then turns left to grab the last note, turns to the speaker
+             * and makes the last shot
+             */
 
             startHeading = driveSubsystem.getHeading();
 
-            addCommands(new MeasuredStraightDriveCommand(100, -0.2, true, driveSubsystem));
-
-            // Shoot arm, no command made yet
+            // backs up for first shot (needs space)
 
             addCommands(new MeasuredStraightDriveCommand(100, -0.2, true, driveSubsystem));
 
-            // Shoot arm, no command made yet
+            addCommands(new PivotToAngleCommand(0.3, 90, true, 5000, armSubsystem));
 
-            addCommands(new TurnToHeadingCommand(0.2, startHeading + 90, true, 3000, driveSubsystem));
+            // first shot
 
-            addCommands(new MeasuredStraightDriveCommand(100, -0.2, true, driveSubsystem));
+            addCommands(new ShooterCommand(0.5, 2000, armSubsystem));
 
-            addCommands(new TurnToHeadingCommand(0.2, startHeading + 30, true, 3000, driveSubsystem));
+            // full turns and goes for the second note
 
-            // Shoot arm, no command made yet
+            addCommands(new PivotToAngleCommand(0.3, 0, true, 5000, armSubsystem));
+
+            addCommands(new TurnToHeadingCommand(0.2, startHeading + 180, true, 3000, driveSubsystem));
+
+            addCommands(new IntakeCommand(0.2, 10000, armSubsystem));
+
+            addCommands(new MeasuredStraightDriveCommand(100, 0.2, true, driveSubsystem));
+
+            // Second shotting.
+
+            addCommands(new PivotToAngleCommand(0.3, 90, true, 5000, armSubsystem));
+
+            addCommands(new TurnToHeadingCommand(0.2, startHeading + 180, true, 3000, driveSubsystem));
+
+            addCommands(new ShooterCommand(0.5, 2000, armSubsystem));
+
+            // Third Sucking \(O-o)/
+            addCommands(new PivotToAngleCommand(0.3, 0, true, 5000, armSubsystem));
+
+            addCommands(new TurnToHeadingCommand(0.2, startHeading - 90, true, 3000, driveSubsystem));
+
+            addCommands(new IntakeCommand(0.2, 10000, armSubsystem));
+
+            addCommands(new MeasuredStraightDriveCommand(100, 0.2, true, driveSubsystem));
+
+            // Third Shooting :p
+
+            addCommands(new TurnToHeadingCommand(0.2, startHeading + 185, true, 3000, driveSubsystem));
+
+            addCommands(new PivotToAngleCommand(0.3, 90, true, 5000, armSubsystem));
+
+            addCommands(new ShooterCommand(0.5, 2000, armSubsystem));
 
             break;
 
         case SPEAKER_FOUR_SHOT:
+            /*
+             * Facing Directly towards the speaker, robot backs up to make first shot,
+             * Makes a full turn and goes forward to get the last note,
+             * full turns again and makes the second shot,
+             * then turns left to grab the 2nd last note, turns to the speaker and shoots
+             * then turns again then goes towards last note
+             * sucks last note (uwu)
+             * and makes the last shot
+             */
 
             startHeading = driveSubsystem.getHeading();
 
-            addCommands(new MeasuredStraightDriveCommand(100, -0.2, true, driveSubsystem));
-
-            // Shoot arm, no command made yet
+            // backs up for first shot (needs space)
 
             addCommands(new MeasuredStraightDriveCommand(100, -0.2, true, driveSubsystem));
 
-            // Shoot arm, no command made yet
+            addCommands(new PivotToAngleCommand(0.3, 90, true, 5000, armSubsystem));
 
-            addCommands(new TurnToHeadingCommand(0.2, startHeading + 90, true, 3, driveSubsystem));
+            // first shot
 
-            addCommands(new MeasuredStraightDriveCommand(100, -0.2, true, driveSubsystem));
+            addCommands(new ShooterCommand(0.5, 2000, armSubsystem));
 
-            addCommands(new TurnToHeadingCommand(0.2, startHeading + 30, true, 3, driveSubsystem));
+            // full turns and goes for the second note
 
-            // Shoot arm, no command made yet
+            addCommands(new PivotToAngleCommand(0.3, 0, true, 5000, armSubsystem));
 
-            addCommands(new TurnToHeadingCommand(0.2, startHeading - 90, true, 3, driveSubsystem));
+            addCommands(new TurnToHeadingCommand(0.2, startHeading + 180, true, 3000, driveSubsystem));
 
-            addCommands(new MeasuredStraightDriveCommand(200, -0.2, true, driveSubsystem));
+            addCommands(new IntakeCommand(0.2, 10000, armSubsystem));
 
-            addCommands(new TurnToHeadingCommand(0.2, startHeading - 30, true, 3, driveSubsystem));
+            addCommands(new MeasuredStraightDriveCommand(100, 0.2, true, driveSubsystem));
 
-            // Shoot arm, no command made yet
+            // Second shotting.
+
+            addCommands(new PivotToAngleCommand(0.3, 90, true, 5000, armSubsystem));
+
+            addCommands(new TurnToHeadingCommand(0.2, startHeading + 180, true, 3000, driveSubsystem));
+
+            addCommands(new ShooterCommand(0.5, 2000, armSubsystem));
+
+            // Third Sucking \(O-o)/
+            addCommands(new PivotToAngleCommand(0.3, 0, true, 5000, armSubsystem));
+
+            addCommands(new TurnToHeadingCommand(0.2, startHeading - 90, true, 3000, driveSubsystem));
+
+            addCommands(new IntakeCommand(0.2, 10000, armSubsystem));
+
+            addCommands(new MeasuredStraightDriveCommand(100, 0.2, true, driveSubsystem));
+
+            // Third Shooting :p
+
+            addCommands(new TurnToHeadingCommand(0.2, startHeading + 185, true, 3000, driveSubsystem));
+
+            addCommands(new PivotToAngleCommand(0.3, 90, true, 5000, armSubsystem));
+
+            addCommands(new ShooterCommand(0.5, 2000, armSubsystem));
+
+
+            // Forth Sucking \(>w<)/
+            addCommands(new PivotToAngleCommand(0.3, 0, true, 5000, armSubsystem));
+
+            addCommands(new TurnToHeadingCommand(0.2, startHeading + 55, true, 3000, driveSubsystem));
+
+            addCommands(new IntakeCommand(0.2, 10000, armSubsystem));
+
+            addCommands(new MeasuredStraightDriveCommand(200, 0.2, true, driveSubsystem));
+
+            // Fourth shooting powo :
+
+            addCommands(new TurnToHeadingCommand(0.2, startHeading - 185, true, 3000, driveSubsystem));
+
+            addCommands(new PivotToAngleCommand(0.3, 90, true, 5000, armSubsystem));
+
+            addCommands(new ShooterCommand(0.5, 2000, armSubsystem));
 
             break;
 
@@ -249,6 +360,5 @@ public class AutonomousCommand extends SequentialCommandGroup {
 
         }
     }
-
 }
 
