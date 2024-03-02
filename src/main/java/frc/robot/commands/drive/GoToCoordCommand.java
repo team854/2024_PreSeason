@@ -1,32 +1,25 @@
 package frc.robot.commands.drive;
 
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
-import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import frc.robot.Constants.DriveConstants.DriveMode;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.commands.LoggingCommandBase;
-import frc.robot.operator.OperatorInput;
+import frc.robot.commands.LoggingCommand;
 import frc.robot.subsystems.DriveSubsystem;
 
-public class GoToCoordCommand extends LoggingCommandBase {
+public class GoToCoordCommand extends LoggingCommand {
 
-    private final DriveSubsystem             driveSubsystem;
-    private final OperatorInput              operatorInput;
-    private final SendableChooser<DriveMode> driveModeChooser;
+    private final DriveSubsystem driveSubsystem;
 
-    double                                   x;
-    dobule                                   y;
+    double                       x;
+    double                       y;
 
-    double                                   veloX;
-    double                                   veloY;
-    double                                   angVelo;
-    double                                   leftVelo;
-    double                                   rightVelo;
+    double                       veloX;
+    double                       veloY;
+    double                       angVelo;
+    double                       leftVelo;
+    double                       rightVelo;
 
-    Chassis                                  movingFrameSpeeds;
-    DifferentialDriveKinematics              wheelSpeeds;
+    // Chassis movingFrameSpeeds;
+    DifferentialDriveKinematics  wheelSpeeds;
 
 
 
@@ -57,13 +50,14 @@ public class GoToCoordCommand extends LoggingCommandBase {
     @Override
     public void execute() {
 
-        double ang             = driveSubsystem.gyroSensorAhrs();
+        double ang             = driveSubsystem.gyroSensorAhrs.getYaw();
         double leftDistMeters  = driveSubsystem.getLeftEncoder() / DriveConstants.ENCODER_COUNTS_PER_REVOLUTION * Math.PI
             * DriveConstants.ROBOT_WHEEL_DIAMETER_M;
         double rightDistMeters = driveSubsystem.getRightEncoder() / DriveConstants.ENCODER_COUNTS_PER_REVOLUTION * Math.PI
             * DriveConstants.ROBOT_WHEEL_DIAMETER_M;
         ;
-        DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(ang, leftDistMeters, rightDistMeters);
+        // DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(ang, leftDistMeters,
+        // rightDistMeters);
 
 
     }
@@ -71,7 +65,7 @@ public class GoToCoordCommand extends LoggingCommandBase {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-
+        return true;
     }
 
     // Called once the command ends or is interrupted.

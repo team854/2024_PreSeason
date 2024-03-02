@@ -45,7 +45,7 @@ public final class Constants {
         public static final boolean LEFT_ENCODER_REVERSED         = false;
         public static final boolean RIGHT_ENCODER_REVERSED        = true;
 
-        public static final double  MAX_WHEEL_SPEED_MPS;
+        public static final double  MAX_WHEEL_SPEED_MPS           = 10;
 
         // encoder stuff
         public static final int     ENCODER_COUNTS_PER_REVOLUTION = 1024;
@@ -53,7 +53,7 @@ public final class Constants {
 
         public static final double  CMS_PER_ENCODER_COUNT         =
             // Assumes the encoders are directly mounted on the wheel shafts
-            (ROBOT_WHEEL_DIAMETER_CMS * Math.PI) / ENCODER_COUNTS_PER_REVOLUTION;
+            (ROBOT_WHEEL_DIAMETER_M * Math.PI) / ENCODER_COUNTS_PER_REVOLUTION * 100d;
 
         // PID gains
         public static final double  HEADING_PID_KP                = 0.02;
@@ -66,31 +66,35 @@ public final class Constants {
 
         public static final double  HEADING_ERROR_BUFFER          = 3;
 
-        // Physical parms
-        public static final double  WIDTH_WHEEL_TO_WHEEL;
-
-        // Characterization gains
-        public static final double  KS_VOLTS;
-        public static final double  KV_VOLT_SECONDS_PER_METER;
-        public static final double  KA_VOLT_SECONDS_SQUARED_PER_METER;
-
-        public static final double  KP_DRIVE_VELO;
-
-        public static final double  MAX_ROBOT_VELO;
-        public static final double  MAX_ROBOT_ACCEL;
-
-        public static final double  K_RAMSETE_B;
-        public static final double  K_RAMSETE_ZETA;
+        /*
+         * // Physical parms
+         * public static final double WIDTH_WHEEL_TO_WHEEL;
+         * 
+         * // Characterization gains
+         * public static final double KS_VOLTS;
+         * public static final double KV_VOLT_SECONDS_PER_METER;
+         * public static final double KA_VOLT_SECONDS_SQUARED_PER_METER;
+         * 
+         * public static final double KP_DRIVE_VELO;
+         * 
+         * public static final double MAX_ROBOT_VELO;
+         * public static final double MAX_ROBOT_ACCEL;
+         * 
+         * public static final double K_RAMSETE_B;
+         * public static final double K_RAMSETE_ZETA;
+         */
 
 
 
     }
 
-    public static final class lightConstants {
+    public static final class LightConstants {
 
         public static final int LED_STRIP_PWM_PORT     = 0;
         public static final int LED_STRIP_LENGTH       = 60;
         public static final int LED_STICK_TAKEN_LENGTH = 5;
+
+        public static final int BOOST_INDEX            = 0;
 
 
     }

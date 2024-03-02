@@ -65,10 +65,6 @@ public class OperatorInput extends SubsystemBase {
         return driverController.getRightX();
     }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> f03747e39d88951744c32b1403f9d4c348b02199
     public double getDriverControllerAxis(Stick stick, Axis axis) {
 
         switch (stick) {

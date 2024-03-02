@@ -6,7 +6,6 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
 
-import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -24,7 +23,7 @@ public class DriveSubsystem extends SubsystemBase {
     private final TalonSRX      rightFollowerMotor       = new TalonSRX(DriveConstants.RIGHT_MOTOR_PORT + 1);
 
     // The gyro sensor
-    private final AHRS          gyroSensorAhrs           = new AHRS();
+    public final AHRS           gyroSensorAhrs           = new AHRS();
 
     // Ultrasonic sensor
     // Conversion from volts to distance in cm
@@ -40,12 +39,15 @@ public class DriveSubsystem extends SubsystemBase {
     private double              leftSpeed                = 0;
     private double              rightSpeed               = 0;
 
-    // Odometry Parameters
-    double                      ang                      = 0;
-    double                      leftDistMeters           = 0;
-    double                      rightDistMeters          = 0;
-
-    DifferentialDriveOdometry   odometry                 = new DifferentialDriveOdometry(ang, leftDistMeters, rightDistMeters);
+    /*
+     * // Odometry Parameters
+     * Rotation2d ang = new Rotation2d(0);
+     * double leftDistMeters = 0;
+     * double rightDistMeters = 0;
+     * 
+     * DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(ang, leftDistMeters,
+     * rightDistMeters);
+     */
 
     /** Creates a new DriveSubsystem. */
     public DriveSubsystem() {
@@ -88,7 +90,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     public double getLeftWheelMeters() {
         return getLeftEncoder() / DriveConstants.ENCODER_COUNTS_PER_REVOLUTION * Math.PI
-            * DriveConstants.ROBOT_WHEEL_DIAMETER_CMS;
+            * DriveConstants.ROBOT_WHEEL_DIAMETER_M;
     }
 
     public double getRightEncoder() {
@@ -97,7 +99,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     public double getRightWheelMeters() {
         return getRightEncoder() / DriveConstants.ENCODER_COUNTS_PER_REVOLUTION * Math.PI
-            * DriveConstants.ROBOT_WHEEL_DIAMETER_CMS;
+            * DriveConstants.ROBOT_WHEEL_DIAMETER_M;
     }
 
 
@@ -157,14 +159,17 @@ public class DriveSubsystem extends SubsystemBase {
         // Gets the yaw from the gyro sensor
         SmartDashboard.putNumber("Gyro Yaw", getYaw());
 
-        // updating odometry parameters
-        ang             = driveSubsystem.gyroSensorAhrs();
-        leftDistMeters  = getLeftWheelMeters();
-        rightDistMeters = getRightWheelMeters();
-
-
-        // updating odometry
-        odometry.update(ang, leftDistMeters, rightDistMeters);
+        /*
+         * // updating odometry parameters
+         * ang = this.gyroSensorAhrs();
+         * leftDistMeters = getLeftWheelMeters();
+         * rightDistMeters = getRightWheelMeters();
+         * 
+         * 
+         * 
+         * // updating odometry
+         * odometry.update(ang, leftDistMeters, rightDistMeters);
+         */
 
     }
 

@@ -23,8 +23,10 @@ public class DefaultDriveCommand extends LoggingCommand {
     double                                   angVelo;
     double                                   leftSpeed;
     double                                   rightSpeed;
-    ChassicSpeeds                            movingFrameSpeeds;
+    ChassisSpeeds                            chassisSpeeds;
     DifferentialDriveKinematics              wheelSpeeds;
+
+
 
     /**
      * Creates a new ExampleCommand.
@@ -65,11 +67,11 @@ public class DefaultDriveCommand extends LoggingCommand {
             veloY = 0;
             angVelo = Math.asin(operatorInput.getLeftX());
 
-            movingFrameSpeeds = new ChassisSpeeds(veloX, veloY, angVelo);
-            wheelSpeeds = new DifferentialDriveKinematics(DriveConstants.WIDTH_WHEEL_TO_WHEEL);
+            // movingFrameSpeeds = new ChassisSpeeds(veloX, veloY, angVelo);
+            // wheelSpeeds = new DifferentialDriveKinematics(DriveConstants.WIDTH_WHEEL_TO_WHEEL);
 
-            leftSpeed = wheelSpeeds.leftMetersPerSecond();
-            rightSpeed = wheelSpeeds.rightMetersPerSecond();
+            // leftSpeed = wheelSpeeds.leftMetersPerSecond();
+            // rightSpeed = wheelSpeeds.rightMetersPerSecond();
 
             if (boost) {
                 driveSubsystem.setMotorSpeeds(leftSpeed, rightSpeed);
@@ -85,7 +87,7 @@ public class DefaultDriveCommand extends LoggingCommand {
             double speed = operatorInput.getSpeed(driveMode);
             double turn = operatorInput.getTurn(driveMode);
 
-            setMotorSpeedsArcade(speed, turn, boost);
+            // setMotorSpeedsArcade(speed, turn, boost);
             lightsSubsystem.ledStick(boost, driveMode);
             break;
 
