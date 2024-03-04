@@ -4,7 +4,6 @@ import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -43,13 +42,6 @@ public class DriveSubsystem extends SubsystemBase {
     // Motor speeds
     private double              leftSpeed                = 0;
     private double              rightSpeed               = 0;
-
-
-    // Odometry objects
-
-    double        radPerSec     = 0;
-
-    ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(leftSpeed, rightSpeed, radPerSec);
 
 
     /** Creates a new DriveSubsystem. */

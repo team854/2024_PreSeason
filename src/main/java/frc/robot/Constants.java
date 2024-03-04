@@ -102,8 +102,20 @@ public final class Constants {
 
         public static final int PIVOT_ARM_ENCODER_COUNT_PER_ROTATION = 0;
 
+        public static final int RESTING_ARM_ANGLE                    = 20;
+
         public static enum HeadingStates {
             FAR, CLOSE
+        }
+
+        public static enum PivotShootStates {
+            PIVOTING,
+            SHOOTING
+        }
+
+        public static enum IntakeStates {
+            PIVOTING,
+            INTAKING
         }
 
         public static final int PIVOT_TO_ANGLE_PID_KP = 0;

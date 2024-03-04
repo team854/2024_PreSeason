@@ -2,51 +2,52 @@ package frc.robot.commands.arm;
 
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.ArmConstants.HeadingStates;
-import frc.robot.Constants.ArmConstants.IntakeStates;
+import frc.robot.Constants.ArmConstants.PivotShootStates;
 import frc.robot.commands.LoggingCommand;
-import frc.robot.operator.OperatorInput;
 import frc.robot.subsystems.ArmSubsystem;
 
-public class IntakeCommand extends LoggingCommand {
+public class PivotShootCommand extends LoggingCommand {
 
-    ArmSubsystem          armSubsystem;
-    OperatorInput         operatorInput;
+    ArmSubsystem             armSubsystem;
 
     // PivotPID
-    private double        currentError;
-    private double        previousError;
-    private double        diffError;
-    private double        errorSignal;
-    private double        pTerm;
-    private double        iTerm       = 0;
-    private double        dTerm;
+    private double           currentError;
+    private double           previousError;
+    private double           diffError;
+    private double           errorSignal;
+    private double           pTerm;
+    private double           iTerm = 0;
+    private double           dTerm;
 
     // Speeds
-    private double        intakeSpeed;
-    private double        pivotSpeed;
+    private double           shootSpeed;
+    private double           pivotSpeed;
 
     // Time Measure
-    private double        initTime;
-    private double        currTime;
-    private double        timeoutMS;
+    private double           initTime;
+    private double           currTime;
+    private double           timeoutMS;
 
     // Logging skibidi
-    private double        speed;
-    private double        targetAngle = 0;
-    private String        reason;
+    private double           speed;
+    private boolean          brakeAtEnd;
+    private double           targetAngle;
+    private String           reason;
 
     // States
-    private IntakeStates  state;
-    private HeadingStates headingState;
+    private PivotShootStates state;
+    private HeadingStates    headingState;
 
 
 
-    public IntakeCommand(double intakeSpeed, double pivotSpeed, double timeoutMS, ArmSubsystem armSubsystem) {
+    public PivotShootCommand(double shootSpeed, double pivotSpeed, double targetAngle, double timeoutMS,
+        ArmSubsystem armSubsystem) {
 
-        this.intakeSpeed  = intakeSpeed;
+        this.shootSpeed   = shootSpeed;
         this.pivotSpeed   = pivotSpeed;
         this.timeoutMS    = timeoutMS;
         this.armSubsystem = armSubsystem;
+        this.targetAngle  = targetAngle;
 
         addRequirements(armSubsystem);
 
@@ -55,12 +56,11 @@ public class IntakeCommand extends LoggingCommand {
     @Override
     public void initialize() {
 
-        String commandParms = "target angle: " + targetAngle + "intake speed: " + intakeSpeed + "pivot speed: " + pivotSpeed
-            + "pivot speed: " + pivotSpeed
+        String commandParms = "shoot speed: " + shootSpeed + "pivot speed: " + pivotSpeed + "target angle: " + targetAngle
             + ", timeout time (ms): " + timeoutMS;
         logCommandStart(commandParms);
 
-        state         = IntakeStates.PIVOTING;
+        state         = PivotShootStates.PIVOTING;
 
         previousError = armSubsystem.getAngleErrorPivot(targetAngle);
         initTime      = System.currentTimeMillis();
@@ -119,9 +119,9 @@ public class IntakeCommand extends LoggingCommand {
 
             break;
 
-        case INTAKING:
+        case SHOOTING:
 
-            armSubsystem.intakeSetSpeed(speed);
+            armSubsystem.intakeSetSpeed(-speed);
 
             break;
 
@@ -140,20 +140,14 @@ public class IntakeCommand extends LoggingCommand {
             return true;
         }
 
-        if (state == IntakeStates.PIVOTING) {
+        if (state == PivotShootStates.PIVOTING) {
             if (Math.abs(currentError) <= ArmConstants.PIVOT_ROT_BUFFER) {
-                state = IntakeStates.INTAKING;
+                state = PivotShootStates.SHOOTING;
                 armSubsystem.pivotRotSetSpeed(0);
             }
         }
 
-        if (!operatorInput.isIntake()) {
-            reason = "let go of intake button";
-            return true;
-        }
-
         return false;
-
 
     }
 

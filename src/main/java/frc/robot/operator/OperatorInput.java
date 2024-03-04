@@ -7,8 +7,7 @@ import frc.robot.Constants.DriveConstants.DriveMode;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.CancelCommand;
 import frc.robot.commands.arm.IntakeCommand;
-import frc.robot.commands.arm.PivotToAngleCommand;
-import frc.robot.commands.arm.ShooterCommand;
+import frc.robot.commands.arm.PivotShootCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 
@@ -133,15 +132,25 @@ public class OperatorInput extends SubsystemBase {
     // arm methods
 
     public boolean isIntake() {
-        return driverController.getXButton();
+        if (driverController.getLeftTriggerAxis() > 0.5) {
+            return true;
+        }
+        return false;
     }
 
-    public boolean isShoot() {
-        return driverController.getYButton();
+    public boolean isShootShort() {
+        if (driverController.getRightTriggerAxis() >= 0.5) {
+            return true;
+        }
+        return false;
     }
 
-    public boolean isPivot() {
+    public boolean isShootLong() {
         return driverController.getRightBumper();
+    }
+
+    public boolean isAmpShot() {
+        return driverController.getLeftBumper();
     }
 
     /**
@@ -157,15 +166,15 @@ public class OperatorInput extends SubsystemBase {
 
         new Trigger(() -> isIntake())
 
-            .onTrue(new IntakeCommand(0.5, 5000, armSubsystem));
+            .onTrue(new IntakeCommand(0.5, 0.3, 10000, armSubsystem));
 
-        new Trigger(() -> isShoot())
+        new Trigger(() -> isShootLong())
 
-            .onTrue(new ShooterCommand(1, 2000, armSubsystem));
+            .onTrue(new PivotShootCommand(1, 0.3, 45, 5000, armSubsystem));
 
-        new Trigger(() -> isPivot())
+        new Trigger(() -> isShootShort())
 
-            .onTrue(new PivotToAngleCommand(0.3, 90, true, 5000, armSubsystem));
+            .onTrue(new PivotShootCommand(0.5, 0.3, 60, 5000, armSubsystem));
 
 
 
