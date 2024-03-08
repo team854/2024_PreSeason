@@ -53,7 +53,7 @@ public class DefaultDriveCommand extends LoggingCommand {
         case DUAL_STICK_ARCADE:
 
             double speed = operatorInput.getSpeed(driveMode);
-            double turn = operatorInput.getTurn(driveMode);
+            double turn = operatorInput.getTurn(driveMode) / 2;
 
             setMotorSpeedsArcade(speed, turn, boost);
             lightsSubsystem.ledStick(boost, driveMode);

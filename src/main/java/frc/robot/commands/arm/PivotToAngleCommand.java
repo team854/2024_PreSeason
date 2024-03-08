@@ -1,7 +1,7 @@
 package frc.robot.commands.arm;
 
 import frc.robot.Constants.ArmConstants;
-import frc.robot.Constants.ArmConstants.HeadingStates;
+import frc.robot.Constants.ArmConstants.AngleStates;
 import frc.robot.commands.LoggingCommand;
 import frc.robot.subsystems.ArmSubsystem;
 
@@ -12,26 +12,26 @@ public class PivotToAngleCommand extends LoggingCommand {
 
 
     // PID
-    private double        currentError;
-    private double        previousError;
-    private double        diffError;
-    private double        errorSignal;
-    private double        pTerm;
-    private double        iTerm = 0;
-    private double        dTerm;
+    private double      currentError;
+    private double      previousError;
+    private double      diffError;
+    private double      errorSignal;
+    private double      pTerm;
+    private double      iTerm = 0;
+    private double      dTerm;
 
     // Time measure
-    private double        initTime;
-    private double        passedTime;
-    private double        timeoutTimeMS;
+    private double      initTime;
+    private double      passedTime;
+    private double      timeoutTimeMS;
 
-    private HeadingStates headingState;
+    private AngleStates angleState;
 
     // Logging skibidi
-    private double        speed;
-    private boolean       brakeAtEnd;
-    private String        reason;
-    private double        targetAngle;
+    private double      speed;
+    private boolean     brakeAtEnd;
+    private String      reason;
+    private double      targetAngle;
 
 
 
@@ -59,10 +59,10 @@ public class PivotToAngleCommand extends LoggingCommand {
         initTime      = System.currentTimeMillis();
 
         if (Math.abs(previousError) > 10) {
-            headingState = HeadingStates.FAR;
+            angleState = AngleStates.FAR;
         }
         else {
-            headingState = HeadingStates.CLOSE;
+            angleState = AngleStates.CLOSE;
         }
 
 
@@ -79,7 +79,7 @@ public class PivotToAngleCommand extends LoggingCommand {
 
         double sgnError = Math.abs(currentError) / currentError;
 
-        switch (headingState) {
+        switch (angleState) {
 
         case FAR:
         default:
@@ -102,11 +102,11 @@ public class PivotToAngleCommand extends LoggingCommand {
             break;
         }
 
-        if (Math.abs(previousError) > ArmConstants.PIVOT_FAR_TO_CLOSE) {
-            headingState = HeadingStates.FAR;
+        if (Math.abs(previousError) > ArmConstants.EQUILIBRIUM_ARM_ANGLE_BUFFER) {
+            angleState = AngleStates.FAR;
         }
         else {
-            headingState = HeadingStates.CLOSE;
+            angleState = AngleStates.CLOSE;
         }
 
 
@@ -120,7 +120,7 @@ public class PivotToAngleCommand extends LoggingCommand {
         currentError = armSubsystem.getAngleErrorPivot(targetAngle);
 
 
-        if (Math.abs(currentError) <= ArmConstants.PIVOT_ROT_BUFFER) {
+        if (Math.abs(currentError) <= ArmConstants.EQUILIBRIUM_ARM_ANGLE_BUFFER) {
             reason = "Within buffer accuracy";
             return true;
         }

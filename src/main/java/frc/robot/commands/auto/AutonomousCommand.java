@@ -79,8 +79,28 @@ public class AutonomousCommand extends SequentialCommandGroup {
              * addCommands(new PivotToAngleCommand(0.1, 30, true, 10000, armSubsystem));
              * 
              * addCommands(new IntakeCommand(0.5, 0.1, 10000, armSubsystem));
+             * addCommands(new IntakeCommand(0.5, 0.3, 5000, armSubsystem));
+             * 
+             * // addCommands(new MeasuredStraightDriveCommand(100, 0.2, true, driveSubsystem));
+             * 
+             * // addCommands(new PivotToAngleCommand(0.3, 30, true, 10000, armSubsystem));
+             * 
+             * // addCommands(new IntakeCommand(0.5, 0.3, 10000, armSubsystem));
+             * 
+             * // addCommands(new PivotToAngleCommand(0.3, 30, true, 10000, armSubsystem));
+             * 
+             * // addCommands(new PivotShootCommand(1, 0.3, 90, 10000, armSubsystem));
+             * case OUTSIDE_ONE_SHOT:
+             * // From outside position, backs up and makes a speaker shot
+             * 
+             * // moves backwards to make first shot
+             * 
+             * /*
+             * addCommands(new MeasuredStraightDriveCommand(100, -0.2, true, driveSubsystem));
              * 
              * addCommands(new PivotToAngleCommand(0.1, 30, true, 10000, armSubsystem));
+             * 
+             * // first shot
              * 
              * addCommands(new PivotShootCommand(1, 0.1, 90, 10000, armSubsystem));
              */

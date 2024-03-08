@@ -51,7 +51,7 @@ public class OperatorInput extends SubsystemBase {
     // drive methods
 
     public boolean getBoost() {
-        return driverController.getRightBumper();
+        return driverController.getXButton();
     }
 
     public double getLeftY() {
@@ -151,6 +151,14 @@ public class OperatorInput extends SubsystemBase {
 
     public boolean isAmpShot() {
         return driverController.getLeftBumper();
+    }
+
+    public boolean isPivotUp() {
+        return driverController.getPOV() == 0;
+    }
+
+    public boolean isPivotDown() {
+        return driverController.getPOV() == 180;
     }
 
     /**
