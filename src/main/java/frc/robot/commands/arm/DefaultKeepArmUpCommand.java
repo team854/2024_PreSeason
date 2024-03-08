@@ -89,7 +89,7 @@ public class DefaultKeepArmUpCommand extends LoggingCommand {
 
             errorSignal = pTerm + iTerm + dTerm;
 
-            Math.max(Math.min(errorSignal + Math.abs(errorSignal) / errorSignal * 0.2, 1), -1);
+            errorSignal = Math.max(Math.min(errorSignal + Math.abs(errorSignal) / errorSignal * 0.2, 1), -1);
 
             armSubsystem.pivotRotSetSpeed(speed * sgnError);
 

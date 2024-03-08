@@ -77,15 +77,14 @@ public class RobotContainer {
         autoPatternChooser.addOption("Drive Forward", AutoPattern.DRIVE_FORWARD);
         autoPatternChooser.addOption("Drive Forward PID Timed", AutoPattern.DRIVE_FORWARD_PID_TIMED);
         autoPatternChooser.addOption("Drive Forward PID Measured", AutoPattern.DRIVE_FORWARD_PID_MEASURED);
-        autoPatternChooser.addOption("One shot from outside", AutoPattern.OUTSIDE_ONE_SHOT);
-        autoPatternChooser.addOption("Two shots from outside", AutoPattern.OUTSIDE_TWO_SHOT);
-        autoPatternChooser.addOption("Three shots from the speaker", AutoPattern.SPEAKER_THREE_SHOT);
-        autoPatternChooser.addOption("Four shots from the speaker", AutoPattern.SPEAKER_FOUR_SHOT);
-        autoPatternChooser.addOption("One shot from the amp", AutoPattern.AMP_ONE_SHOT);
-        autoPatternChooser.addOption("Two shots from the amp", AutoPattern.AMP_TWO_SHOT);
-        autoPatternChooser.addOption("One shot amp, one shot into speaker, from amo", AutoPattern.AMP_ONE_SHOT_ONE_AMP);
-        autoPatternChooser.addOption("One shot into amp", AutoPattern.AMP_ONE_AMP);
-        autoPatternChooser.addOption("Two shots into amp", AutoPattern.AMP_TWO_AMP);
+        autoPatternChooser.addOption("Outside side 1 shot", AutoPattern.OUTSIDE_ONE_SHOT);
+        autoPatternChooser.addOption("Outside side 2 shot", AutoPattern.OUTSIDE_TWO_SHOT);
+        autoPatternChooser.addOption("Speaker side 3 shot", AutoPattern.SPEAKER_THREE_SHOT);
+        autoPatternChooser.addOption("Speaker side 2 shot", AutoPattern.SPEAKER_TWO_SHOT);
+        autoPatternChooser.addOption("Speaker side 1 shot", AutoPattern.SPEAKER_ONE_SHOT);
+        autoPatternChooser.addOption("Amp side 1 shot", AutoPattern.AMP_ONE_SHOT);
+        autoPatternChooser.addOption("Amp side 2 shot", AutoPattern.AMP_TWO_SHOT);
+        autoPatternChooser.addOption("Amp side 3 shot", AutoPattern.AMP_ONE_SHOT);
 
     }
 

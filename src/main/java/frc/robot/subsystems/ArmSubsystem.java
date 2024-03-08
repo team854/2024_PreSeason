@@ -1,6 +1,8 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 
@@ -39,6 +41,14 @@ public class ArmSubsystem extends SubsystemBase {
     public ArmSubsystem() {
 
         this.currAnglePivot = getAnglePivot();
+
+        pivot.setIdleMode(IdleMode.kBrake);
+        pivot.setInverted(ArmConstants.PIVOT_INVERTED);
+
+
+        intakeLower.setNeutralMode(NeutralMode.Coast);
+        intakeHigher.follow(intakeHigher);
+
 
     }
 

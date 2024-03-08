@@ -27,24 +27,76 @@ public final class Constants {
             DRIVE_FORWARD_PID_MEASURED,
             TEST_ARM_COMMANDS,
             // the below autopatterns assume that were on blue i.e. when facing the speaker the amp
-            // is on the left
-            OUTSIDE_ONE_SHOT,
-            OUTSIDE_TWO_SHOT,
-            SPEAKER_THREE_SHOT,
-            SPEAKER_FOUR_SHOT,
+            // is on the right
             AMP_ONE_SHOT,
             AMP_TWO_SHOT,
-            AMP_ONE_SHOT_ONE_AMP,
-            AMP_ONE_AMP,
-            AMP_TWO_AMP
+            AMP_THREE_SHOT,
+            SPEAKER_ONE_SHOT,
+            SPEAKER_TWO_SHOT,
+            SPEAKER_THREE_SHOT,
+            SPEAKER_FOUR_SHOT,
+            OUTSIDE_ONE_SHOT,
+            OUTSIDE_TWO_SHOT,
+            OUTSIDE_THREE_SHOT,
         }
 
         // amp side distance variables
 
-        public static final double AmpSideDiagStepCM = null;
-        public static final double AmpSideDiagAngle  = null;
-        public static final double AmpSideStraightCM = null;
-
+        /*
+         * public static final double AmpSideTimeoutMS = null;
+         * 
+         * public static final double AmpSideDiagStepCM = null;
+         * public static final double AmpSideFirstStraightCM = null;
+         * public static final double AmpSideSecondStraightCM = null;
+         * public static final double AmpSideThirdStraightCM = null;
+         * 
+         * public static final double AmpSideFirstAngle = null;
+         * public static final double AmpSideSecondAngle = null;
+         * public static final double AmpSideShootAngle = null;
+         * 
+         * public static final double AmpSideShootSpeed = null;
+         * public static final double AmpSidePivotSpeed = null;
+         * public static final double AmpSideDriveSpeed = null;
+         * public static final double AmpSideIntakeSpeed = null;
+         * 
+         * // speaker side variables
+         * 
+         * public static final double SpeakerSideTimeoutMS = null;
+         * 
+         * public static final double SpeakerSideDiagStepCM = null;
+         * public static final double SpeakerSideFirstStraightCM = null;
+         * public static final double SpeakerSideSecondStraightCM = null;
+         * public static final double SpeakerSideThirdStraightCM = null;
+         * 
+         * public static final double SpeakerSideShootAngle = null;
+         * public static final double SpeakerSideSwivelAngle = null;
+         * public static final double SpeakerSideFirstAngle = null;
+         * 
+         * public static final double SpeakerSideDriveSpeed = null;
+         * public static final double SpeakerSidePivotSpeed = null;
+         * public static final double SpeakerSideShootSpeed = null;
+         * public static final double SpeakerSideIntakeSpeed = null;
+         * public static final double SpeakerSideSwivelSpeed = null;
+         * 
+         * // outside side variables
+         * 
+         * public static final double OutsideSideTimeoutMS = null;
+         * 
+         * public static final double OutsideSideDiagStepCM = null;
+         * public static final double OutsideSideFirstStraightCM = null;
+         * public static final double OutsideSideSecondStraightCM = null;
+         * public static final double OutsideSideThirdStraightCM = null;
+         * 
+         * public static final double OutsideSideFirstAngle = null;
+         * public static final double OutsideSideSecondAngle = null;
+         * public static final double OutsideSideShooterAngle = null;
+         * 
+         * public static final double OutsideSideShooterSpeed = null;
+         * public static final double OutsideSidePivotSpeed = null;
+         * public static final double OutsideSideDriveSpeed = null;
+         * public static final double OutsideSideIntakeSpeed = null;
+         * 
+         */
 
 
     }
@@ -104,14 +156,16 @@ public final class Constants {
 
     public static final class ArmConstants {
 
-        public static final int PIVOT_PORT                           = 20;
-        public static final int PROXIMITY_PORT                       = null;
-        public static final int INTAKE_LOWER_PORT                    = null;
-        public static final int INTAKE_HIGHER_PORT                   = null;
+        public static final int     PIVOT_PORT                           = 20;
+        public static final int     PROXIMITY_PORT                       = null;
+        public static final int     INTAKE_LOWER_PORT                    = null;
+        public static final int     INTAKE_HIGHER_PORT                   = null;
 
-        public static final int PIVOT_ARM_ENCODER_COUNT_PER_ROTATION = 0;
+        public static final int     PIVOT_ARM_ENCODER_COUNT_PER_ROTATION = 0;
 
-        public static final int RESTING_ARM_ANGLE                    = 20;
+        public static final int     RESTING_ARM_ANGLE                    = 20;
+
+        public static final boolean PIVOT_INVERTED                       = true;
 
         public static enum HeadingStates {
             FAR, CLOSE

@@ -6,11 +6,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.AutoConstants.AutoPattern;
-import frc.robot.commands.arm.IntakeCommand;
-import frc.robot.commands.arm.PivotShootCommand;
-import frc.robot.commands.arm.PivotToAngleCommand;
 import frc.robot.commands.drive.MeasuredDriveAtHeadingCommand;
-import frc.robot.commands.drive.MeasuredStraightDriveCommand;
 import frc.robot.commands.drive.TimedDriveCommand;
 import frc.robot.commands.drive.TimedStraightDriveCommand;
 import frc.robot.subsystems.ArmSubsystem;
@@ -76,337 +72,446 @@ public class AutonomousCommand extends SequentialCommandGroup {
         case TEST_ARM_COMMANDS:
             // program that will test the intake, pivot shoot, and pivot to angle
 
-            addCommands(new MeasuredStraightDriveCommand(100, 0.2, true, driveSubsystem));
-
-            addCommands(new PivotToAngleCommand(0.3, 30, true, 10000, armSubsystem));
-
-            addCommands(new IntakeCommand(0.5, 0.3, 10000, armSubsystem));
-
-            addCommands(new PivotToAngleCommand(0.3, 30, true, 10000, armSubsystem));
-
-            addCommands(new PivotShootCommand(1, 0.3, 90, 10000, armSubsystem));
-        case OUTSIDE_ONE_SHOT:
-            // From outside position, backs up and makes a speaker shot
-
-            // moves backwards to make first shot
 
             /*
-             * addCommands(new MeasuredStraightDriveCommand(100, -0.2, true, driveSubsystem));
-             * 
-             * addCommands(new PivotToAngleCommand(0.3, 90, true, 3000, armSubsystem));
-             * 
-             * // first shot
-             * 
-             * addCommands(new ShooterCommand(1, 2000, armSubsystem));
-             */
-            break;
-
-        case OUTSIDE_TWO_SHOT:
-            // From outside position, backs up and makes a speaker shot
-            // then it turns goes backwards to get a note, goes forward and turns back to make
-            // another shot
-            /*
-             * startHeading = driveSubsystem.getHeading();
-             * 
-             * // moving arm while backign up for first shot
-             * 
-             * addCommands(new PivotToAngleCommand(0.2, 90, true, 3000, armSubsystem));
-             * 
-             * addCommands(new MeasuredStraightDriveCommand(100, -0.2, true, driveSubsystem));
-             * 
-             * // first shot
-             * 
-             * addCommands(new ShooterCommand(0.5, 2000, armSubsystem));
-             * 
-             * // turns and drives towards first note while intaking
-             * 
-             * addCommands(new TurnToHeadingCommand(0.2, startHeading + 120, true, 3000,
-             * driveSubsystem));
-             * 
-             * addCommands(new PivotToAngleCommand(0.2, 0, true, 3000, armSubsystem));
-             * 
-             * addCommands(new IntakeCommand(0.2, 10000, armSubsystem));
-             * 
-             * addCommands(new MeasuredStraightDriveCommand(30, 0.2, true, driveSubsystem));
-             * 
-             * 
-             * // getting ready to shoot while turning to correct angle
-             * 
-             * addCommands(new PivotToAngleCommand(0.2, 90, true, 3000, armSubsystem));
-             * 
-             * addCommands(new TurnToHeadingCommand(0.2, startHeading - 102, true, 3,
-             * driveSubsystem));
-             * 
-             * // second shot
-             * 
-             * addCommands(new ShooterCommand(0.5, 2000, armSubsystem));
-             */
-
-            break;
-
-        case SPEAKER_THREE_SHOT:
-            /*
-             * Facing Directly towards the speaker, robot backs up to make first shot,
-             * Makes a full turn and goes forward to get the last note,
-             * full turns again and makes the second shot,
-             * then turns left to grab the last note, turns to the speaker
-             * and makes the last shot
-             */
-
-            /*
-             * 
-             * startHeading = driveSubsystem.getHeading();
-             * 
-             * // backs up for first shot (needs space)
-             * 
-             * addCommands(new MeasuredStraightDriveCommand(100, -0.2, true, driveSubsystem));
-             * 
-             * addCommands(new PivotToAngleCommand(0.3, 90, true, 5000, armSubsystem));
-             * 
-             * // first shot
-             * 
-             * addCommands(new ShooterCommand(0.5, 2000, armSubsystem));
-             * 
-             * // full turns and goes for the second note
-             * 
-             * addCommands(new PivotToAngleCommand(0.3, 0, true, 5000, armSubsystem));
-             * 
-             * addCommands(new TurnToHeadingCommand(0.2, startHeading + 180, true, 3000,
-             * driveSubsystem));
-             * 
-             * addCommands(new IntakeCommand(0.2, 10000, armSubsystem));
-             * 
              * addCommands(new MeasuredStraightDriveCommand(100, 0.2, true, driveSubsystem));
              * 
-             * // Second shotting.
+             * addCommands(new PivotToAngleCommand(0.1, 30, true, 10000, armSubsystem));
              * 
-             * addCommands(new PivotToAngleCommand(0.3, 90, true, 5000, armSubsystem));
+             * addCommands(new IntakeCommand(0.5, 0.1, 10000, armSubsystem));
              * 
-             * addCommands(new TurnToHeadingCommand(0.2, startHeading + 180, true, 3000,
-             * driveSubsystem));
+             * addCommands(new PivotToAngleCommand(0.1, 30, true, 10000, armSubsystem));
              * 
-             * addCommands(new ShooterCommand(0.5, 2000, armSubsystem));
-             * 
-             * // Third Sucking \(O-o)/
-             * addCommands(new PivotToAngleCommand(0.3, 0, true, 5000, armSubsystem));
-             * 
-             * addCommands(new TurnToHeadingCommand(0.2, startHeading - 90, true, 3000,
-             * driveSubsystem));
-             * 
-             * addCommands(new IntakeCommand(0.2, 10000, armSubsystem));
-             * 
-             * addCommands(new MeasuredStraightDriveCommand(100, 0.2, true, driveSubsystem));
-             * 
-             * // Third Shooting :p
-             * 
-             * addCommands(new TurnToHeadingCommand(0.2, startHeading + 185, true, 3000,
-             * driveSubsystem));
-             * 
-             * addCommands(new PivotToAngleCommand(0.3, 90, true, 5000, armSubsystem));
-             * 
-             * addCommands(new ShooterCommand(0.5, 2000, armSubsystem));
-             * 
-             * break;
+             * addCommands(new PivotShootCommand(1, 0.1, 90, 10000, armSubsystem));
              */
-
-        case SPEAKER_FOUR_SHOT:
-            /*
-             * Facing Directly towards the speaker, robot backs up to make first shot,
-             * Makes a full turn and goes forward to get the last note,
-             * full turns again and makes the second shot,
-             * then turns left to grab the 2nd last note, turns to the speaker and shoots
-             * then turns again then goes towards last note
-             * sucks last note (uwu)
-             * and makes the last shot
-             */
-
-            startHeading = driveSubsystem.getHeading();
-
-            // backs up for first shot (needs space)
-
-            /*
-             * 
-             * addCommands(new MeasuredStraightDriveCommand(100, -0.2, true, driveSubsystem));
-             * 
-             * addCommands(new PivotToAngleCommand(0.3, 90, true, 5000, armSubsystem));
-             * 
-             * // first shot
-             * 
-             * addCommands(new ShooterCommand(0.5, 2000, armSubsystem));
-             * 
-             * // full turns and goes for the second note
-             * 
-             * addCommands(new PivotToAngleCommand(0.3, 0, true, 5000, armSubsystem));
-             * 
-             * addCommands(new TurnToHeadingCommand(0.2, startHeading + 180, true, 3000,
-             * driveSubsystem));
-             * 
-             * addCommands(new IntakeCommand(0.2, 10000, armSubsystem));
-             * 
-             * addCommands(new MeasuredStraightDriveCommand(100, 0.2, true, driveSubsystem));
-             * 
-             * // Second shotting.
-             * 
-             * addCommands(new PivotToAngleCommand(0.3, 90, true, 5000, armSubsystem));
-             * 
-             * addCommands(new TurnToHeadingCommand(0.2, startHeading + 180, true, 3000,
-             * driveSubsystem));
-             * 
-             * addCommands(new ShooterCommand(0.5, 2000, armSubsystem));
-             * 
-             * // Third Sucking \(O-o)/
-             * addCommands(new PivotToAngleCommand(0.3, 0, true, 5000, armSubsystem));
-             * 
-             * addCommands(new TurnToHeadingCommand(0.2, startHeading - 90, true, 3000,
-             * driveSubsystem));
-             * 
-             * addCommands(new IntakeCommand(0.2, 10000, armSubsystem));
-             * 
-             * addCommands(new MeasuredStraightDriveCommand(100, 0.2, true, driveSubsystem));
-             * 
-             * // Third Shooting :p
-             * 
-             * addCommands(new TurnToHeadingCommand(0.2, startHeading + 185, true, 3000,
-             * driveSubsystem));
-             * 
-             * addCommands(new PivotToAngleCommand(0.3, 90, true, 5000, armSubsystem));
-             * 
-             * addCommands(new ShooterCommand(0.5, 2000, armSubsystem));
-             * 
-             * 
-             * // Forth Sucking \(>w<)/
-             * addCommands(new PivotToAngleCommand(0.3, 0, true, 5000, armSubsystem));
-             * 
-             * addCommands(new TurnToHeadingCommand(0.2, startHeading + 55, true, 3000,
-             * driveSubsystem));
-             * 
-             * addCommands(new IntakeCommand(0.2, 10000, armSubsystem));
-             * 
-             * addCommands(new MeasuredStraightDriveCommand(200, 0.2, true, driveSubsystem));
-             * 
-             * // Fourth shooting powo :
-             * 
-             * addCommands(new TurnToHeadingCommand(0.2, startHeading - 185, true, 3000,
-             * driveSubsystem));
-             * 
-             * addCommands(new PivotToAngleCommand(0.3, 90, true, 5000, armSubsystem));
-             * 
-             * addCommands(new ShooterCommand(0.5, 2000, armSubsystem));
-             * 
-             */
-
             break;
 
-        case AMP_ONE_SHOT:
+        /*
+         * case AMP_ONE_SHOT:
+         * // From outside position, backs up and makes a speaker shot
+         * // Starts at the edge of the subwoofer facing away from it
+         * 
+         * startHeading = driveSubsystem.getHeading();
+         * 
+         * // moves backwards to make first shot
+         * 
+         * addCommands(new MeasuredStraightDriveCommand(AutoConstants.AmpSideDiagStepCM,
+         * -AutoConstants.AmpSideDriveSpeed, true,
+         * driveSubsystem));
+         * 
+         * // makes first shot
+         * 
+         * addCommands(new PivotShootCommand(AutoConstants.AmpSideShootSpeed,
+         * AutoConstants.AmpSidePivotSpeed,
+         * AutoConstants.AmpSideShootAngle, AutoConstants.AmpSideTimeoutMS, armSubsystem));
+         * 
+         * // turns and leaves starting zone to get mobility points
+         * 
+         * addCommands(new TurnToHeadingCommand(AutoConstants.AmpSideDriveSpeed,
+         * startHeading + AutoConstants.AmpSideFirstAngle, true, AutoConstants.AmpSideTimeoutMS,
+         * driveSubsystem));
+         * 
+         * addCommands(
+         * new MeasuredStraightDriveCommand(AutoConstants.AmpSideFirstStraightCM,
+         * -AutoConstants.AmpSideDriveSpeed, true,
+         * driveSubsystem));
+         * 
+         * break;
+         * 
+         * case AMP_TWO_SHOT:
+         * // From outside position, backs up and makes a speaker shot
+         * // then it turns goes backwards to get a note, goes forward and turns back to make
+         * // another shot. starts at the edge of the subwoofer facing away from it
+         * 
+         * startHeading = driveSubsystem.getHeading();
+         * 
+         * // backing up for first shot
+         * 
+         * addCommands(new MeasuredStraightDriveCommand(AutoConstants.AmpSideDiagStepCM,
+         * AutoConstants.AmpSideDriveSpeed, true,
+         * driveSubsystem));
+         * 
+         * // first shot
+         * 
+         * addCommands(new PivotShootCommand(AutoConstants.AmpSideShootSpeed,
+         * AutoConstants.AmpSidePivotSpeed,
+         * AutoConstants.AmpSideShootAngle, AutoConstants.AmpSideTimeoutMS, armSubsystem));
+         * 
+         * // turns and drives towards first note while intaking
+         * 
+         * addCommands(new TurnToHeadingCommand(AutoConstants.AmpSideDriveSpeed,
+         * startHeading + AutoConstants.AmpSideFirstAngle, true, AutoConstants.AmpSideTimeoutMS,
+         * driveSubsystem));
+         * 
+         * addCommands(new IntakeCommand(AutoConstants.AmpSideIntakeSpeed,
+         * AutoConstants.AmpSidePivotSpeed,
+         * AutoConstants.AmpSideTimeoutMS, armSubsystem));
+         * 
+         * addCommands(new MeasuredStraightDriveCommand(AutoConstants.AmpSideSecondStraightCM,
+         * AutoConstants.AmpSideDriveSpeed,
+         * true, driveSubsystem));
+         * 
+         * // goes back to shooting place
+         * 
+         * addCommands(new MeasuredStraightDriveCommand(AutoConstants.AmpSideSecondStraightCM,
+         * -AutoConstants.AmpSideDriveSpeed,
+         * true, driveSubsystem));
+         * 
+         * // second shot
+         * 
+         * addCommands(new TurnToHeadingCommand(AutoConstants.AmpSideDriveSpeed,
+         * startHeading + AutoConstants.AmpSideFirstAngle, true, AutoConstants.AmpSideTimeoutMS,
+         * driveSubsystem));
+         * 
+         * addCommands(new PivotShootCommand(AutoConstants.AmpSideShootSpeed,
+         * AutoConstants.AmpSidePivotSpeed,
+         * AutoConstants.AmpSideShootAngle, AutoConstants.AmpSideTimeoutMS, armSubsystem));
+         * 
+         * // turns and leaves starting zone to get mobility points
+         * 
+         * addCommands(new TurnToHeadingCommand(AutoConstants.AmpSideDriveSpeed,
+         * startHeading + AutoConstants.AmpSideFirstAngle, true, AutoConstants.AmpSideTimeoutMS,
+         * driveSubsystem));
+         * 
+         * addCommands(
+         * new MeasuredStraightDriveCommand(AutoConstants.AmpSideFirstStraightCM,
+         * -AutoConstants.AmpSideDriveSpeed, true,
+         * driveSubsystem));
+         * 
+         * break;
+         * 
+         * case AMP_THREE_SHOT:
+         * /*
+         * From amp position, robot starts at the edge of the subwoofer in amp position,
+         * backs up, makes first shot, turns to go get second note, returns for second shot,
+         * then backs up more to get the third ring and returns finally to get the third sho
+         */
+        /*
+         * startHeading = driveSubsystem.getHeading();
+         * 
+         * // backing up for first shot
+         * 
+         * addCommands(new MeasuredStraightDriveCommand(AutoConstants.AmpSideDiagStepCM,
+         * AutoConstants.AmpSideDriveSpeed, true,
+         * driveSubsystem));
+         * 
+         * // first shot
+         * 
+         * addCommands(new PivotShootCommand(AutoConstants.AmpSideShootSpeed,
+         * AutoConstants.AmpSidePivotSpeed,
+         * AutoConstants.AmpSideShootAngle, AutoConstants.AmpSideTimeoutMS, armSubsystem));
+         * 
+         * // turns and drives towards first note while intaking
+         * 
+         * addCommands(new TurnToHeadingCommand(AutoConstants.AmpSideDriveSpeed,
+         * startHeading + AutoConstants.AmpSideFirstAngle, true, AutoConstants.AmpSideTimeoutMS,
+         * driveSubsystem));
+         * 
+         * addCommands(new IntakeCommand(AutoConstants.AmpSideIntakeSpeed,
+         * AutoConstants.AmpSidePivotSpeed,
+         * AutoConstants.AmpSideTimeoutMS, armSubsystem));
+         * 
+         * addCommands(new MeasuredStraightDriveCommand(AutoConstants.AmpSideSecondStraightCM,
+         * AutoConstants.AmpSideDriveSpeed,
+         * true, driveSubsystem));
+         * 
+         * // goes back to shooting place
+         * 
+         * addCommands(new MeasuredStraightDriveCommand(AutoConstants.AmpSideSecondStraightCM,
+         * -AutoConstants.AmpSideDriveSpeed,
+         * true, driveSubsystem));
+         * 
+         * // second shot
+         * 
+         * addCommands(new TurnToHeadingCommand(AutoConstants.AmpSideDriveSpeed,
+         * startHeading + AutoConstants.AmpSideFirstAngle, true, AutoConstants.AmpSideTimeoutMS,
+         * driveSubsystem));
+         * 
+         * addCommands(new PivotShootCommand(AutoConstants.AmpSideShootSpeed,
+         * AutoConstants.AmpSidePivotSpeed,
+         * AutoConstants.AmpSideShootAngle, AutoConstants.AmpSideTimeoutMS, armSubsystem));
+         * 
+         * // goes for the third note while intaking
+         * 
+         * addCommands(new TurnToHeadingCommand(AutoConstants.AmpSideDriveSpeed,
+         * startHeading + AutoConstants.AmpSideFirstAngle, true, AutoConstants.AmpSideTimeoutMS,
+         * driveSubsystem));
+         * 
+         * addCommands(
+         * new MeasuredStraightDriveCommand(AutoConstants.AmpSideFirstStraightCM,
+         * AutoConstants.AmpSideDriveSpeed, true,
+         * driveSubsystem));
+         * 
+         * addCommands(
+         * new MeasuredStraightDriveCommand(AutoConstants.AmpSideSecondStraightCM,
+         * AutoConstants.AmpSideDriveSpeed, true,
+         * driveSubsystem));
+         * 
+         * addCommands(new TurnToHeadingCommand(AutoConstants.AmpSideDriveSpeed,
+         * startHeading + AutoConstants.AmpSideSecondAngle, true, AutoConstants.AmpSideTimeoutMS,
+         * driveSubsystem));
+         * 
+         * addCommands(new IntakeCommand(AutoConstants.AmpSideIntakeSpeed,
+         * AutoConstants.AmpSidePivotSpeed,
+         * AutoConstants.AmpSideTimeoutMS, armSubsystem));
+         * 
+         * addCommands(
+         * new MeasuredStraightDriveCommand(AutoConstants.AmpSideThirdStraightCM,
+         * AutoConstants.AmpSideDriveSpeed, true,
+         * driveSubsystem));
+         * 
+         * addCommands(
+         * new MeasuredStraightDriveCommand(AutoConstants.AmpSideThirdStraightCM,
+         * -AutoConstants.AmpSideDriveSpeed, true,
+         * driveSubsystem));
+         * 
+         * addCommands(new TurnToHeadingCommand(AutoConstants.AmpSideDriveSpeed,
+         * startHeading + AutoConstants.AmpSideFirstAngle, true, AutoConstants.AmpSideTimeoutMS,
+         * driveSubsystem));
+         * 
+         * addCommands(
+         * new MeasuredStraightDriveCommand(AutoConstants.AmpSideSecondStraightCM,
+         * -AutoConstants.AmpSideDriveSpeed, true,
+         * driveSubsystem));
+         * 
+         * addCommands(
+         * new MeasuredStraightDriveCommand(AutoConstants.AmpSideFirstStraightCM,
+         * -AutoConstants.AmpSideDriveSpeed, true,
+         * driveSubsystem));
+         * 
+         * // third shot
+         * 
+         * addCommands(new TurnToHeadingCommand(AutoConstants.AmpSideDriveSpeed,
+         * startHeading + AutoConstants.AmpSideFirstAngle, true, AutoConstants.AmpSideTimeoutMS,
+         * driveSubsystem));
+         * 
+         * addCommands(new PivotShootCommand(AutoConstants.AmpSideShootSpeed,
+         * AutoConstants.AmpSidePivotSpeed,
+         * AutoConstants.AmpSideShootAngle, AutoConstants.AmpSideTimeoutMS, armSubsystem));
+         * 
+         * // turns and leaves starting zone to get mobility points
+         * 
+         * addCommands(new TurnToHeadingCommand(AutoConstants.AmpSideDriveSpeed,
+         * startHeading + AutoConstants.AmpSideFirstAngle, true, AutoConstants.AmpSideTimeoutMS,
+         * driveSubsystem));
+         * 
+         * addCommands(
+         * new MeasuredStraightDriveCommand(AutoConstants.AmpSideFirstStraightCM,
+         * -AutoConstants.AmpSideDriveSpeed, true,
+         * driveSubsystem));
+         * 
+         * break;
+         * 
+         * case SPEAKER_ONE_SHOT:
+         * /*
+         * From speaker position, robot starts in the center facing away from speaker
+         * The robot backs up and makes one shot, then backs up further to get mobility points
+         */
 
-            /*
-             * 
-             * startHeading = driveSubsystem.getHeading();
-             * 
-             * addCommands(new MeasuredStraightDriveCommand(100, -0.2, true, driveSubsystem));
-             * 
-             * // Shoot arm, no command made yet
-             * 
-             * addCommands(new TurnToHeadingCommand(0.2, startHeading + 45, true, 3,
-             * driveSubsystem));
-             * 
-             * addCommands(new MeasuredStraightDriveCommand(100, -0.2, true, driveSubsystem));
-             * 
-             * break;
-             */
+        // backs up
+        /*
+         * addCommands(
+         * new MeasuredStraightDriveCommand(AutoConstants.SpeakerSideFirstStraightCM,
+         * AutoConstants.SpeakerSideDriveSpeed,
+         * true, driveSubsystem));
+         * 
+         * // first shot
+         * 
+         * addCommands(new PivotShootCommand(AutoConstants.SpeakerSideShootSpeed,
+         * AutoConstants.SpeakerSidePivotSpeed,
+         * AutoConstants.SpeakerSideShootAngle, AutoConstants.SpeakerSideTimeoutMS, armSubsystem));
+         * 
+         * // leaves starting zone to get mobility points
+         * 
+         * addCommands(
+         * new MeasuredStraightDriveCommand(AutoConstants.SpeakerSideSecondStraightCM,
+         * AutoConstants.SpeakerSideDriveSpeed,
+         * true,
+         * driveSubsystem));
+         * 
+         * 
+         * case SPEAKER_TWO_SHOT:
+         * /*
+         * From speaker position, robot starts in the center facing away from speaker
+         * The robot backs up
+         */
 
-        case AMP_TWO_SHOT:
-            /*
-             * startHeading = driveSubsystem.getHeading();
-             * 
-             * addCommands(new MeasuredStraightDriveCommand(100, -0.2, true, driveSubsystem));
-             * 
-             * // Shoot arm, no command made yet
-             * 
-             * addCommands(new TurnToHeadingCommand(0.2, startHeading + 45, true, 3,
-             * driveSubsystem));
-             * 
-             * addCommands(new MeasuredStraightDriveCommand(200, -0.2, true, driveSubsystem));
-             * 
-             * addCommands(new TurnToHeadingCommand(0.2, startHeading + 22.5, true, 3,
-             * driveSubsystem));
-             * 
-             * // Shoot arm, no command made yet
-             */
-
-            break;
-
-        case AMP_ONE_SHOT_ONE_AMP:
-            /*
-             * startHeading = driveSubsystem.getHeading();
-             * 
-             * addCommands(new MeasuredStraightDriveCommand(100, -0.2, true, driveSubsystem));
-             * 
-             * // Shoot arm, no command made yet
-             * 
-             * addCommands(new TurnToHeadingCommand(0.2, startHeading + 45, true, 3,
-             * driveSubsystem));
-             * 
-             * addCommands(new MeasuredStraightDriveCommand(200, -0.2, true, driveSubsystem));
-             * 
-             * addCommands(new TurnToHeadingCommand(0.2, startHeading + 135, true, 3,
-             * driveSubsystem));
-             * 
-             * addCommands(new MeasuredStraightDriveCommand(100, 0.2, true, driveSubsystem));
-             * 
-             * // Shoot arm into amp, no command made yet
-             */
-
-            break;
-
-        case AMP_ONE_AMP:
-            /*
-             * startHeading = driveSubsystem.getHeading();
-             * 
-             * addCommands(new MeasuredStraightDriveCommand(100, -0.2, true, driveSubsystem));
-             * 
-             * addCommands(new TurnToHeadingCommand(0.2, startHeading + 31, true, 3,
-             * driveSubsystem));
-             * 
-             * addCommands(new MeasuredStraightDriveCommand(206, -0.2, true, driveSubsystem));
-             * 
-             * addCommands(new TurnToHeadingCommand(0.2, startHeading + 135, true, 3,
-             * driveSubsystem));
-             * 
-             * addCommands(new MeasuredStraightDriveCommand(50, 0.2, true, driveSubsystem));
-             * 
-             * // Shoot arm into amp, no command made yet
-             */
-
-            break;
-
-        case AMP_TWO_AMP:
-
-            /*
-             * /
-             * startHeading = driveSubsystem.getHeading();
-             * 
-             * addCommands(new MeasuredStraightDriveCommand(100, -0.2, true, driveSubsystem));
-             * 
-             * addCommands(new TurnToHeadingCommand(0.2, startHeading + 31, true, 3,
-             * driveSubsystem));
-             * 
-             * addCommands(new MeasuredStraightDriveCommand(206, -0.2, true, driveSubsystem));
-             * 
-             * addCommands(new TurnToHeadingCommand(0.2, startHeading + 135, true, 3,
-             * driveSubsystem));
-             * 
-             * addCommands(new MeasuredStraightDriveCommand(50, 0.2, true, driveSubsystem));
-             * 
-             * // Shoot arm into amp, no command made yet
-             * 
-             * addCommands(new MeasuredStraightDriveCommand(100, -0.2, true, driveSubsystem));
-             * 
-             * // Shoot arm into amp, no command made yet
-             */
-
-            break;
-
+        // backs up
+        /*
+         * addCommands(
+         * new MeasuredStraightDriveCommand(AutoConstants.SpeakerSideFirstStraightCM,
+         * AutoConstants.SpeakerSideDriveSpeed,
+         * true, driveSubsystem));
+         * 
+         * // first shot
+         * 
+         * addCommands(new PivotShootCommand(AutoConstants.SpeakerSideShootSpeed,
+         * AutoConstants.SpeakerSidePivotSpeed,
+         * AutoConstants.SpeakerSideShootAngle, AutoConstants.SpeakerSideTimeoutMS, armSubsystem));
+         * 
+         * // goes for second shot while intaking
+         * 
+         * addCommands(
+         * new MeasuredStraightDriveCommand(AutoConstants.SpeakerSideSecondStraightCM,
+         * AutoConstants.SpeakerSideDriveSpeed,
+         * true, driveSubsystem));
+         * 
+         * addCommands(new IntakeCommand(AutoConstants.SpeakerSideIntakeSpeed,
+         * AutoConstants.SpeakerSidePivotSpeed,
+         * AutoConstants.AmpSideTimeoutMS, armSubsystem));
+         * 
+         * // goes back to make new shot
+         * 
+         * addCommands(
+         * new MeasuredStraightDriveCommand(AutoConstants.SpeakerSideSecondStraightCM,
+         * -AutoConstants.SpeakerSideDriveSpeed,
+         * true, driveSubsystem));
+         * 
+         * // second shot
+         * 
+         * addCommands(new PivotShootCommand(AutoConstants.SpeakerSideShootSpeed,
+         * AutoConstants.SpeakerSidePivotSpeed,
+         * AutoConstants.SpeakerSideShootAngle, AutoConstants.SpeakerSideTimeoutMS, armSubsystem));
+         * 
+         * // goes outside again to make mobility points
+         * 
+         * addCommands(
+         * new MeasuredStraightDriveCommand(AutoConstants.SpeakerSideSecondStraightCM,
+         * AutoConstants.SpeakerSideDriveSpeed,
+         * true, driveSubsystem));
+         * 
+         * break;
+         * 
+         * case SPEAKER_THREE_SHOT:
+         * /*
+         * From speaker position, robot backs up to make first shot,
+         * Grabs last note, goes back to make second shot,
+         * then turns left to grab the last note, turns to the speaker
+         * and makes the last shot
+         */
+        /*
+         * startHeading = driveSubsystem.getHeading();
+         * 
+         * // backs up
+         * 
+         * addCommands(
+         * new MeasuredStraightDriveCommand(AutoConstants.SpeakerSideDiagStepCM,
+         * AutoConstants.SpeakerSideDriveSpeed,
+         * true, driveSubsystem));
+         * 
+         * // first shot
+         * 
+         * addCommands(new PivotShootCommand(AutoConstants.SpeakerSideShootSpeed,
+         * AutoConstants.SpeakerSidePivotSpeed,
+         * AutoConstants.SpeakerSideShootAngle, AutoConstants.SpeakerSideTimeoutMS, armSubsystem));
+         * 
+         * // goes for second shot while intaking
+         * 
+         * addCommands(new IntakeCommand(AutoConstants.SpeakerSideIntakeSpeed,
+         * AutoConstants.SpeakerSidePivotSpeed,
+         * AutoConstants.AmpSideTimeoutMS, armSubsystem));
+         * 
+         * addCommands(
+         * new MeasuredStraightDriveCommand(AutoConstants.SpeakerSideFirstStraightCM,
+         * AutoConstants.SpeakerSideDriveSpeed,
+         * true, driveSubsystem));
+         * 
+         * // goes back to make new shot
+         * 
+         * addCommands(
+         * new MeasuredStraightDriveCommand(AutoConstants.SpeakerSideFirstStraightCM,
+         * -AutoConstants.SpeakerSideDriveSpeed,
+         * true, driveSubsystem));
+         * 
+         * // second shot
+         * 
+         * addCommands(new PivotShootCommand(AutoConstants.SpeakerSideShootSpeed,
+         * AutoConstants.SpeakerSidePivotSpeed,
+         * AutoConstants.SpeakerSideShootAngle, AutoConstants.SpeakerSideTimeoutMS, armSubsystem));
+         * 
+         * // goes for the third note
+         * 
+         * addCommands(
+         * new MeasuredStraightDriveCommand(AutoConstants.SpeakerSideFirstStraightCM,
+         * AutoConstants.SpeakerSideDriveSpeed,
+         * true, driveSubsystem));
+         * 
+         * addCommands(new SwivelOnLeftWheelCommand(AutoConstants.SpeakerSideSwivelSpeed,
+         * startHeading + AutoConstants.SpeakerSideSwivelAngle,
+         * true, AutoConstants.SpeakerSideTimeoutMS, driveSubsystem));
+         * 
+         * addCommands(new SwivelOnRightWheelCommand(AutoConstants.SpeakerSideSwivelSpeed,
+         * startHeading,
+         * true, AutoConstants.SpeakerSideTimeoutMS, driveSubsystem));
+         * 
+         * addCommands(
+         * new MeasuredStraightDriveCommand(AutoConstants.SpeakerSideSecondStraightCM,
+         * AutoConstants.SpeakerSideDriveSpeed,
+         * true, driveSubsystem));
+         * 
+         * addCommands(new TurnToHeadingCommand(AutoConstants.SpeakerSideDriveSpeed,
+         * startHeading + AutoConstants.SpeakerSideFirstAngle, true,
+         * AutoConstants.SpeakerSideTimeoutMS,
+         * driveSubsystem));
+         * 
+         * addCommands(new IntakeCommand(AutoConstants.SpeakerSideIntakeSpeed,
+         * AutoConstants.AmpSidePivotSpeed,
+         * AutoConstants.SpeakerSideTimeoutMS, armSubsystem));
+         * 
+         * addCommands(
+         * new MeasuredStraightDriveCommand(AutoConstants.SpeakerSideThirdStraightCM,
+         * AutoConstants.SpeakerSideDriveSpeed,
+         * true, driveSubsystem));
+         * 
+         * // comes back
+         * 
+         * addCommands(
+         * new MeasuredStraightDriveCommand(AutoConstants.SpeakerSideThirdStraightCM,
+         * -AutoConstants.SpeakerSideDriveSpeed,
+         * true, driveSubsystem));
+         * 
+         * addCommands(new TurnToHeadingCommand(AutoConstants.SpeakerSideDriveSpeed,
+         * startHeading, true, AutoConstants.SpeakerSideTimeoutMS, driveSubsystem));
+         * 
+         * addCommands(
+         * new MeasuredStraightDriveCommand(AutoConstants.SpeakerSideSecondStraightCM,
+         * -AutoConstants.SpeakerSideDriveSpeed,
+         * true, driveSubsystem));
+         * 
+         * addCommands(new SwivelOnRightWheelCommand(-AutoConstants.SpeakerSideSwivelSpeed,
+         * startHeading + AutoConstants.SpeakerSideSwivelAngle, true,
+         * AutoConstants.SpeakerSideTimeoutMS, driveSubsystem));
+         * 
+         * addCommands(new SwivelOnLeftWheelCommand(-AutoConstants.SpeakerSideSwivelSpeed,
+         * startHeading,
+         * true, AutoConstants.SpeakerSideTimeoutMS, driveSubsystem));
+         * 
+         * addCommands(
+         * new MeasuredStraightDriveCommand(AutoConstants.SpeakerSideSecondStraightCM,
+         * -AutoConstants.SpeakerSideDriveSpeed,
+         * true, driveSubsystem));
+         * 
+         * addCommands(
+         * new MeasuredStraightDriveCommand(AutoConstants.SpeakerSideFirstStraightCM,
+         * -AutoConstants.SpeakerSideDriveSpeed,
+         * true, driveSubsystem));
+         * 
+         * // third shot
+         * 
+         * addCommands(new PivotShootCommand(AutoConstants.SpeakerSideShootSpeed,
+         * AutoConstants.SpeakerSidePivotSpeed,
+         * AutoConstants.SpeakerSideShootAngle, AutoConstants.SpeakerSideTimeoutMS, armSubsystem));
+         * 
+         * // moves back out to get mobility points
+         * 
+         * addCommands(
+         * new MeasuredStraightDriveCommand(AutoConstants.SpeakerSideFirstStraightCM,
+         * AutoConstants.SpeakerSideDriveSpeed,
+         * true, driveSubsystem));
+         * 
+         * break;
+         * 
+         */
         }
     }
 }

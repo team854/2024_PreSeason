@@ -5,7 +5,7 @@ import frc.robot.Constants.DriveConstants.HeadingStates;
 import frc.robot.commands.LoggingCommand;
 import frc.robot.subsystems.DriveSubsystem;
 
-public class PivotOnRightWheelCommand extends LoggingCommand {
+public class SwivelOnLeftWheelCommand extends LoggingCommand {
 
     private DriveSubsystem driveSubsystem;
 
@@ -35,7 +35,7 @@ public class PivotOnRightWheelCommand extends LoggingCommand {
 
 
 
-    public PivotOnRightWheelCommand(double speed, double targetHeading, boolean brakeAtEnd, double timeoutTimeMS,
+    public SwivelOnLeftWheelCommand(double speed, double targetHeading, boolean brakeAtEnd, double timeoutTimeMS,
         DriveSubsystem driveSubsystem) {
         this.speed          = speed;
         this.brakeAtEnd     = brakeAtEnd;
@@ -84,7 +84,7 @@ public class PivotOnRightWheelCommand extends LoggingCommand {
         case FAR:
         default:
 
-            driveSubsystem.setMotorSpeeds(speed * sgnError, 0);
+            driveSubsystem.setMotorSpeeds(0, -speed * sgnError);
             break;
 
         case CLOSE:
@@ -97,7 +97,7 @@ public class PivotOnRightWheelCommand extends LoggingCommand {
 
             Math.max(Math.min(errorSignal + Math.abs(errorSignal) / errorSignal * 0.2, 1), -1);
 
-            driveSubsystem.setMotorSpeeds(errorSignal * sgnError, 0);
+            driveSubsystem.setMotorSpeeds(0, -errorSignal * sgnError);
 
             break;
         }
