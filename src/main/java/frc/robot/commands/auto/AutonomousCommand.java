@@ -73,7 +73,6 @@ public class AutonomousCommand extends SequentialCommandGroup {
             // Drive forward for 10 meters
             addCommands(new MeasuredDriveAtHeadingCommand(100, 0.1, true, 355, driveSubsystem));
             break;
-
         case TEST_ARM_COMMANDS:
             // program that will test the intake, pivot shoot, and pivot to angle
 
@@ -86,7 +85,6 @@ public class AutonomousCommand extends SequentialCommandGroup {
             addCommands(new PivotToAngleCommand(0.3, 30, true, 10000, armSubsystem));
 
             addCommands(new PivotShootCommand(1, 0.3, 90, 10000, armSubsystem));
-
         case OUTSIDE_ONE_SHOT:
             // From outside position, backs up and makes a speaker shot
 
@@ -101,7 +99,6 @@ public class AutonomousCommand extends SequentialCommandGroup {
              * 
              * addCommands(new ShooterCommand(1, 2000, armSubsystem));
              */
-
             break;
 
         case OUTSIDE_TWO_SHOT:

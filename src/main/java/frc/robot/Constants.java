@@ -104,11 +104,10 @@ public final class Constants {
 
     public static final class ArmConstants {
 
-        public static final int PIVOT_PORT                           = 0;
-        public static final int SHOOTER_PORT                         = 0;
-        public static final int PROXIMITY_PORT                       = 0;
-        public static final int INTAKE_LOWER_PORT                    = 0;
-        public static final int INTAKE_HIGHER_PORT                   = 0;
+        public static final int PIVOT_PORT                           = 20;
+        public static final int PROXIMITY_PORT                       = null;
+        public static final int INTAKE_LOWER_PORT                    = null;
+        public static final int INTAKE_HIGHER_PORT                   = null;
 
         public static final int PIVOT_ARM_ENCODER_COUNT_PER_ROTATION = 0;
 
