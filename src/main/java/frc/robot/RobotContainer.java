@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.AutoConstants.AutoPattern;
 import frc.robot.Constants.DriveConstants.DriveMode;
-import frc.robot.commands.arm.DefaultKeepArmUpCommand;
 import frc.robot.commands.auto.AutonomousCommand;
 import frc.robot.commands.drive.DefaultDriveCommand;
 import frc.robot.operator.OperatorInput;
@@ -55,7 +54,7 @@ public class RobotContainer {
 
         // Initialize the default command of the subsystem, to keep the arm hovering over the
         // ground.
-        armSubsystem.setDefaultCommand(new DefaultKeepArmUpCommand(armSubsystem));
+        // armSubsystem.setDefaultCommand(new DefaultKeepArmUpCommand(armSubsystem));
 
         // Configure the button bindings
         operatorInput.configureButtonBindings(driveSubsystem, armSubsystem);

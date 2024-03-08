@@ -41,9 +41,9 @@ public final class Constants {
 
         // amp side distance variables
 
-        public static final double AmpSideDiagStepCM = null;
-        public static final double AmpSideDiagAngle  = null;
-        public static final double AmpSideStraightCM = null;
+        public static final double AmpSideDiagStepCM = 0;
+        public static final double AmpSideDiagAngle  = 0;
+        public static final double AmpSideStraightCM = 0;
 
 
 
@@ -56,8 +56,10 @@ public final class Constants {
         }
 
         // motor stuff
-        public static final int     LEFT_MOTOR_PORT        = 10;
-        public static final int     RIGHT_MOTOR_PORT       = 20;
+        public static final int     LEFT_REAR_PORT         = 21;
+        public static final int     LEFT_FRONT_PORT        = 22;
+        public static final int     RIGHT_REAR_PORT        = 23;
+        public static final int     RIGHT_FRONT_PORT       = 24;
 
         public static final boolean LEFT_MOTOR_REVERSED    = false;
         public static final boolean RIGHT_MOTOR_REVERSED   = true;
@@ -105,11 +107,11 @@ public final class Constants {
     public static final class ArmConstants {
 
         public static final int PIVOT_PORT                           = 20;
-        public static final int PROXIMITY_PORT                       = null;
-        public static final int INTAKE_LOWER_PORT                    = null;
-        public static final int INTAKE_HIGHER_PORT                   = null;
+        public static final int PROXIMITY_PORT                       = 0;
+        public static final int INTAKE_LOWER_PORT                    = 1;
+        public static final int INTAKE_HIGHER_PORT                   = 2;
 
-        public static final int PIVOT_ARM_ENCODER_COUNT_PER_ROTATION = 0;
+        public static final int PIVOT_ARM_ENCODER_COUNT_PER_ROTATION = 1024;
 
         public static final int RESTING_ARM_ANGLE                    = 20;
 

@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 
@@ -13,15 +14,15 @@ public class DriveSubsystem extends SubsystemBase {
 
 
     // The motors on the left side of the drive.
-    private final CANSparkMax   leftPrimaryMotor         = new CANSparkMax(DriveConstants.LEFT_MOTOR_PORT,
+    private final CANSparkMax   leftPrimaryMotor         = new CANSparkMax(DriveConstants.LEFT_FRONT_PORT,
         CANSparkLowLevel.MotorType.kBrushless);
-    private final CANSparkMax   leftFollowerMotor        = new CANSparkMax(DriveConstants.LEFT_MOTOR_PORT + 1,
+    private final CANSparkMax   leftFollowerMotor        = new CANSparkMax(DriveConstants.LEFT_REAR_PORT,
         CANSparkLowLevel.MotorType.kBrushless);
 
     // The motors on the right side of the drive.
-    private final CANSparkMax   rightPrimaryMotor        = new CANSparkMax(DriveConstants.RIGHT_MOTOR_PORT,
+    private final CANSparkMax   rightPrimaryMotor        = new CANSparkMax(DriveConstants.RIGHT_FRONT_PORT,
         CANSparkLowLevel.MotorType.kBrushless);
-    private final CANSparkMax   rightFollowerMotor       = new CANSparkMax(DriveConstants.RIGHT_MOTOR_PORT + 1,
+    private final CANSparkMax   rightFollowerMotor       = new CANSparkMax(DriveConstants.RIGHT_REAR_PORT,
         CANSparkLowLevel.MotorType.kBrushless);
 
     // The gyro sensor
@@ -60,6 +61,7 @@ public class DriveSubsystem extends SubsystemBase {
          */
 
         leftFollowerMotor.follow(leftPrimaryMotor);
+        leftPrimaryMotor.setIdleMode(IdleMode.kCoast);
 
 
         rightPrimaryMotor.setInverted(DriveConstants.RIGHT_MOTOR_REVERSED);
@@ -71,6 +73,7 @@ public class DriveSubsystem extends SubsystemBase {
          */
 
         rightFollowerMotor.follow(rightPrimaryMotor);
+        rightPrimaryMotor.setIdleMode(IdleMode.kCoast);
 
     }
 
