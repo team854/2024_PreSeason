@@ -25,6 +25,7 @@ public final class Constants {
             DRIVE_FORWARD,
             DRIVE_FORWARD_PID_TIMED,
             DRIVE_FORWARD_PID_MEASURED,
+            TEST_ARM_COMMANDS,
             // the below autopatterns assume that were on blue i.e. when facing the speaker the amp
             // is on the left
             OUTSIDE_ONE_SHOT,
@@ -37,6 +38,15 @@ public final class Constants {
             AMP_ONE_AMP,
             AMP_TWO_AMP
         }
+
+        // amp side distance variables
+
+        public static final double AmpSideDiagStepCM = null;
+        public static final double AmpSideDiagAngle  = null;
+        public static final double AmpSideStraightCM = null;
+
+
+
     }
 
     public static final class DriveConstants {
