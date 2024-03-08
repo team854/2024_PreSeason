@@ -106,14 +106,17 @@ public final class Constants {
 
     public static final class ArmConstants {
 
-        public static final int PIVOT_PORT                           = 20;
-        public static final int PROXIMITY_PORT                       = 0;
-        public static final int INTAKE_LOWER_PORT                    = 1;
-        public static final int INTAKE_HIGHER_PORT                   = 2;
+        public static final int    PIVOT_PORT                           = 20;
+        public static final int    PROXIMITY_PORT                       = 0;
+        public static final int    INTAKE_LOWER_PORT                    = 1;
+        public static final int    INTAKE_HIGHER_PORT                   = 2;
 
-        public static final int PIVOT_ARM_ENCODER_COUNT_PER_ROTATION = 1024;
+        public static final double PIVOT_ARM_ENCODER_COUNT_PER_ROTATION = 37.2;
 
-        public static final int RESTING_ARM_ANGLE                    = 20;
+        public static final double MIN_ARM_PIVOT_ANGLE                  = -26.5;
+        public static final double MAX_ARM_PIVOT_ANGLE                  = 130.0;
+
+        public static final int    RESTING_ARM_ANGLE                    = 20;
 
         public static enum HeadingStates {
             FAR, CLOSE

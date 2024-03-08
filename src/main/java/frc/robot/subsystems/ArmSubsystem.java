@@ -39,6 +39,12 @@ public class ArmSubsystem extends SubsystemBase {
 
     public ArmSubsystem() {
 
+        // The arm pivot motor needs to be inverted
+        pivot.setInverted(true);
+
+
+        pivot.getEncoder().setPosition(0); // below level
+
         this.currAnglePivot = getAnglePivot();
 
         pivot.setIdleMode(IdleMode.kBrake);
@@ -48,12 +54,16 @@ public class ArmSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
 
+        // Some simple safety code
+        checkArmSafety();
+        pivotRotSetSpeed(pivotRotSpeed);
+
         SmartDashboard.putNumber("Pivot Motor Speed", this.pivotRotSpeed);
         SmartDashboard.putNumber("Lower Intake Motor Speed", this.intakeLowerSpeed);
         SmartDashboard.putNumber("Higher Intake Motor Speed", this.intakeHigherSpeed);
 
         SmartDashboard.putNumber("Pivot encoder count", this.encoderCountPivot);
-        SmartDashboard.putNumber("Arm Angle", this.currAnglePivot);
+        SmartDashboard.putNumber("Arm Angle", getAnglePivot());
 
         SmartDashboard.putBoolean("Loaded", this.loaded);
 
@@ -61,15 +71,34 @@ public class ArmSubsystem extends SubsystemBase {
 
     }
 
+    private void checkArmSafety() {
+        if (this.pivotRotSpeed > 0 && getAnglePivot() > ArmConstants.MAX_ARM_PIVOT_ANGLE) {
+            this.pivotRotSpeed = 0;
+        }
+        if (this.pivotRotSpeed < 0 && getAnglePivot() < ArmConstants.MIN_ARM_PIVOT_ANGLE) {
+            this.pivotRotSpeed = 0;
+        }
+
+    }
+
     // pivot methods
 
     public double getEncoderCountPivot() {
-        this.encoderCountPivot = pivot.getAlternateEncoder(ArmConstants.PIVOT_ARM_ENCODER_COUNT_PER_ROTATION).getPosition();
+
+        // floor = 0;
+        // 0 deg = -2.4
+        // 90 deg = -11.71
+        // max = 17
+
+        // Starting position is zero encoder counts which is acutally
+        // a -2.4 count from offset
+        this.encoderCountPivot = pivot.getEncoder().getPosition() - 2.4;
         return this.encoderCountPivot;
     }
 
     public double getAnglePivot() {
-        this.currAnglePivot = getEncoderCountPivot() * ArmConstants.PIVOT_ARM_ENCODER_COUNT_PER_ROTATION / 360;
+
+        this.currAnglePivot = getEncoderCountPivot() / ArmConstants.PIVOT_ARM_ENCODER_COUNT_PER_ROTATION * 360;
         return this.currAnglePivot;
     }
 
@@ -79,6 +108,9 @@ public class ArmSubsystem extends SubsystemBase {
 
     public void pivotRotSetSpeed(double speed) {
         this.pivotRotSpeed = speed;
+
+        checkArmSafety();
+
         pivot.set(pivotRotSpeed);
     }
 
@@ -100,4 +132,3 @@ public class ArmSubsystem extends SubsystemBase {
 
 
 }
-

@@ -1,6 +1,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.RobotController;
@@ -54,6 +55,10 @@ public class LightsSubsystem extends SubsystemBase {
       ledStrip.setLength(LightConstants.LED_STRIP_LENGTH);
       setAllLEDs(new Color(250, 21, 0));
       ledStrip.start();
+
+      // Add the carmera here
+      CameraServer.startAutomaticCapture();
+
    }
 
    public void setEnabled() {

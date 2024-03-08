@@ -153,6 +153,14 @@ public class OperatorInput extends SubsystemBase {
         return driverController.getLeftBumper();
     }
 
+    public boolean isPivotUp() {
+        return driverController.getPOV() == 0;
+    }
+
+    public boolean isPivotDown() {
+        return driverController.getPOV() == 180;
+    }
+
     /**
      * Use this method to define your robotFunction -> command mappings.
      *
