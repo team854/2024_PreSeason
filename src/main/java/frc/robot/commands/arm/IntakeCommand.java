@@ -1,7 +1,7 @@
 package frc.robot.commands.arm;
 
 import frc.robot.Constants.ArmConstants;
-import frc.robot.Constants.ArmConstants.HeadingStates;
+import frc.robot.Constants.ArmConstants.AngleStates;
 import frc.robot.Constants.ArmConstants.IntakeStates;
 import frc.robot.commands.LoggingCommand;
 import frc.robot.operator.OperatorInput;
@@ -9,35 +9,37 @@ import frc.robot.subsystems.ArmSubsystem;
 
 public class IntakeCommand extends LoggingCommand {
 
-    ArmSubsystem          armSubsystem;
-    OperatorInput         operatorInput;
+    ArmSubsystem         armSubsystem;
+    OperatorInput        operatorInput;
 
     // PivotPID
-    private double        currentError;
-    private double        previousError;
-    private double        diffError;
-    private double        errorSignal;
-    private double        pTerm;
-    private double        iTerm       = 0;
-    private double        dTerm;
+    private double       currentError;
+    private double       sgnError;
+    private double       previousError;
+    private double       diffError;
+    private double       errorSignal;
+    private double       sgnErrorSignal;
+    private double       pTerm;
+    private double       iTerm       = 0;
+    private double       dTerm;
 
     // Speeds
-    private double        intakeSpeed;
-    private double        pivotSpeed;
+    private double       intakeSpeed;
+    private double       pivotSpeed;
 
     // Time Measure
-    private double        initTime;
-    private double        currTime;
-    private double        timeoutMS;
+    private double       initTime;
+    private double       currTime;
+    private double       timeoutMS;
 
     // Logging skibidi
-    private double        speed;
-    private double        targetAngle = 0;
-    private String        reason;
+    private double       speed;
+    private double       targetAngle = 0;
+    private String       reason;
 
     // States
-    private IntakeStates  state;
-    private HeadingStates headingState;
+    private IntakeStates state;
+    private AngleStates  angleState;
 
 
 
@@ -66,10 +68,10 @@ public class IntakeCommand extends LoggingCommand {
         initTime      = System.currentTimeMillis();
 
         if (Math.abs(previousError) > 10) {
-            headingState = HeadingStates.FAR;
+            angleState = AngleStates.FAR;
         }
         else {
-            headingState = HeadingStates.CLOSE;
+            angleState = AngleStates.CLOSE;
         }
 
     }
@@ -82,18 +84,10 @@ public class IntakeCommand extends LoggingCommand {
         case PIVOTING:
 
             currentError = armSubsystem.getAngleErrorPivot(targetAngle);
+            sgnError = currentError / Math.abs(currentError);
             diffError = currentError - previousError;
-            previousError = currentError;
 
-            double sgnError = Math.abs(currentError) / currentError;
-
-            switch (headingState) {
-
-            case FAR:
-            default:
-
-                armSubsystem.pivotRotSetSpeed(speed * sgnError);
-                break;
+            switch (angleState) {
 
             case CLOSE:
 
@@ -102,19 +96,33 @@ public class IntakeCommand extends LoggingCommand {
                 dTerm += ArmConstants.PIVOT_TO_ANGLE_PID_KD * diffError;
 
                 errorSignal = pTerm + iTerm + dTerm;
+                try {
+                    sgnErrorSignal = errorSignal / Math.abs(errorSignal);
+                }
+                catch (Exception e) {
+                    sgnErrorSignal = 0;
+                }
 
-                Math.max(Math.min(errorSignal + Math.abs(errorSignal) / errorSignal * 0.2, 1), -1);
 
-                armSubsystem.pivotRotSetSpeed(speed * sgnError);
+                errorSignal = Math.max(Math.min(errorSignal + sgnErrorSignal * ArmConstants.PIVOT_DEFAULT_SPEED, 1.0), -1.0);
+
+                armSubsystem.pivotRotSetSpeed(errorSignal * sgnError);
 
                 break;
+
+            case FAR:
+
+                armSubsystem.pivotRotSetSpeed(ArmConstants.PIVOT_DEFAULT_SPEED * sgnError);
+
+                break;
+
             }
 
-            if (Math.abs(previousError) > ArmConstants.PIVOT_FAR_TO_CLOSE) {
-                headingState = HeadingStates.FAR;
+            if (Math.abs(previousError) > ArmConstants.EQUILIBRIUM_ARM_ANGLE_BUFFER) {
+                angleState = AngleStates.FAR;
             }
             else {
-                headingState = HeadingStates.CLOSE;
+                angleState = AngleStates.CLOSE;
             }
 
             break;
@@ -141,16 +149,17 @@ public class IntakeCommand extends LoggingCommand {
         }
 
         if (state == IntakeStates.PIVOTING) {
-            if (Math.abs(currentError) <= ArmConstants.PIVOT_ROT_BUFFER) {
+            if (Math.abs(currentError) <= ArmConstants.EQUILIBRIUM_ARM_ANGLE_BUFFER) {
                 state = IntakeStates.INTAKING;
                 armSubsystem.pivotRotSetSpeed(0);
             }
         }
-
-        if (!operatorInput.isIntake()) {
-            reason = "let go of intake button";
-            return true;
-        }
+        /*
+         * if (!operatorInput.isIntake()) {
+         * reason = "let go of intake button";
+         * return true;
+         * }
+         */
 
         return false;
 

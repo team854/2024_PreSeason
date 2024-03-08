@@ -51,7 +51,7 @@ public class OperatorInput extends SubsystemBase {
     // drive methods
 
     public boolean getBoost() {
-        return driverController.getRightBumper();
+        return driverController.getXButton();
     }
 
     public double getLeftY() {

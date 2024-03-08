@@ -5,7 +5,6 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
@@ -20,7 +19,7 @@ public class ArmSubsystem extends SubsystemBase {
         CANSparkLowLevel.MotorType.kBrushless);
     WPI_TalonSRX                intakeLower      = new WPI_TalonSRX(ArmConstants.INTAKE_LOWER_PORT);
     WPI_TalonSRX                intakeHigher     = new WPI_TalonSRX(ArmConstants.INTAKE_HIGHER_PORT);
-    DigitalInput                proximitySensor  = new DigitalInput(ArmConstants.PROXIMITY_PORT);
+    WPI_TalonSRX                keeper           = new WPI_TalonSRX(ArmConstants.KEEPER_PORT);
 
     boolean                     loaded;
 
@@ -30,6 +29,7 @@ public class ArmSubsystem extends SubsystemBase {
     double                      pivotRotSpeed;
     double                      intakeLowerSpeed;
     double                      intakeHigherSpeed;
+    double                      keeperSpeed;
 
 
     public final GameController driverController = new GameController(
@@ -119,16 +119,19 @@ public class ArmSubsystem extends SubsystemBase {
     public void intakeSetSpeed(double speed) {
         this.intakeLowerSpeed  = speed;
         this.intakeHigherSpeed = speed;
+        this.keeperSpeed       = speed;
         intakeLower.set(speed);
         intakeHigher.set(speed);
+        keeper.set(speed);
     }
 
     // proximity sensor methods
-
-    public boolean isLoaded() {
-        this.loaded = proximitySensor.get();
-        return loaded;
-    }
+    /*
+     * public boolean isLoaded() {
+     * this.loaded = proximitySensor.get();
+     * return loaded;
+     * }
+     */
 
 
 }

@@ -7,10 +7,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.AutoConstants.AutoPattern;
 import frc.robot.commands.arm.IntakeCommand;
-import frc.robot.commands.arm.PivotShootCommand;
-import frc.robot.commands.arm.PivotToAngleCommand;
 import frc.robot.commands.drive.MeasuredDriveAtHeadingCommand;
-import frc.robot.commands.drive.MeasuredStraightDriveCommand;
 import frc.robot.commands.drive.TimedDriveCommand;
 import frc.robot.commands.drive.TimedStraightDriveCommand;
 import frc.robot.subsystems.ArmSubsystem;
@@ -76,15 +73,17 @@ public class AutonomousCommand extends SequentialCommandGroup {
         case TEST_ARM_COMMANDS:
             // program that will test the intake, pivot shoot, and pivot to angle
 
-            addCommands(new MeasuredStraightDriveCommand(100, 0.2, true, driveSubsystem));
+            addCommands(new IntakeCommand(0.5, 0.3, 5000, armSubsystem));
 
-            addCommands(new PivotToAngleCommand(0.3, 30, true, 10000, armSubsystem));
+            // addCommands(new MeasuredStraightDriveCommand(100, 0.2, true, driveSubsystem));
 
-            addCommands(new IntakeCommand(0.5, 0.3, 10000, armSubsystem));
+            // addCommands(new PivotToAngleCommand(0.3, 30, true, 10000, armSubsystem));
 
-            addCommands(new PivotToAngleCommand(0.3, 30, true, 10000, armSubsystem));
+            // addCommands(new IntakeCommand(0.5, 0.3, 10000, armSubsystem));
 
-            addCommands(new PivotShootCommand(1, 0.3, 90, 10000, armSubsystem));
+            // addCommands(new PivotToAngleCommand(0.3, 30, true, 10000, armSubsystem));
+
+            // addCommands(new PivotShootCommand(1, 0.3, 90, 10000, armSubsystem));
         case OUTSIDE_ONE_SHOT:
             // From outside position, backs up and makes a speaker shot
 

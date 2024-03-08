@@ -1,7 +1,7 @@
 package frc.robot.commands.arm;
 
 import frc.robot.Constants.ArmConstants;
-import frc.robot.Constants.ArmConstants.HeadingStates;
+import frc.robot.Constants.ArmConstants.AngleStates;
 import frc.robot.Constants.ArmConstants.PivotShootStates;
 import frc.robot.commands.LoggingCommand;
 import frc.robot.subsystems.ArmSubsystem;
@@ -36,7 +36,7 @@ public class PivotShootCommand extends LoggingCommand {
 
     // States
     private PivotShootStates state;
-    private HeadingStates    headingState;
+    private AngleStates      angleState;
 
 
 
@@ -66,10 +66,10 @@ public class PivotShootCommand extends LoggingCommand {
         initTime      = System.currentTimeMillis();
 
         if (Math.abs(previousError) > 10) {
-            headingState = HeadingStates.FAR;
+            angleState = AngleStates.FAR;
         }
         else {
-            headingState = HeadingStates.CLOSE;
+            angleState = AngleStates.CLOSE;
         }
 
     }
@@ -87,7 +87,7 @@ public class PivotShootCommand extends LoggingCommand {
 
             double sgnError = Math.abs(currentError) / currentError;
 
-            switch (headingState) {
+            switch (angleState) {
 
             case FAR:
             default:
@@ -110,11 +110,11 @@ public class PivotShootCommand extends LoggingCommand {
                 break;
             }
 
-            if (Math.abs(previousError) > ArmConstants.PIVOT_FAR_TO_CLOSE) {
-                headingState = HeadingStates.FAR;
+            if (Math.abs(previousError) > ArmConstants.EQUILIBRIUM_ARM_ANGLE_BUFFER) {
+                angleState = AngleStates.FAR;
             }
             else {
-                headingState = HeadingStates.CLOSE;
+                angleState = AngleStates.CLOSE;
             }
 
             break;
@@ -141,7 +141,7 @@ public class PivotShootCommand extends LoggingCommand {
         }
 
         if (state == PivotShootStates.PIVOTING) {
-            if (Math.abs(currentError) <= ArmConstants.PIVOT_ROT_BUFFER) {
+            if (Math.abs(currentError) <= ArmConstants.EQUILIBRIUM_ARM_ANGLE_BUFFER) {
                 state = PivotShootStates.SHOOTING;
                 armSubsystem.pivotRotSetSpeed(0);
             }

@@ -107,18 +107,24 @@ public final class Constants {
     public static final class ArmConstants {
 
         public static final int    PIVOT_PORT                           = 20;
-        public static final int    PROXIMITY_PORT                       = 0;
+        public static final int    KEEPER_PORT                          = 2;
         public static final int    INTAKE_LOWER_PORT                    = 1;
-        public static final int    INTAKE_HIGHER_PORT                   = 2;
+        public static final int    INTAKE_HIGHER_PORT                   = 0;
+
+        // climber motor left = 3;
+        // climber motor right = 4;
 
         public static final double PIVOT_ARM_ENCODER_COUNT_PER_ROTATION = 37.2;
 
         public static final double MIN_ARM_PIVOT_ANGLE                  = -26.5;
         public static final double MAX_ARM_PIVOT_ANGLE                  = 130.0;
 
-        public static final int    RESTING_ARM_ANGLE                    = 20;
+        public static final int    EQUILIBRIUM_ARM_ANGLE                = 61;
+        public static final int    EQUILIBRIUM_ARM_ANGLE_BUFFER         = 5;
 
-        public static enum HeadingStates {
+        public static final double PIVOT_DEFAULT_SPEED                  = 0.1;
+
+        public static enum AngleStates {
             FAR, CLOSE
         }
 
@@ -132,12 +138,9 @@ public final class Constants {
             INTAKING
         }
 
-        public static final int PIVOT_TO_ANGLE_PID_KP = 0;
-        public static final int PIVOT_TO_ANGLE_PID_KI = 0;
-        public static final int PIVOT_TO_ANGLE_PID_KD = 0;
-
-        public static final int PIVOT_FAR_TO_CLOSE    = 0;
-        public static final int PIVOT_ROT_BUFFER      = 0;
+        public static final double PIVOT_TO_ANGLE_PID_KP = 0;
+        public static final double PIVOT_TO_ANGLE_PID_KI = 0;
+        public static final double PIVOT_TO_ANGLE_PID_KD = 0;
 
 
 

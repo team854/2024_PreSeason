@@ -61,7 +61,7 @@ public class DriveSubsystem extends SubsystemBase {
          */
 
         leftFollowerMotor.follow(leftPrimaryMotor);
-        leftPrimaryMotor.setIdleMode(IdleMode.kCoast);
+        leftPrimaryMotor.setIdleMode(IdleMode.kBrake);
 
 
         rightPrimaryMotor.setInverted(DriveConstants.RIGHT_MOTOR_REVERSED);
@@ -73,7 +73,7 @@ public class DriveSubsystem extends SubsystemBase {
          */
 
         rightFollowerMotor.follow(rightPrimaryMotor);
-        rightPrimaryMotor.setIdleMode(IdleMode.kCoast);
+        rightPrimaryMotor.setIdleMode(IdleMode.kBrake);
 
     }
 
