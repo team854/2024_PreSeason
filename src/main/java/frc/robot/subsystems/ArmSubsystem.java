@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.motorcontrol.VictorSP;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -20,6 +21,8 @@ public class ArmSubsystem extends SubsystemBase {
     VictorSP                    intakeLower      = new VictorSP(ArmConstants.INTAKE_LOWER_PORT);
     VictorSP                    intakeHigher     = new VictorSP(ArmConstants.INTAKE_HIGHER_PORT);
     VictorSP                    keeper           = new VictorSP(ArmConstants.KEEPER_PORT);
+
+    DigitalInput                proximitySensor  = new DigitalInput(ArmConstants.PROXIMITY_PORT_DIO);
 
     boolean                     loaded;
 
@@ -41,6 +44,9 @@ public class ArmSubsystem extends SubsystemBase {
 
         pivot.setIdleMode(IdleMode.kBrake);
         pivot.setInverted(ArmConstants.PIVOT_INVERTED);
+        keeper.setInverted(true);
+        intakeHigher.setInverted(true);
+        intakeLower.setInverted(true);
 
         // The arm pivot motor needs to be inverted
         pivot.getEncoder().setPosition(0); // below level
@@ -63,7 +69,7 @@ public class ArmSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Pivot encoder count", this.encoderCountPivot);
         SmartDashboard.putNumber("Arm Angle", getAnglePivot());
 
-        SmartDashboard.putBoolean("Loaded", this.loaded);
+        SmartDashboard.putBoolean("Loaded", isLoaded());
 
     }
 
@@ -113,21 +119,33 @@ public class ArmSubsystem extends SubsystemBase {
     // intake methods
 
     public void intakeSetSpeed(double speed) {
-        this.intakeLowerSpeed  = speed;
-        this.intakeHigherSpeed = speed;
-        this.keeperSpeed       = speed;
-        intakeLower.set(speed);
-        intakeHigher.set(speed);
-        keeper.set(speed);
+        this.intakeLowerSpeed  = -Math.abs(speed);
+        this.intakeHigherSpeed = -Math.abs(speed);
+        this.keeperSpeed       = Math.abs(speed);
+        intakeLower.set(intakeLowerSpeed);
+        intakeHigher.set(intakeHigherSpeed);
+        keeper.set(keeperSpeed);
+    }
+
+    public void setShooterSpeed(double speed) {
+        this.intakeLowerSpeed  = Math.abs(speed);
+        this.intakeHigherSpeed = Math.abs(speed);
+        intakeLower.set(intakeLowerSpeed);
+        intakeHigher.set(intakeHigherSpeed);
+    }
+
+    public void setKeeperSpeed(double speed) {
+        this.keeperSpeed = -Math.abs(speed);
+        keeper.set(keeperSpeed);
     }
 
     // proximity sensor methods
-    /*
-     * public boolean isLoaded() {
-     * this.loaded = proximitySensor.get();
-     * return loaded;
-     * }
-     */
+
+    public boolean isLoaded() {
+        this.loaded = !proximitySensor.get();
+        return loaded;
+    }
+
 
 
 }

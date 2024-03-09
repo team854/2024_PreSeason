@@ -17,9 +17,6 @@ public class ClimbSubsystem extends SubsystemBase {
     double                      leftSpeed;
     double                      rightSpeed;
 
-    int                         leftCount;
-    int                         rightCount;
-
 
     public final GameController driverController = new GameController(
         OperatorConstants.DRIVER_CONTROLLER_PORT,
@@ -36,49 +33,9 @@ public class ClimbSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
 
-        checkClimberSafety();
-        setLeftSpeed(leftSpeed);
-        setRightSpeed(rightSpeed);
-
-        SmartDashboard.putNumber("Left Encoder Count", this.leftCount);
-        SmartDashboard.putNumber("Right Encoder Count", this.rightCount);
-        SmartDashboard.putNumber("Left Displacement (cm)", getDispLeftCM());
-        SmartDashboard.putNumber("Right Displacement (cm)", getDispRightCM());
         SmartDashboard.putNumber("Left speed", this.leftSpeed);
         SmartDashboard.putNumber("Right speed", this.rightSpeed);
 
-
-    }
-
-
-    // encoder methods
-
-    public double getLeftEncoderCount() {
-        // find how to do encoders
-        this.leftCount = leftClimber.getChannel();
-        return leftCount;
-    }
-
-    public double getRightEncoderCount() {
-        // find how to do encoders
-        this.rightCount = rightClimber.getChannel();
-        return rightClimber.get();
-    }
-
-    public double getDispLeftCM() {
-        return getLeftEncoderCount() / ClimbConstants.ENCODER_COUNTS_PER_REVOLUTION * ClimbConstants.REVOLUTIONS_TO_CM;
-    }
-
-    public double getDispRightCM() {
-        return getRightEncoderCount() / ClimbConstants.ENCODER_COUNTS_PER_REVOLUTION * ClimbConstants.REVOLUTIONS_TO_CM;
-    }
-
-    public double getDispErrorLeft(double targetDisp) {
-        return targetDisp - getDispLeftCM();
-    }
-
-    public double getDispErrorRight(double targetDisp) {
-        return targetDisp - getDispRightCM();
     }
 
     public void setLeftSpeed(double leftSpeed) {
@@ -89,17 +46,6 @@ public class ClimbSubsystem extends SubsystemBase {
     public void setRightSpeed(double rightSpeed) {
         this.rightSpeed = rightSpeed;
         rightClimber.set(rightSpeed);
-    }
-
-    public void checkClimberSafety() {
-        if (getDispLeftCM() > ClimbConstants.MAXIMUM_DISPLACEMENT + 2) {
-            this.leftSpeed = 0;
-            setLeftSpeed(0);
-        }
-        if (getDispRightCM() > ClimbConstants.MAXIMUM_DISPLACEMENT + 2) {
-            this.rightSpeed = 0;
-            setRightSpeed(0);
-        }
     }
 
 }

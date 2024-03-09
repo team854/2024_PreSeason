@@ -4,11 +4,11 @@ import frc.robot.Constants.ClimbConstants;
 import frc.robot.operator.OperatorInput;
 import frc.robot.subsystems.ClimbSubsystem;
 
-public class LowerBothClimbersCommand extends BaseClimberCommand {
+public class RaiseBothClimbersCommand extends BaseClimberCommand {
 
     OperatorInput operatorInput;
 
-    public LowerBothClimbersCommand(ClimbSubsystem climbSubsystem, OperatorInput operatorInput) {
+    public RaiseBothClimbersCommand(ClimbSubsystem climbSubsystem, OperatorInput operatorInput) {
         super(climbSubsystem);
         this.operatorInput = operatorInput;
     }
@@ -22,14 +22,14 @@ public class LowerBothClimbersCommand extends BaseClimberCommand {
     // Check here
     @Override
     public void execute() {
-        climbSubsystem.setLeftSpeed(ClimbConstants.CLIMBER_LOWER_SPEED);
-        climbSubsystem.setRightSpeed(ClimbConstants.CLIMBER_LOWER_SPEED);
+        climbSubsystem.setLeftSpeed(-ClimbConstants.CLIMBER_RAISE_SPEED);
+        climbSubsystem.setRightSpeed(-ClimbConstants.CLIMBER_RAISE_SPEED);
     }
 
     @Override
     public boolean isFinished() {
 
-        if (!operatorInput.isLowerClimbers() && isTimeoutExceeded(0.25)) {
+        if (!operatorInput.isRaiseClimbers() && isTimeoutExceeded(0.25)) {
             setFinishReason("let go of intake button");
             return true;
         }

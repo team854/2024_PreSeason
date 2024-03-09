@@ -8,6 +8,9 @@ public class IntakeCommand extends BaseArmCommand {
 
     final OperatorInput operatorInput;
 
+    long                start;
+    long                finish;
+
     // Speeds
 
     public IntakeCommand(OperatorInput operatorInput, ArmSubsystem armSubsystem) {
@@ -23,6 +26,8 @@ public class IntakeCommand extends BaseArmCommand {
         logCommandStart();
 
         super.initialize();
+
+        start = 0;
 
     }
 
@@ -43,6 +48,21 @@ public class IntakeCommand extends BaseArmCommand {
         if (!operatorInput.isIntake() && isTimeoutExceeded(0.25)) {
             setFinishReason("let go of intake button");
             return true;
+        }
+
+        if (armSubsystem.isLoaded()) {
+            finish = System.currentTimeMillis();
+
+            if ((finish - start > 500) && (start != 0)) {
+                setFinishReason("sensor intook");
+                return true;
+            }
+            if (start == 0) {
+
+                start = System.currentTimeMillis();
+            }
+
+
         }
 
         return false;

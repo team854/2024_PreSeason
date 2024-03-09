@@ -3,12 +3,14 @@ package frc.robot.operator;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.DriveConstants.DriveMode;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.CancelCommand;
 import frc.robot.commands.arm.IntakeCommand;
 import frc.robot.commands.arm.PivotShootCommand;
 import frc.robot.commands.climb.LowerBothClimbersCommand;
+import frc.robot.commands.climb.RaiseBothClimbersCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
@@ -166,6 +168,10 @@ public class OperatorInput extends SubsystemBase {
     // climber methods
 
     public boolean isLowerClimbers() {
+        return driverController.getAButton();
+    }
+
+    public boolean isRaiseClimbers() {
         return driverController.getBButton();
     }
 
@@ -186,15 +192,25 @@ public class OperatorInput extends SubsystemBase {
 
         new Trigger(() -> isShootLong())
 
-            .onTrue(new PivotShootCommand(1, 0.3, 45, 5000, armSubsystem));
+            .onTrue(new PivotShootCommand(1, 45, 5000, armSubsystem));
 
         new Trigger(() -> isShootShort())
 
-            .onTrue(new PivotShootCommand(0.5, 0.3, 60, 5000, armSubsystem));
+            .onTrue(new PivotShootCommand(0.5, 60, 5000, armSubsystem));
 
         new Trigger(() -> isLowerClimbers())
 
             .onTrue(new LowerBothClimbersCommand(climbSubsystem, this));
+
+
+        new Trigger(() -> isRaiseClimbers())
+
+            .onTrue(new RaiseBothClimbersCommand(climbSubsystem, this));
+
+        new Trigger(() -> isAmpShot())
+
+            .onTrue(new PivotShootCommand(ArmConstants.AmpShootSpeed, ArmConstants.AmpTargetAngle,
+                ArmConstants.AmpTimeoutMS, armSubsystem));
 
 
 

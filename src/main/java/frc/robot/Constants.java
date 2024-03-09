@@ -26,37 +26,48 @@ public final class Constants {
             DRIVE_FORWARD_PID_TIMED,
             DRIVE_FORWARD_PID_MEASURED,
             TEST_ARM_COMMANDS,
-            // the below autopatterns assume that were on blue i.e. when facing the speaker the amp
-            // is on the right
-            AMP_ONE_SHOT,
-            AMP_TWO_SHOT,
-            AMP_THREE_SHOT,
-            SPEAKER_ONE_SHOT,
-            SPEAKER_TWO_SHOT,
-            SPEAKER_THREE_SHOT,
-            SPEAKER_FOUR_SHOT,
-            OUTSIDE_ONE_SHOT,
-            OUTSIDE_TWO_SHOT,
-            OUTSIDE_THREE_SHOT,
+            // blue side
+            BLUE_AMP_ONE_SHOT,
+            BLUE_AMP_TWO_SHOT,
+            BLUE_AMP_THREE_SHOT,
+            BLUE_SPEAKER_ONE_SHOT,
+            BLUE_SPEAKER_TWO_SHOT,
+            BLUE_SPEAKER_THREE_SHOT,
+            BLUE_SPEAKER_FOUR_SHOT,
+            BLUE_OUTSIDE_ONE_SHOT,
+            BLUE_OUTSIDE_TWO_SHOT,
+            BLUE_OUTSIDE_THREE_SHOT,
+            // red side
+            RED_AMP_ONE_SHOT,
+            RED_AMP_TWO_SHOT,
+            RED_AMP_THREE_SHOT,
+            RED_SPEAKER_ONE_SHOT,
+            RED_SPEAKER_TWO_SHOT,
+            RED_SPEAKER_THREE_SHOT,
+            RED_SPEAKER_FOUR_SHOT,
+            RED_OUTSIDE_ONE_SHOT,
+            RED_OUTSIDE_TWO_SHOT,
+            RED_OUTSIDE_THREE_SHOT,
+
         }
 
         // amp side distance variables
 
-        public static final double AmpSideTimeoutMS            = 0;
+        public static final double AmpSideTimeoutMS            = 4000;
 
-        public static final double AmpSideDiagStepCM           = 0;
-        public static final double AmpSideFirstStraightCM      = 0;
+        public static final double AmpSideDiagStepCM           = 120;
+        public static final double AmpSideFirstStraightCM      = 240;
         public static final double AmpSideSecondStraightCM     = 0;
         public static final double AmpSideThirdStraightCM      = 0;
 
-        public static final double AmpSideFirstAngle           = 0;
-        public static final double AmpSideSecondAngle          = 0;
-        public static final double AmpSideShootAngle           = 0;
+        public static final double AmpSideFirstAngle           = 60;
+        public static final double AmpSideSecondAngle          = 90;
+        public static final double AmpSideShootAngle           = 120;
 
-        public static final double AmpSideShootSpeed           = 0;
-        public static final double AmpSidePivotSpeed           = 0;
-        public static final double AmpSideDriveSpeed           = 0;
-        public static final double AmpSideIntakeSpeed          = 0;
+        public static final double AmpSideShootSpeed           = 1;
+        public static final double AmpSidePivotSpeed           = 0.2;
+        public static final double AmpSideDriveSpeed           = 0.3;
+        public static final double AmpSideIntakeSpeed          = 0.5;
 
         // speaker side variables
 
@@ -163,9 +174,10 @@ public final class Constants {
     public static final class ArmConstants {
 
         public static final int     PIVOT_PORT                           = 20;
-        public static final int     KEEPER_PORT                          = 2;
+        public static final int     KEEPER_PORT                          = 0;
         public static final int     INTAKE_LOWER_PORT                    = 1;
-        public static final int     INTAKE_HIGHER_PORT                   = 0;
+        public static final int     INTAKE_HIGHER_PORT                   = 2;
+        public static final int     PROXIMITY_PORT_DIO                   = 0;
 
         public static final boolean PIVOT_INVERTED                       = true;
 
@@ -197,11 +209,24 @@ public final class Constants {
             INTAKING
         }
 
-        public static final double PIVOT_TO_ANGLE_PID_KP = 0.005;
-        public static final double PIVOT_TO_ANGLE_PID_KI = 0;
-        public static final double PIVOT_TO_ANGLE_PID_KD = 0;
+        public static final double PIVOT_TO_ANGLE_PID_KP   = 0.005;
+        public static final double PIVOT_TO_ANGLE_PID_KI   = 0;
+        public static final double PIVOT_TO_ANGLE_PID_KD   = 0;
 
+        public static final double AmpShootSpeed           = 0.3;
+        public static final double AmpPivotSpeed           = 0.2;
+        public static final double AmpTargetAngle          = 100;
+        public static final double AmpTimeoutMS            = 4000;
 
+        public static final double LongSpeakerShootSpeed   = 1;
+        public static final double LongSpeakerPivotSpeed   = 0.2;
+        public static final double LongSpeakerTargetAngle  = 40;
+        public static final double LongSpeakerTimeoutMS    = 4000;
+
+        public static final double ShortSpeakerShootSpeed  = 0.5;
+        public static final double ShortSpeakerPivotSpeed  = 0.2;
+        public static final double ShortSpeakerTargetAngle = 90;
+        public static final double ShortSpeakerTimeoutMS   = 4000;
 
     }
 
@@ -218,7 +243,8 @@ public final class Constants {
 
         public static final double  MAXIMUM_DISPLACEMENT          = 0;
         public static final double  LOWERED_DISP_LEVEL            = 0;
-        public static final double  CLIMBER_DEFAULT_SPEED         = 0;
+        public static final double  CLIMBER_RAISE_SPEED           = 0;
+        public static final double  CLIMBER_LOWER_SPEED           = 0;
 
         public static enum ClimbStates {
             CLOSE, FAR

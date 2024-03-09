@@ -96,7 +96,6 @@ public class DefaultDriveCommand extends LoggingCommand {
         double maxSpeed = 1.0;
 
         if (!boost) {
-            speed    /= 2.0;
             turn     /= 2.0;
             maxSpeed /= 2.0;
         }

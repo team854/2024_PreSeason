@@ -83,14 +83,22 @@ public class RobotContainer {
         autoPatternChooser.addOption("Drive Forward", AutoPattern.DRIVE_FORWARD);
         autoPatternChooser.addOption("Drive Forward PID Timed", AutoPattern.DRIVE_FORWARD_PID_TIMED);
         autoPatternChooser.addOption("Drive Forward PID Measured", AutoPattern.DRIVE_FORWARD_PID_MEASURED);
-        autoPatternChooser.addOption("Outside side 1 shot", AutoPattern.OUTSIDE_ONE_SHOT);
-        autoPatternChooser.addOption("Outside side 2 shot", AutoPattern.OUTSIDE_TWO_SHOT);
-        autoPatternChooser.addOption("Speaker side 3 shot", AutoPattern.SPEAKER_THREE_SHOT);
-        autoPatternChooser.addOption("Speaker side 2 shot", AutoPattern.SPEAKER_TWO_SHOT);
-        autoPatternChooser.addOption("Speaker side 1 shot", AutoPattern.SPEAKER_ONE_SHOT);
-        autoPatternChooser.addOption("Amp side 1 shot", AutoPattern.AMP_ONE_SHOT);
-        autoPatternChooser.addOption("Amp side 2 shot", AutoPattern.AMP_TWO_SHOT);
-        autoPatternChooser.addOption("Amp side 3 shot", AutoPattern.AMP_ONE_SHOT);
+        autoPatternChooser.addOption("Blue Outside side 1 shot", AutoPattern.BLUE_OUTSIDE_ONE_SHOT);
+        autoPatternChooser.addOption("Blue Outside side 2 shot", AutoPattern.BLUE_OUTSIDE_TWO_SHOT);
+        autoPatternChooser.addOption("Blue Speaker side 3 shot", AutoPattern.BLUE_SPEAKER_THREE_SHOT);
+        autoPatternChooser.addOption("Blue Speaker side 2 shot", AutoPattern.BLUE_SPEAKER_TWO_SHOT);
+        autoPatternChooser.addOption("Blue Speaker side 1 shot", AutoPattern.BLUE_SPEAKER_ONE_SHOT);
+        autoPatternChooser.addOption("Blue Amp side 1 shot", AutoPattern.BLUE_AMP_ONE_SHOT);
+        autoPatternChooser.addOption("Blue Amp side 2 shot", AutoPattern.BLUE_AMP_TWO_SHOT);
+        autoPatternChooser.addOption("Blue Amp side 3 shot", AutoPattern.BLUE_AMP_ONE_SHOT);
+        autoPatternChooser.addOption("Red Outside side 1 shot", AutoPattern.RED_OUTSIDE_ONE_SHOT);
+        autoPatternChooser.addOption("Red Outside side 2 shot", AutoPattern.RED_OUTSIDE_TWO_SHOT);
+        autoPatternChooser.addOption("Red Speaker side 3 shot", AutoPattern.RED_SPEAKER_THREE_SHOT);
+        autoPatternChooser.addOption("Red Speaker side 2 shot", AutoPattern.RED_SPEAKER_TWO_SHOT);
+        autoPatternChooser.addOption("Red Speaker side 1 shot", AutoPattern.RED_SPEAKER_ONE_SHOT);
+        autoPatternChooser.addOption("Red Amp side 1 shot", AutoPattern.RED_AMP_ONE_SHOT);
+        autoPatternChooser.addOption("Red Amp side 2 shot", AutoPattern.RED_AMP_TWO_SHOT);
+        autoPatternChooser.addOption("Red Amp side 3 shot", AutoPattern.RED_AMP_ONE_SHOT);
 
     }
 

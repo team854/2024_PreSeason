@@ -14,7 +14,7 @@ public class DefaultArmCommand extends BaseArmCommand {
     /**
      * Creates a new ExampleCommand.
      *
-     * @param driveSubsystem The subsystem used by this command.
+     * @param armSubsystem The subsystem used by this command.
      */
     public DefaultArmCommand(OperatorInput operatorInput, ArmSubsystem armSubsystem) {
 
@@ -51,7 +51,7 @@ public class DefaultArmCommand extends BaseArmCommand {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        // The default drive command never ends, but can be interrupted by other commands.
+        // The default arm command never ends, but can be interrupted by other commands.
         return false;
     }
 
