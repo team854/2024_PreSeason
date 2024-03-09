@@ -1,46 +1,36 @@
 package frc.robot.commands.drive;
 
 import frc.robot.Constants.DriveConstants;
-import frc.robot.commands.LoggingCommand;
 import frc.robot.subsystems.DriveSubsystem;
 
 // This command doesn't perfectly account for encoders being overmeasured because of slight correction turns that the PID needs to make
-public class MeasuredStraightDriveCommand extends LoggingCommand {
+public class MeasuredStraightDriveCommand extends BaseDriveCommand {
 
     private DriveSubsystem driveSubsystem;
     private double         dist;
     private double         speed;
     private boolean        brakeAtEnd;
 
-
-
-    private double         errorSignal;
-    private double         previousError;
-    private double         targetHeading;
-    private double         pTerm;
-    private double         iTerm = 0;
-    private double         dTerm;
     private double         initialLeftEncoder;
     private double         initialRightEncoder;
-    private double         cmToEncoderUnits;
+    private double         cmToEncoderCounts;
 
     private String         reason;
 
 
 
     public MeasuredStraightDriveCommand(double dist, double speed, boolean brakeAtEnd, DriveSubsystem driveSubsystem) {
-        this.dist           = dist;
-        this.speed          = speed;
-        this.driveSubsystem = driveSubsystem;
-        this.brakeAtEnd     = brakeAtEnd;
+        super(driveSubsystem);
 
-        addRequirements(driveSubsystem);
+        this.dist       = dist;
+        this.speed      = speed;
+        this.brakeAtEnd = brakeAtEnd;
     }
 
     @Override
     public void initialize() {
 
-        String commandParms = "distance (cm): " + dist + ", speed: " + speed + ", target heading: " + targetHeading + ", brake: "
+        String commandParms = "distance (cm): " + dist + ", speed: " + speed + ", brake: "
             + brakeAtEnd;
 
         logCommandStart(commandParms);
@@ -48,32 +38,14 @@ public class MeasuredStraightDriveCommand extends LoggingCommand {
         initialLeftEncoder  = driveSubsystem.getLeftEncoder();
         initialRightEncoder = driveSubsystem.getRightEncoder();
 
-        cmToEncoderUnits    = Math.abs(dist / frc.robot.Constants.DriveConstants.CMS_PER_ENCODER_COUNT);
-
-        targetHeading       = driveSubsystem.getHeading();
+        cmToEncoderCounts   = Math.abs(dist * DriveConstants.ENCODER_COUNTS_PER_CM);
 
     }
 
     @Override
     public void execute() {
 
-        // executes every 20ms
-        double currentError = driveSubsystem.getHeadingError(targetHeading);
-        double diffError    = currentError - previousError;
-        previousError  = currentError;
-
-        pTerm          = DriveConstants.HEADING_PID_KP * currentError;
-        iTerm         += DriveConstants.HEADING_PID_KI * diffError;
-        dTerm          = DriveConstants.HEADING_PID_KD * diffError;
-
-
-        errorSignal    = pTerm + iTerm + dTerm;
-
-        double sgnSpeed   = Math.abs(speed) / speed;
-        double leftSpeed  = Math.min(Math.max(speed - errorSignal * sgnSpeed, -1.0), 1.0);
-        double rightSpeed = Math.min(Math.max(speed + errorSignal * sgnSpeed, -1.0), 1.0);
-
-        driveSubsystem.setMotorSpeeds(leftSpeed, rightSpeed);
+        driveStraight(speed);
 
     }
 
@@ -86,12 +58,10 @@ public class MeasuredStraightDriveCommand extends LoggingCommand {
         double countedLeft          = Math.abs(currentLeftEncoder - initialLeftEncoder);
         double countedRight         = Math.abs(currentRigthtEncoder - initialRightEncoder);
 
-        if ((countedLeft + countedRight) / 2 >= cmToEncoderUnits) {
+        if ((countedLeft + countedRight) / 2 >= cmToEncoderCounts) {
             reason = "passed a distance of " + dist + " cm";
             return true;
         }
-
-
 
         return false;
 

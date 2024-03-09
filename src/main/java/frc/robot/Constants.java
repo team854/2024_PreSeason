@@ -42,62 +42,58 @@ public final class Constants {
 
         // amp side distance variables
 
-        /*
-         * public static final double AmpSideTimeoutMS = null;
-         * 
-         * public static final double AmpSideDiagStepCM = null;
-         * public static final double AmpSideFirstStraightCM = null;
-         * public static final double AmpSideSecondStraightCM = null;
-         * public static final double AmpSideThirdStraightCM = null;
-         * 
-         * public static final double AmpSideFirstAngle = null;
-         * public static final double AmpSideSecondAngle = null;
-         * public static final double AmpSideShootAngle = null;
-         * 
-         * public static final double AmpSideShootSpeed = null;
-         * public static final double AmpSidePivotSpeed = null;
-         * public static final double AmpSideDriveSpeed = null;
-         * public static final double AmpSideIntakeSpeed = null;
-         * 
-         * // speaker side variables
-         * 
-         * public static final double SpeakerSideTimeoutMS = null;
-         * 
-         * public static final double SpeakerSideDiagStepCM = null;
-         * public static final double SpeakerSideFirstStraightCM = null;
-         * public static final double SpeakerSideSecondStraightCM = null;
-         * public static final double SpeakerSideThirdStraightCM = null;
-         * 
-         * public static final double SpeakerSideShootAngle = null;
-         * public static final double SpeakerSideSwivelAngle = null;
-         * public static final double SpeakerSideFirstAngle = null;
-         * 
-         * public static final double SpeakerSideDriveSpeed = null;
-         * public static final double SpeakerSidePivotSpeed = null;
-         * public static final double SpeakerSideShootSpeed = null;
-         * public static final double SpeakerSideIntakeSpeed = null;
-         * public static final double SpeakerSideSwivelSpeed = null;
-         * 
-         * // outside side variables
-         * 
-         * public static final double OutsideSideTimeoutMS = null;
-         * 
-         * public static final double OutsideSideDiagStepCM = null;
-         * public static final double OutsideSideFirstStraightCM = null;
-         * public static final double OutsideSideSecondStraightCM = null;
-         * public static final double OutsideSideThirdStraightCM = null;
-         * 
-         * public static final double OutsideSideFirstAngle = null;
-         * public static final double OutsideSideSecondAngle = null;
-         * public static final double OutsideSideShooterAngle = null;
-         * 
-         * public static final double OutsideSideShooterSpeed = null;
-         * public static final double OutsideSidePivotSpeed = null;
-         * public static final double OutsideSideDriveSpeed = null;
-         * public static final double OutsideSideIntakeSpeed = null;
-         * 
-         */
+        public static final double AmpSideTimeoutMS            = 0;
 
+        public static final double AmpSideDiagStepCM           = 0;
+        public static final double AmpSideFirstStraightCM      = 0;
+        public static final double AmpSideSecondStraightCM     = 0;
+        public static final double AmpSideThirdStraightCM      = 0;
+
+        public static final double AmpSideFirstAngle           = 0;
+        public static final double AmpSideSecondAngle          = 0;
+        public static final double AmpSideShootAngle           = 0;
+
+        public static final double AmpSideShootSpeed           = 0;
+        public static final double AmpSidePivotSpeed           = 0;
+        public static final double AmpSideDriveSpeed           = 0;
+        public static final double AmpSideIntakeSpeed          = 0;
+
+        // speaker side variables
+
+        public static final double SpeakerSideTimeoutMS        = 0;
+
+        public static final double SpeakerSideDiagStepCM       = 0;
+        public static final double SpeakerSideFirstStraightCM  = 0;
+        public static final double SpeakerSideSecondStraightCM = 0;
+        public static final double SpeakerSideThirdStraightCM  = 0;
+
+        public static final double SpeakerSideShootAngle       = 0;
+        public static final double SpeakerSideSwivelAngle      = 0;
+        public static final double SpeakerSideFirstAngle       = 0;
+
+        public static final double SpeakerSideDriveSpeed       = 0;
+        public static final double SpeakerSidePivotSpeed       = 0;
+        public static final double SpeakerSideShootSpeed       = 0;
+        public static final double SpeakerSideIntakeSpeed      = 0;
+        public static final double SpeakerSideSwivelSpeed      = 0;
+
+        // outside side variables
+
+        public static final double OutsideSideTimeoutMS        = 0;
+
+        public static final double OutsideSideDiagStepCM       = 0;
+        public static final double OutsideSideFirstStraightCM  = 0;
+        public static final double OutsideSideSecondStraightCM = 0;
+        public static final double OutsideSideThirdStraightCM  = 0;
+
+        public static final double OutsideSideFirstAngle       = 0;
+        public static final double OutsideSideSecondAngle      = 0;
+        public static final double OutsideSideShooterAngle     = 0;
+
+        public static final double OutsideSideShooterSpeed     = 0;
+        public static final double OutsideSidePivotSpeed       = 0;
+        public static final double OutsideSideDriveSpeed       = 0;
+        public static final double OutsideSideIntakeSpeed      = 0;
 
     }
 
@@ -129,6 +125,8 @@ public final class Constants {
             // Assumes the encoders are directly mounted on the wheel shafts
             (ROBOT_WHEEL_DIAMETER_M * Math.PI) / ENCODER_COUNTS_PER_REVOLUTION / 100d;
 
+        public static final double ENCODER_COUNTS_PER_CM         = 0;
+
         // PID gains
         public static final double HEADING_PID_KP                = 0.02;
         public static final double HEADING_PID_KI                = 0;
@@ -143,6 +141,12 @@ public final class Constants {
         public static enum HeadingStates {
             FAR, CLOSE
         }
+
+        public static final double DEFAULT_DRIVE_SPEED       = 0;
+        public static final double DEFAULT_TURN_SPEED        = 0;
+
+        public static final double TURN_TO_HEADING_CLOSE     = 0;
+        public static final double TURN_TO_HEADING_TOLERANCE = 0;
 
     }
 
@@ -164,9 +168,6 @@ public final class Constants {
         public static final int     INTAKE_HIGHER_PORT                   = 0;
 
         public static final boolean PIVOT_INVERTED                       = true;
-
-        // climber motor left = 3;
-        // climber motor right = 4;
 
         public static final double  PIVOT_ARM_ENCODER_COUNT_PER_ROTATION = 37.2;
 
@@ -199,6 +200,37 @@ public final class Constants {
         public static final double PIVOT_TO_ANGLE_PID_KP = 0.005;
         public static final double PIVOT_TO_ANGLE_PID_KI = 0;
         public static final double PIVOT_TO_ANGLE_PID_KD = 0;
+
+
+
+    }
+
+    public static final class ClimbConstants {
+
+        public static final int     LEFT_CLIMB_PORT               = 3;
+        public static final int     RIGHT_CLIMB_PORT              = 4;
+
+        public static final boolean LEFT_CLIMBER_REVERSED         = false;
+        public static final boolean RIGHT_CLIMBER_REVERSED        = false;
+
+        public static final int     ENCODER_COUNTS_PER_REVOLUTION = 0;
+        public static final int     REVOLUTIONS_TO_CM             = 0;
+
+        public static final double  MAXIMUM_DISPLACEMENT          = 0;
+        public static final double  LOWERED_DISP_LEVEL            = 0;
+        public static final double  CLIMBER_DEFAULT_SPEED         = 0;
+
+        public static enum ClimbStates {
+            CLOSE, FAR
+        }
+
+        public static final double CLIMB_DISP_CLOSE = 0;
+
+        public static final double CLIMB_PID_KP     = 0;
+        public static final double CLIMB_PID_KI     = 0;
+        public static final double CLIMB_PID_KD     = 0;
+
+        public static final double DISP_TOLERANCE   = 0;
 
 
 

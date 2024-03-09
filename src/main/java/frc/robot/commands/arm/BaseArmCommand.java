@@ -46,8 +46,6 @@ public abstract class BaseArmCommand extends LoggingCommand {
 
         }
 
-
-
         switch (angleState) {
 
         case CLOSE:

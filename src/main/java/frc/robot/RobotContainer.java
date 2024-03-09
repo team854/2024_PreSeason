@@ -17,6 +17,7 @@ import frc.robot.commands.auto.AutonomousCommand;
 import frc.robot.commands.drive.DefaultDriveCommand;
 import frc.robot.operator.OperatorInput;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LightsSubsystem;
 
@@ -36,6 +37,7 @@ public class RobotContainer {
     private final LightsSubsystem              lightsSubsystem    = new LightsSubsystem();
     private final DriveSubsystem               driveSubsystem     = new DriveSubsystem();
     private final ArmSubsystem                 armSubsystem       = new ArmSubsystem();
+    private final ClimbSubsystem               climbSubsystem     = new ClimbSubsystem();
 
     // All dashboard choosers are defined here...
     private final SendableChooser<DriveMode>   driveModeChooser   = new SendableChooser<>();
@@ -61,7 +63,7 @@ public class RobotContainer {
         // armSubsystem.setDefaultCommand(new DefaultKeepArmUpCommand(armSubsystem));
 
         // Configure the button bindings
-        operatorInput.configureButtonBindings(driveSubsystem, armSubsystem);
+        operatorInput.configureButtonBindings(driveSubsystem, armSubsystem, climbSubsystem);
 
         // Add a trigger to flash the lights when the robot goes from disabled to enabled
         new Trigger(() -> RobotController.isSysActive())
@@ -103,6 +105,7 @@ public class RobotContainer {
         return new AutonomousCommand(
             driveSubsystem,
             autoPatternChooser,
-            armSubsystem);
+            armSubsystem,
+            operatorInput);
     }
 }

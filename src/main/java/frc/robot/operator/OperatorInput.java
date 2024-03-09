@@ -8,7 +8,9 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.CancelCommand;
 import frc.robot.commands.arm.IntakeCommand;
 import frc.robot.commands.arm.PivotShootCommand;
+import frc.robot.commands.climb.LowerBothClimbersCommand;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 
 
@@ -161,12 +163,18 @@ public class OperatorInput extends SubsystemBase {
         return driverController.getPOV() == 180;
     }
 
+    // climber methods
+
+    public boolean isLowerClimbers() {
+        return driverController.getBButton();
+    }
+
     /**
      * Use this method to define your robotFunction -> command mappings.
      *
      * NOTE: all subsystems should be passed into this method.
      */
-    public void configureButtonBindings(DriveSubsystem driveSubsystem, ArmSubsystem armSubsystem) {
+    public void configureButtonBindings(DriveSubsystem driveSubsystem, ArmSubsystem armSubsystem, ClimbSubsystem climbSubsystem) {
 
         new Trigger(() -> isCancel())
 
@@ -183,6 +191,10 @@ public class OperatorInput extends SubsystemBase {
         new Trigger(() -> isShootShort())
 
             .onTrue(new PivotShootCommand(0.5, 0.3, 60, 5000, armSubsystem));
+
+        new Trigger(() -> isLowerClimbers())
+
+            .onTrue(new LowerBothClimbersCommand(climbSubsystem, this));
 
 
 
