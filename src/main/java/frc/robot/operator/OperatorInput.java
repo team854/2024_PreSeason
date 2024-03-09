@@ -132,7 +132,7 @@ public class OperatorInput extends SubsystemBase {
     // arm methods
 
     public boolean isIntake() {
-        if (driverController.getLeftTriggerAxis() > 0.5) {
+        if (driverController.getLeftTriggerAxis() >= 0.5) {
             return true;
         }
         return false;
@@ -174,7 +174,7 @@ public class OperatorInput extends SubsystemBase {
 
         new Trigger(() -> isIntake())
 
-            .onTrue(new IntakeCommand(0.5, 0.3, 10000, armSubsystem));
+            .onTrue(new IntakeCommand(this, armSubsystem));
 
         new Trigger(() -> isShootLong())
 

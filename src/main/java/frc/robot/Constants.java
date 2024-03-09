@@ -148,7 +148,7 @@ public final class Constants {
 
     public static final class LightConstants {
 
-        public static final int LED_STRIP_PWM_PORT     = 0;
+        public static final int LED_STRIP_PWM_PORT     = 9;
         public static final int LED_STRIP_LENGTH       = 60;
         public static final int LED_STICK_TAKEN_LENGTH = 5;
         public static final int BOOST_INDEX            = 0;
@@ -158,23 +158,29 @@ public final class Constants {
 
     public static final class ArmConstants {
 
-        public static final int    PIVOT_PORT                           = 20;
-        public static final int    KEEPER_PORT                          = 2;
-        public static final int    INTAKE_LOWER_PORT                    = 1;
-        public static final int    INTAKE_HIGHER_PORT                   = 0;
+        public static final int     PIVOT_PORT                           = 20;
+        public static final int     KEEPER_PORT                          = 2;
+        public static final int     INTAKE_LOWER_PORT                    = 1;
+        public static final int     INTAKE_HIGHER_PORT                   = 0;
+
+        public static final boolean PIVOT_INVERTED                       = true;
 
         // climber motor left = 3;
         // climber motor right = 4;
 
-        public static final double PIVOT_ARM_ENCODER_COUNT_PER_ROTATION = 37.2;
+        public static final double  PIVOT_ARM_ENCODER_COUNT_PER_ROTATION = 37.2;
 
-        public static final double MIN_ARM_PIVOT_ANGLE                  = -26.5;
-        public static final double MAX_ARM_PIVOT_ANGLE                  = 130.0;
+        public static final double  MIN_ARM_PIVOT_ANGLE                  = -26.5;
+        public static final double  MAX_ARM_PIVOT_ANGLE                  = 130.0;
 
-        public static final int    EQUILIBRIUM_ARM_ANGLE                = 61;
-        public static final int    EQUILIBRIUM_ARM_ANGLE_BUFFER         = 5;
+        public static final int     EQUILIBRIUM_ARM_ANGLE                = 68;
+        public static final int     EQUILIBRIUM_ARM_ANGLE_CLOSE          = 10;
+        public static final int     EQUILIBRIUM_ARM_ANGLE_TOLERANCE      = 2;
 
-        public static final double PIVOT_DEFAULT_SPEED                  = 0.1;
+        public static final double  PIVOT_DEFAULT_SPEED                  = 0.1;
+
+        public static final double  INTAKE_ANGLE                         = -25;
+        public static final double  INTAKE_SPEED                         = 0.5;
 
         public static enum AngleStates {
             FAR, CLOSE
@@ -190,7 +196,7 @@ public final class Constants {
             INTAKING
         }
 
-        public static final double PIVOT_TO_ANGLE_PID_KP = 0;
+        public static final double PIVOT_TO_ANGLE_PID_KP = 0.005;
         public static final double PIVOT_TO_ANGLE_PID_KI = 0;
         public static final double PIVOT_TO_ANGLE_PID_KD = 0;
 

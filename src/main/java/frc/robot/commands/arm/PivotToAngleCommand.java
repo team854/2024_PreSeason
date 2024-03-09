@@ -1,49 +1,31 @@
 package frc.robot.commands.arm;
 
 import frc.robot.Constants.ArmConstants;
-import frc.robot.Constants.ArmConstants.AngleStates;
-import frc.robot.commands.LoggingCommand;
 import frc.robot.subsystems.ArmSubsystem;
 
-public class PivotToAngleCommand extends LoggingCommand {
-
-    private ArmSubsystem armSubsystem;
-
-
-
-    // PID
-    private double      currentError;
-    private double      previousError;
-    private double      diffError;
-    private double      errorSignal;
-    private double      pTerm;
-    private double      iTerm = 0;
-    private double      dTerm;
+public class PivotToAngleCommand extends BaseArmCommand {
 
     // Time measure
-    private double      initTime;
-    private double      passedTime;
-    private double      timeoutTimeMS;
-
-    private AngleStates angleState;
+    private double  initTime;
+    private double  passedTime;
+    private double  timeoutTimeMS;
 
     // Logging skibidi
-    private double      speed;
-    private boolean     brakeAtEnd;
-    private String      reason;
-    private double      targetAngle;
+    private double  speed;
+    private boolean brakeAtEnd;
+    private String  reason;
+    private double  targetAngle;
 
 
 
-    public PivotToAngleCommand(double speed, double targetAngle, boolean brakeAtEnd, double timeoutTimeMS,
+    public PivotToAngleCommand(double speed, double targetAngle, double timeoutTimeMS,
         ArmSubsystem armSubsystem) {
+
+        super(armSubsystem);
+
         this.speed         = speed;
-        this.brakeAtEnd    = brakeAtEnd;
         this.targetAngle   = targetAngle;
         this.timeoutTimeMS = timeoutTimeMS;
-        this.armSubsystem  = armSubsystem;
-
-        addRequirements(armSubsystem);
     }
 
     @Override
@@ -53,17 +35,9 @@ public class PivotToAngleCommand extends LoggingCommand {
             + ", timeout time (ms): " + timeoutTimeMS;
         logCommandStart(commandParms);
 
-        previousError = armSubsystem.getAngleErrorPivot(targetAngle);
+        super.initialize();
 
-
-        initTime      = System.currentTimeMillis();
-
-        if (Math.abs(previousError) > 10) {
-            angleState = AngleStates.FAR;
-        }
-        else {
-            angleState = AngleStates.CLOSE;
-        }
+        initTime = System.currentTimeMillis();
 
 
     }
@@ -71,56 +45,14 @@ public class PivotToAngleCommand extends LoggingCommand {
     @Override
     public void execute() {
 
-        // executes every 20ms
-
-        currentError  = armSubsystem.getAngleErrorPivot(targetAngle);
-        diffError     = currentError - previousError;
-        previousError = currentError;
-
-        double sgnError = Math.abs(currentError) / currentError;
-
-        switch (angleState) {
-
-        case FAR:
-        default:
-
-            armSubsystem.pivotRotSetSpeed(speed * sgnError);
-            break;
-
-        case CLOSE:
-
-            pTerm = ArmConstants.PIVOT_TO_ANGLE_PID_KP * currentError;
-            iTerm += ArmConstants.PIVOT_TO_ANGLE_PID_KI * currentError;
-            dTerm += ArmConstants.PIVOT_TO_ANGLE_PID_KD * diffError;
-
-            errorSignal = pTerm + iTerm + dTerm;
-
-            Math.max(Math.min(errorSignal + Math.abs(errorSignal) / errorSignal * 0.2, 1), -1);
-
-            armSubsystem.pivotRotSetSpeed(speed * sgnError);
-
-            break;
-        }
-
-        if (Math.abs(previousError) > ArmConstants.EQUILIBRIUM_ARM_ANGLE_BUFFER) {
-            angleState = AngleStates.FAR;
-        }
-        else {
-            angleState = AngleStates.CLOSE;
-        }
-
+        moveToTargetAngle(targetAngle);
 
     }
 
     @Override
     public boolean isFinished() {
 
-        // executes every 20ms
-
-        currentError = armSubsystem.getAngleErrorPivot(targetAngle);
-
-
-        if (Math.abs(currentError) <= ArmConstants.EQUILIBRIUM_ARM_ANGLE_BUFFER) {
+        if (Math.abs(getAngleError(targetAngle)) <= ArmConstants.EQUILIBRIUM_ARM_ANGLE_TOLERANCE) {
             reason = "Within buffer accuracy";
             return true;
         }
@@ -138,12 +70,6 @@ public class PivotToAngleCommand extends LoggingCommand {
 
     @Override
     public void end(boolean interrupted) {
-
-        if (brakeAtEnd) {
-            armSubsystem.pivotRotSetSpeed(0);
-        }
-
-
         setFinishReason(reason);
         logCommandEnd(interrupted);
     }

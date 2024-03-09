@@ -1,11 +1,10 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 
+import edu.wpi.first.wpilibj.motorcontrol.VictorSP;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
@@ -18,9 +17,9 @@ public class ArmSubsystem extends SubsystemBase {
 
     CANSparkMax                 pivot            = new CANSparkMax(ArmConstants.PIVOT_PORT,
         CANSparkLowLevel.MotorType.kBrushless);
-    WPI_TalonSRX                intakeLower      = new WPI_TalonSRX(ArmConstants.INTAKE_LOWER_PORT);
-    WPI_TalonSRX                intakeHigher     = new WPI_TalonSRX(ArmConstants.INTAKE_HIGHER_PORT);
-    WPI_TalonSRX                keeper           = new WPI_TalonSRX(ArmConstants.KEEPER_PORT);
+    VictorSP                    intakeLower      = new VictorSP(ArmConstants.INTAKE_LOWER_PORT);
+    VictorSP                    intakeHigher     = new VictorSP(ArmConstants.INTAKE_HIGHER_PORT);
+    VictorSP                    keeper           = new VictorSP(ArmConstants.KEEPER_PORT);
 
     boolean                     loaded;
 
@@ -40,31 +39,13 @@ public class ArmSubsystem extends SubsystemBase {
 
     public ArmSubsystem() {
 
+        pivot.setIdleMode(IdleMode.kBrake);
+        pivot.setInverted(ArmConstants.PIVOT_INVERTED);
+
         // The arm pivot motor needs to be inverted
-        pivot.setInverted(true);
-
-
         pivot.getEncoder().setPosition(0); // below level
 
         this.currAnglePivot = getAnglePivot();
-
-        pivot.setIdleMode(IdleMode.kBrake);
-        pivot.setInverted(ArmConstants.PIVOT_INVERTED);
-
-
-        intakeLower.setNeutralMode(NeutralMode.Coast);
-        intakeHigher.follow(intakeHigher);
-
-
-        pivot.setIdleMode(IdleMode.kBrake);
-        pivot.setInverted(ArmConstants.PIVOT_INVERTED);
-
-
-        intakeLower.setNeutralMode(NeutralMode.Coast);
-        intakeHigher.follow(intakeHigher);
-
-
-        pivot.setIdleMode(IdleMode.kBrake);
 
     }
 
@@ -83,8 +64,6 @@ public class ArmSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Arm Angle", getAnglePivot());
 
         SmartDashboard.putBoolean("Loaded", this.loaded);
-
-
 
     }
 
