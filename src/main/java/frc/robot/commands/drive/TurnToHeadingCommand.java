@@ -19,9 +19,10 @@ public class TurnToHeadingCommand extends BaseDriveCommand {
         DriveSubsystem driveSubsystem) {
         super(driveSubsystem);
 
-        this.brakeAtEnd    = brakeAtEnd;
-        this.targetHeading = targetHeading;
-        this.timeoutTimeMS = timeoutTimeMS;
+        this.brakeAtEnd     = brakeAtEnd;
+        this.targetHeading  = targetHeading;
+        this.timeoutTimeMS  = timeoutTimeMS;
+        this.driveSubsystem = driveSubsystem;
     }
 
     @Override

@@ -11,6 +11,10 @@ public class PivotShootCommand extends BaseArmCommand {
     // Logging skibidi
     private double targetAngle;
 
+    private long   start   = 0;
+
+    private int    counter = 0;
+
 
     public PivotShootCommand(double shootSpeed, double targetAngle, double timeoutMS,
         ArmSubsystem armSubsystem) {
@@ -39,16 +43,18 @@ public class PivotShootCommand extends BaseArmCommand {
         armSubsystem.setShooterSpeed(shootSpeed);
 
         if (atAngle) {
-            armSubsystem.setKeeperSpeed(shootSpeed);
-        }
 
+            if (isTimeoutExceeded(1)) {
+                armSubsystem.setKeeperSpeed(shootSpeed);
+            }
+        }
     }
 
     @Override
     public boolean isFinished() {
 
-        if (!armSubsystem.isLoaded()) {
-            setFinishReason("Shot note");
+        // Stop after 5 seconds.
+        if (isTimeoutExceeded(2)) {
             return true;
         }
 

@@ -64,8 +64,7 @@ public final class Constants {
         public static final double AmpSideSecondAngle          = 90;
         public static final double AmpSideShootAngle           = 120;
 
-        public static final double AmpSideShootSpeed           = 1;
-        public static final double AmpSidePivotSpeed           = 0.2;
+        public static final double AmpSideShootSpeed           = 0.5;
         public static final double AmpSideDriveSpeed           = 0.3;
         public static final double AmpSideIntakeSpeed          = 0.5;
 
@@ -209,7 +208,7 @@ public final class Constants {
             INTAKING
         }
 
-        public static final double PIVOT_TO_ANGLE_PID_KP   = 0.005;
+        public static final double PIVOT_TO_ANGLE_PID_KP   = 0.008;
         public static final double PIVOT_TO_ANGLE_PID_KI   = 0;
         public static final double PIVOT_TO_ANGLE_PID_KD   = 0;
 
@@ -218,10 +217,10 @@ public final class Constants {
         public static final double AmpTargetAngle          = 100;
         public static final double AmpTimeoutMS            = 4000;
 
-        public static final double LongSpeakerShootSpeed   = 1;
+        public static final double LongSpeakerShootSpeed   = 0.5;
         public static final double LongSpeakerPivotSpeed   = 0.2;
-        public static final double LongSpeakerTargetAngle  = 40;
-        public static final double LongSpeakerTimeoutMS    = 4000;
+        public static final double LongSpeakerTargetAngle  = 60;
+        public static final double LongSpeakerTimeoutMS    = 5000;
 
         public static final double ShortSpeakerShootSpeed  = 0.5;
         public static final double ShortSpeakerPivotSpeed  = 0.2;
@@ -243,8 +242,8 @@ public final class Constants {
 
         public static final double  MAXIMUM_DISPLACEMENT          = 0;
         public static final double  LOWERED_DISP_LEVEL            = 0;
-        public static final double  CLIMBER_RAISE_SPEED           = 0;
-        public static final double  CLIMBER_LOWER_SPEED           = 0;
+        public static final double  CLIMBER_RAISE_SPEED           = 0.7;
+        public static final double  CLIMBER_LOWER_SPEED           = 0.7;
 
         public static enum ClimbStates {
             CLOSE, FAR

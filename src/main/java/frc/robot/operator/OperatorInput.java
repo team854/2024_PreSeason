@@ -9,6 +9,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.CancelCommand;
 import frc.robot.commands.arm.IntakeCommand;
 import frc.robot.commands.arm.PivotShootCommand;
+import frc.robot.commands.arm.ShootCommand;
 import frc.robot.commands.climb.LowerBothClimbersCommand;
 import frc.robot.commands.climb.RaiseBothClimbersCommand;
 import frc.robot.subsystems.ArmSubsystem;
@@ -149,6 +150,10 @@ public class OperatorInput extends SubsystemBase {
         return false;
     }
 
+    public boolean isShoot() {
+        return driverController.getYButton();
+    }
+
     public boolean isShootLong() {
         return driverController.getRightBumper();
     }
@@ -192,16 +197,15 @@ public class OperatorInput extends SubsystemBase {
 
         new Trigger(() -> isShootLong())
 
-            .onTrue(new PivotShootCommand(1, 45, 5000, armSubsystem));
+            .onTrue(new PivotShootCommand(1, 55, 5000, armSubsystem));
 
         new Trigger(() -> isShootShort())
 
-            .onTrue(new PivotShootCommand(0.5, 60, 5000, armSubsystem));
+            .onTrue(new PivotShootCommand(1, 62, 5000, armSubsystem));
 
         new Trigger(() -> isLowerClimbers())
 
             .onTrue(new LowerBothClimbersCommand(climbSubsystem, this));
-
 
         new Trigger(() -> isRaiseClimbers())
 
@@ -211,6 +215,10 @@ public class OperatorInput extends SubsystemBase {
 
             .onTrue(new PivotShootCommand(ArmConstants.AmpShootSpeed, ArmConstants.AmpTargetAngle,
                 ArmConstants.AmpTimeoutMS, armSubsystem));
+
+        new Trigger(() -> isShoot())
+
+            .onTrue(new ShootCommand(1, armSubsystem));
 
 
 

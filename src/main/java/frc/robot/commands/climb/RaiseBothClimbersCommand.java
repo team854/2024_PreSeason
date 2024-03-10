@@ -29,7 +29,7 @@ public class RaiseBothClimbersCommand extends BaseClimberCommand {
     @Override
     public boolean isFinished() {
 
-        if (!operatorInput.isRaiseClimbers() && isTimeoutExceeded(0.25)) {
+        if (!operatorInput.isRaiseClimbers()) {
             setFinishReason("let go of intake button");
             return true;
         }
@@ -39,6 +39,8 @@ public class RaiseBothClimbersCommand extends BaseClimberCommand {
 
     @Override
     public void end(boolean interrupted) {
+        climbSubsystem.setLeftSpeed(0);
+        climbSubsystem.setRightSpeed(0);
         logCommandEnd(interrupted);
     }
 

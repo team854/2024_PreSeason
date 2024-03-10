@@ -22,9 +22,10 @@ public class MeasuredStraightDriveCommand extends BaseDriveCommand {
     public MeasuredStraightDriveCommand(double dist, double speed, boolean brakeAtEnd, DriveSubsystem driveSubsystem) {
         super(driveSubsystem);
 
-        this.dist       = dist;
-        this.speed      = speed;
-        this.brakeAtEnd = brakeAtEnd;
+        this.dist           = dist;
+        this.speed          = speed;
+        this.brakeAtEnd     = brakeAtEnd;
+        this.driveSubsystem = driveSubsystem;
     }
 
     @Override
