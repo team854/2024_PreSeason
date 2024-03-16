@@ -93,12 +93,7 @@ public class DefaultDriveCommand extends LoggingCommand {
 
     private void setMotorSpeedsArcade(double speed, double turn, boolean boost) {
 
-        double maxSpeed = 1.0;
-
-        if (!boost) {
-            turn     /= 2.0;
-            maxSpeed /= 2.0;
-        }
+        double maxSpeed   = 1.0;
 
         // The basic algorithm for arcade is to add the turn and the speed
 
@@ -132,6 +127,12 @@ public class DefaultDriveCommand extends LoggingCommand {
 
                 leftSpeed = rightSpeed + turn;
             }
+        }
+
+        if (!boost) {
+            leftSpeed  /= 2.0;
+            rightSpeed /= 2.0;
+            turn       /= 2.0;
         }
 
         driveSubsystem.setMotorSpeeds(leftSpeed, rightSpeed);

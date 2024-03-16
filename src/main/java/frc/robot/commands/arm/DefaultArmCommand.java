@@ -42,8 +42,14 @@ public class DefaultArmCommand extends BaseArmCommand {
             armSubsystem.pivotRotSetSpeed(-.1);
         }
         else {
-            moveToTargetAngle(ArmConstants.EQUILIBRIUM_ARM_ANGLE);
+            if (armSubsystem.isLoaded()) {
+                moveToTargetAngle(ArmConstants.EQUILIBRIUM_ARM_ANGLE_EMPTY);
+            }
+            else {
+                moveToTargetAngle(ArmConstants.EQUILIBRIUM_ARM_ANGLE_LOADED);
+            }
         }
+
 
 
     }

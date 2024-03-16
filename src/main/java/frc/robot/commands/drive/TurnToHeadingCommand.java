@@ -34,8 +34,6 @@ public class TurnToHeadingCommand extends BaseDriveCommand {
 
         reached = false;
 
-        super.initialize();
-
     }
 
     @Override

@@ -134,6 +134,13 @@ public class ArmSubsystem extends SubsystemBase {
         intakeHigher.set(intakeHigherSpeed);
     }
 
+    public void setAmpSpeed(double speed) {
+        this.intakeLowerSpeed  = 0.2;
+        this.intakeHigherSpeed = Math.abs(speed);
+        intakeLower.set(intakeLowerSpeed);
+        intakeHigher.set(intakeHigherSpeed);
+    }
+
     public void setKeeperSpeed(double speed) {
         this.keeperSpeed = -Math.abs(speed);
         keeper.set(keeperSpeed);

@@ -17,6 +17,9 @@ public class ClimbSubsystem extends SubsystemBase {
     double                      leftSpeed;
     double                      rightSpeed;
 
+    int                         leftEncoder      = 0;
+    int                         rightEncoder     = 0;
+
 
     public final GameController driverController = new GameController(
         OperatorConstants.DRIVER_CONTROLLER_PORT,
@@ -47,5 +50,23 @@ public class ClimbSubsystem extends SubsystemBase {
         this.rightSpeed = rightSpeed;
         rightClimber.set(rightSpeed);
     }
+
+    /*
+     * public int getLeftEncoder() {
+     * this.leftEncoder = leftClimber.getSelectedSensorPosition();
+     * }
+     * 
+     * public int getRightEncoder() {
+     * 
+     * }
+     * 
+     * public double getRightDistance() {
+     * 
+     * }
+     * 
+     * public double getLeftDistance() {
+     * 
+     * }
+     */
 
 }

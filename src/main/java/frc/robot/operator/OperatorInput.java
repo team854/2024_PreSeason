@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.DriveConstants.DriveMode;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.CancelCommand;
+import frc.robot.commands.arm.AmpShootCommand;
 import frc.robot.commands.arm.IntakeCommand;
 import frc.robot.commands.arm.PivotShootCommand;
 import frc.robot.commands.arm.ShootCommand;
@@ -143,19 +144,19 @@ public class OperatorInput extends SubsystemBase {
         return false;
     }
 
-    public boolean isShootShort() {
+    public boolean isShootFront() {
         if (driverController.getRightTriggerAxis() >= 0.5) {
             return true;
         }
         return false;
     }
 
-    public boolean isShoot() {
-        return driverController.getYButton();
+    public boolean isShootBack() {
+        return driverController.getRightBumper();
     }
 
-    public boolean isShootLong() {
-        return driverController.getRightBumper();
+    public boolean isShoot() {
+        return driverController.getYButton();
     }
 
     public boolean isAmpShot() {
@@ -195,11 +196,11 @@ public class OperatorInput extends SubsystemBase {
 
             .onTrue(new IntakeCommand(this, armSubsystem));
 
-        new Trigger(() -> isShootLong())
+        new Trigger(() -> isShootBack())
 
             .onTrue(new PivotShootCommand(1, 111, 5000, armSubsystem));
 
-        new Trigger(() -> isShootShort())
+        new Trigger(() -> isShootFront())
 
             .onTrue(new PivotShootCommand(1, 61, 5000, armSubsystem));
 
@@ -213,9 +214,9 @@ public class OperatorInput extends SubsystemBase {
 
         new Trigger(() -> isAmpShot())
 
-            // 108
+            // 108, 0.25
             .onTrue(
-                new PivotShootCommand(0.27, 110, 5000, armSubsystem)
+                new AmpShootCommand(0.4, 112, 5000, armSubsystem)
                     .deadlineWith(new TimedStraightDriveCommand(10000, -0.1, true, driveSubsystem.getHeading(), driveSubsystem)));
 
         new Trigger(() -> isShoot())

@@ -53,57 +53,52 @@ public final class Constants {
 
         // amp side distance variables
 
-        public static final double AmpSideTimeoutMS            = 4000;
+        public static final double AmpSideTimeoutMS            = 5000;
 
-        public static final double AmpSideDiagStepCM           = 120;
+        public static final double AmpSideDiagStepCM           = 50;
         public static final double AmpSideFirstStraightCM      = 240;
         public static final double AmpSideSecondStraightCM     = 0;
         public static final double AmpSideThirdStraightCM      = 0;
 
         public static final double AmpSideFirstAngle           = 60;
-        public static final double AmpSideSecondAngle          = 90;
-        public static final double AmpSideShootAngle           = 120;
+        public static final double AmpSideSecondAngle          = 0;
+        public static final double AmpSideShootAngle           = 111;
 
-        public static final double AmpSideShootSpeed           = 0.5;
+        public static final double AmpSideShootSpeed           = 1;
         public static final double AmpSideDriveSpeed           = 0.3;
-        public static final double AmpSideIntakeSpeed          = 0.5;
 
         // speaker side variables
 
-        public static final double SpeakerSideTimeoutMS        = 15000;
+        public static final double SpeakerSideTimeoutMS        = 5000;
 
         public static final double SpeakerSideDiagStepCM       = 100;
         public static final double SpeakerSideFirstStraightCM  = 100;
         public static final double SpeakerSideSecondStraightCM = 0;
         public static final double SpeakerSideThirdStraightCM  = 0;
 
-        public static final double SpeakerSideShootAngle       = 110;
+        public static final double SpeakerSideShootAngle       = 111;
         public static final double SpeakerSideSwivelAngle      = 0;
         public static final double SpeakerSideFirstAngle       = 0;
 
-        public static final double SpeakerSideDriveSpeed       = 0.5;
-        public static final double SpeakerSidePivotSpeed       = 0;
+        public static final double SpeakerSideDriveSpeed       = 0.3;
         public static final double SpeakerSideShootSpeed       = 1;
-        public static final double SpeakerSideIntakeSpeed      = 0;
         public static final double SpeakerSideSwivelSpeed      = 0;
 
         // outside side variables
 
-        public static final double OutsideSideTimeoutMS        = 0;
+        public static final double OutsideSideTimeoutMS        = 5000;
 
-        public static final double OutsideSideDiagStepCM       = 0;
-        public static final double OutsideSideFirstStraightCM  = 300;
+        public static final double OutsideSideDiagStepCM       = 300;
+        public static final double OutsideSideFirstStraightCM  = 0;
         public static final double OutsideSideSecondStraightCM = 0;
         public static final double OutsideSideThirdStraightCM  = 0;
 
         public static final double OutsideSideFirstAngle       = 0;
         public static final double OutsideSideSecondAngle      = 0;
-        public static final double OutsideSideShooterAngle     = 0;
+        public static final double OutsideSideShooterAngle     = 111;
 
-        public static final double OutsideSideShooterSpeed     = 0;
-        public static final double OutsideSidePivotSpeed       = 0;
-        public static final double OutsideSideDriveSpeed       = 0.5;
-        public static final double OutsideSideIntakeSpeed      = 0;
+        public static final double OutsideSideShooterSpeed     = 1;
+        public static final double OutsideSideDriveSpeed       = 0.3;
 
     }
 
@@ -157,7 +152,7 @@ public final class Constants {
         public static final double DEFAULT_TURN_SPEED        = 0;
 
         public static final double TURN_TO_HEADING_CLOSE     = 0;
-        public static final double TURN_TO_HEADING_TOLERANCE = 0;
+        public static final double TURN_TO_HEADING_TOLERANCE = 2;
 
     }
 
@@ -186,7 +181,8 @@ public final class Constants {
         public static final double  MIN_ARM_PIVOT_ANGLE                  = -26.5;
         public static final double  MAX_ARM_PIVOT_ANGLE                  = 130.0;
 
-        public static final int     EQUILIBRIUM_ARM_ANGLE                = 68;
+        public static final int     EQUILIBRIUM_ARM_ANGLE_EMPTY          = 68;
+        public static final int     EQUILIBRIUM_ARM_ANGLE_LOADED         = 0;
         public static final int     EQUILIBRIUM_ARM_ANGLE_CLOSE          = 10;
         public static final double  EQUILIBRIUM_ARM_ANGLE_TOLERANCE      = 1.5;
 
