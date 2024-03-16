@@ -1,6 +1,5 @@
 package frc.robot.commands.drive;
 
-import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.LoggingCommand;
 import frc.robot.subsystems.DriveSubsystem;
 
@@ -50,19 +49,25 @@ public class TimedStraightDriveCommand extends LoggingCommand {
     public void execute() {
 
         // executes every 20ms
-        double currentError = driveSubsystem.getHeadingError(targetHeading);
-        double diffError    = currentError - previousError;
-        previousError  = currentError;
+        /*
+         * double currentError = driveSubsystem.getHeadingError(targetHeading);
+         * double diffError = currentError - previousError;
+         * previousError = currentError;
+         * 
+         * pTerm = DriveConstants.HEADING_PID_KP * currentError;
+         * iTerm += DriveConstants.HEADING_PID_KI * currentError;
+         * dTerm += DriveConstants.HEADING_PID_KD * diffError;
+         * 
+         * 
+         * errorSignal = pTerm + iTerm + dTerm;
+         * 
+         * double leftSpeed = Math.min(Math.max(speed - errorSignal, -1.0), 1.0);
+         * double rightSpeed = Math.min(Math.max(speed + errorSignal, -1.0), 1.0);
+         * 
+         */
 
-        pTerm          = DriveConstants.HEADING_PID_KP * currentError;
-        iTerm         += DriveConstants.HEADING_PID_KI * currentError;
-        dTerm         += DriveConstants.HEADING_PID_KD * diffError;
-
-
-        errorSignal    = pTerm + iTerm + dTerm;
-
-        double leftSpeed  = Math.min(Math.max(speed - errorSignal, -1.0), 1.0);
-        double rightSpeed = Math.min(Math.max(speed + errorSignal, -1.0), 1.0);
+        double leftSpeed  = speed;
+        double rightSpeed = speed;
 
         driveSubsystem.setMotorSpeeds(leftSpeed, rightSpeed);
 

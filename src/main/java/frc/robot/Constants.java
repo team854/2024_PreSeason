@@ -70,20 +70,20 @@ public final class Constants {
 
         // speaker side variables
 
-        public static final double SpeakerSideTimeoutMS        = 0;
+        public static final double SpeakerSideTimeoutMS        = 15000;
 
-        public static final double SpeakerSideDiagStepCM       = 0;
-        public static final double SpeakerSideFirstStraightCM  = 0;
+        public static final double SpeakerSideDiagStepCM       = 100;
+        public static final double SpeakerSideFirstStraightCM  = 100;
         public static final double SpeakerSideSecondStraightCM = 0;
         public static final double SpeakerSideThirdStraightCM  = 0;
 
-        public static final double SpeakerSideShootAngle       = 0;
+        public static final double SpeakerSideShootAngle       = 110;
         public static final double SpeakerSideSwivelAngle      = 0;
         public static final double SpeakerSideFirstAngle       = 0;
 
-        public static final double SpeakerSideDriveSpeed       = 0;
+        public static final double SpeakerSideDriveSpeed       = 0.5;
         public static final double SpeakerSidePivotSpeed       = 0;
-        public static final double SpeakerSideShootSpeed       = 0;
+        public static final double SpeakerSideShootSpeed       = 1;
         public static final double SpeakerSideIntakeSpeed      = 0;
         public static final double SpeakerSideSwivelSpeed      = 0;
 
@@ -92,7 +92,7 @@ public final class Constants {
         public static final double OutsideSideTimeoutMS        = 0;
 
         public static final double OutsideSideDiagStepCM       = 0;
-        public static final double OutsideSideFirstStraightCM  = 0;
+        public static final double OutsideSideFirstStraightCM  = 300;
         public static final double OutsideSideSecondStraightCM = 0;
         public static final double OutsideSideThirdStraightCM  = 0;
 
@@ -102,7 +102,7 @@ public final class Constants {
 
         public static final double OutsideSideShooterSpeed     = 0;
         public static final double OutsideSidePivotSpeed       = 0;
-        public static final double OutsideSideDriveSpeed       = 0;
+        public static final double OutsideSideDriveSpeed       = 0.5;
         public static final double OutsideSideIntakeSpeed      = 0;
 
     }
@@ -128,14 +128,15 @@ public final class Constants {
         // public static final double MAX_WHEEL_SPEED_MPS;
 
         // encoder stuff
-        public static final int    ENCODER_COUNTS_PER_REVOLUTION = 1024;
+        public static final int    ENCODER_COUNTS_PER_REVOLUTION = 10;
         public static final double ROBOT_WHEEL_DIAMETER_M        = 6 * 2.54 / 100d;
 
         public static final double CMS_PER_ENCODER_COUNT         =
             // Assumes the encoders are directly mounted on the wheel shafts
             (ROBOT_WHEEL_DIAMETER_M * Math.PI) / ENCODER_COUNTS_PER_REVOLUTION / 100d;
 
-        public static final double ENCODER_COUNTS_PER_CM         = 0;
+        public static final double ENCODER_COUNTS_PER_CM         = ENCODER_COUNTS_PER_REVOLUTION
+            / (ROBOT_WHEEL_DIAMETER_M * Math.PI * 100);
 
         // PID gains
         public static final double HEADING_PID_KP                = 0.02;
@@ -187,7 +188,7 @@ public final class Constants {
 
         public static final int     EQUILIBRIUM_ARM_ANGLE                = 68;
         public static final int     EQUILIBRIUM_ARM_ANGLE_CLOSE          = 10;
-        public static final int     EQUILIBRIUM_ARM_ANGLE_TOLERANCE      = 2;
+        public static final double  EQUILIBRIUM_ARM_ANGLE_TOLERANCE      = 1.5;
 
         public static final double  PIVOT_DEFAULT_SPEED                  = 0.1;
 
@@ -208,7 +209,8 @@ public final class Constants {
             INTAKING
         }
 
-        public static final double PIVOT_TO_ANGLE_PID_KP   = 0.008;
+        // 0.03
+        public static final double PIVOT_TO_ANGLE_PID_KP   = 0.03;
         public static final double PIVOT_TO_ANGLE_PID_KI   = 0;
         public static final double PIVOT_TO_ANGLE_PID_KD   = 0;
 
@@ -242,8 +244,8 @@ public final class Constants {
 
         public static final double  MAXIMUM_DISPLACEMENT          = 0;
         public static final double  LOWERED_DISP_LEVEL            = 0;
-        public static final double  CLIMBER_RAISE_SPEED           = 0.7;
-        public static final double  CLIMBER_LOWER_SPEED           = 0.7;
+        public static final double  CLIMBER_RAISE_SPEED           = 0.5;
+        public static final double  CLIMBER_LOWER_SPEED           = 0.5;
 
         public static enum ClimbStates {
             CLOSE, FAR

@@ -3,7 +3,6 @@ package frc.robot.operator;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.DriveConstants.DriveMode;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.CancelCommand;
@@ -12,6 +11,7 @@ import frc.robot.commands.arm.PivotShootCommand;
 import frc.robot.commands.arm.ShootCommand;
 import frc.robot.commands.climb.LowerBothClimbersCommand;
 import frc.robot.commands.climb.RaiseBothClimbersCommand;
+import frc.robot.commands.drive.TimedStraightDriveCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
@@ -197,11 +197,11 @@ public class OperatorInput extends SubsystemBase {
 
         new Trigger(() -> isShootLong())
 
-            .onTrue(new PivotShootCommand(1, 55, 5000, armSubsystem));
+            .onTrue(new PivotShootCommand(1, 111, 5000, armSubsystem));
 
         new Trigger(() -> isShootShort())
 
-            .onTrue(new PivotShootCommand(1, 62, 5000, armSubsystem));
+            .onTrue(new PivotShootCommand(1, 61, 5000, armSubsystem));
 
         new Trigger(() -> isLowerClimbers())
 
@@ -213,8 +213,10 @@ public class OperatorInput extends SubsystemBase {
 
         new Trigger(() -> isAmpShot())
 
-            .onTrue(new PivotShootCommand(ArmConstants.AmpShootSpeed, ArmConstants.AmpTargetAngle,
-                ArmConstants.AmpTimeoutMS, armSubsystem));
+            // 108
+            .onTrue(
+                new PivotShootCommand(0.27, 110, 5000, armSubsystem)
+                    .deadlineWith(new TimedStraightDriveCommand(10000, -0.1, true, driveSubsystem.getHeading(), driveSubsystem)));
 
         new Trigger(() -> isShoot())
 

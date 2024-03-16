@@ -513,25 +513,8 @@ public class AutonomousCommand extends SequentialCommandGroup {
              * then backs into mobility zone
              */
 
-            startHeading = driveSubsystem.getHeading();
-
-            // moves backwards to make first shot
-
-            addCommands(new MeasuredStraightDriveCommand(AutoConstants.OutsideSideDiagStepCM,
-                AutoConstants.OutsideSideDriveSpeed, true,
-                driveSubsystem));
-
-            // makes first shot
-
-            addCommands(new PivotShootCommand(AutoConstants.OutsideSideShooterSpeed,
-
-                AutoConstants.OutsideSideShooterAngle, AutoConstants.AmpSideTimeoutMS, armSubsystem));
-
-            // turns and leaves starting zone to get mobility points
-
-            addCommands(new TurnToHeadingCommand(AutoConstants.OutsideSideDriveSpeed,
-                startHeading + AutoConstants.OutsideSideFirstAngle, true, AutoConstants.AmpSideTimeoutMS,
-                driveSubsystem));
+            addCommands(
+                new PivotShootCommand(1, 111, 5000, armSubsystem));
 
             addCommands(
                 new MeasuredStraightDriveCommand(AutoConstants.OutsideSideFirstStraightCM,
@@ -930,12 +913,6 @@ public class AutonomousCommand extends SequentialCommandGroup {
              * The robot backs up and makes one shot, then backs up further to get mobility points
              */
 
-            // backs up
-
-            addCommands(
-                new MeasuredStraightDriveCommand(AutoConstants.SpeakerSideFirstStraightCM,
-                    AutoConstants.SpeakerSideDriveSpeed,
-                    true, driveSubsystem));
 
             // first shot
 
@@ -943,13 +920,14 @@ public class AutonomousCommand extends SequentialCommandGroup {
 
                 AutoConstants.SpeakerSideShootAngle, AutoConstants.SpeakerSideTimeoutMS, armSubsystem));
 
-            // leaves starting zone to get mobility points
 
             addCommands(
-                new MeasuredStraightDriveCommand(AutoConstants.SpeakerSideSecondStraightCM,
+                new MeasuredStraightDriveCommand(AutoConstants.SpeakerSideFirstStraightCM,
                     AutoConstants.SpeakerSideDriveSpeed,
-                    true,
-                    driveSubsystem));
+                    true, driveSubsystem));
+
+            break;
+
 
 
         case RED_SPEAKER_TWO_SHOT:

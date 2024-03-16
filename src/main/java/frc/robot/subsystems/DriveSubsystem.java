@@ -87,11 +87,11 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public double getLeftEncoder() {
-        return leftFollowerMotor.getAlternateEncoder(DriveConstants.ENCODER_COUNTS_PER_REVOLUTION).getPosition();
+        return leftFollowerMotor.getEncoder().getPosition();
     }
 
     public double getRightEncoder() {
-        return rightFollowerMotor.getAlternateEncoder(DriveConstants.ENCODER_COUNTS_PER_REVOLUTION).getPosition();
+        return rightFollowerMotor.getEncoder().getPosition();
     }
 
 
