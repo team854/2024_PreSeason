@@ -71,7 +71,7 @@ public final class Constants {
 
         public static final double SpeakerSideTimeoutMS        = 5000;
 
-        public static final double SpeakerSideDiagStepCM       = 100;
+        public static final double SpeakerSideDiagStepCM       = 250;
         public static final double SpeakerSideFirstStraightCM  = 100;
         public static final double SpeakerSideSecondStraightCM = 0;
         public static final double SpeakerSideThirdStraightCM  = 0;
@@ -82,7 +82,6 @@ public final class Constants {
 
         public static final double SpeakerSideDriveSpeed       = 0.3;
         public static final double SpeakerSideShootSpeed       = 1;
-        public static final double SpeakerSideSwivelSpeed      = 0;
 
         // outside side variables
 

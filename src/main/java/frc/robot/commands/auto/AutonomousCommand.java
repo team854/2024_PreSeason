@@ -207,6 +207,32 @@ public class AutonomousCommand extends SequentialCommandGroup {
 
             break;
 
+        case RED_SPEAKER_ONE_SHOT:
+
+            addCommands(
+                new PivotShootCommand(AutoConstants.SpeakerSideShootSpeed, AutoConstants.SpeakerSideShootAngle,
+                    AutoConstants.SpeakerSideTimeoutMS, armSubsystem));
+
+            addCommands(
+                new MeasuredStraightDriveCommand(AutoConstants.SpeakerSideDiagStepCM,
+                    AutoConstants.SpeakerSideDriveSpeed, true,
+                    driveSubsystem));
+
+            break;
+
+        case BLUE_SPEAKER_ONE_SHOT:
+
+            addCommands(
+                new PivotShootCommand(AutoConstants.SpeakerSideShootSpeed, AutoConstants.SpeakerSideShootAngle,
+                    AutoConstants.SpeakerSideTimeoutMS, armSubsystem));
+
+            addCommands(
+                new MeasuredStraightDriveCommand(AutoConstants.SpeakerSideDiagStepCM,
+                    AutoConstants.SpeakerSideDriveSpeed, true,
+                    driveSubsystem));
+
+            break;
+
         case BLUE_AMP_TWO_SHOT:
             // From outside position, makes a speaker and backs up
             // then it turns goes backwards to get a note, goes forward and turns back to make
