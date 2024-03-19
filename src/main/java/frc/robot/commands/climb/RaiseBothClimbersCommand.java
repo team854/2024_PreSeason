@@ -22,8 +22,21 @@ public class RaiseBothClimbersCommand extends BaseClimberCommand {
     // Check here
     @Override
     public void execute() {
-        climbSubsystem.setLeftSpeed(-ClimbConstants.CLIMBER_RAISE_SPEED);
-        climbSubsystem.setRightSpeed(-ClimbConstants.CLIMBER_RAISE_SPEED);
+
+        if (climbSubsystem.isLeftAtLimit()) {
+            climbSubsystem.setLeftSpeed(0);
+        }
+        else {
+            climbSubsystem.setLeftSpeed(-ClimbConstants.CLIMBER_LOWER_SPEED);
+        }
+
+        if (climbSubsystem.isRightAtLimit()) {
+            climbSubsystem.setRightSpeed(0);
+        }
+        else {
+            climbSubsystem.setRightSpeed(-ClimbConstants.CLIMBER_LOWER_SPEED);
+        }
+
     }
 
     @Override

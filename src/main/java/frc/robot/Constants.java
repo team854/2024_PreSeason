@@ -56,11 +56,11 @@ public final class Constants {
         public static final double AmpSideTimeoutMS            = 5000;
 
         public static final double AmpSideDiagStepCM           = 50;
-        public static final double AmpSideFirstStraightCM      = 240;
+        public static final double AmpSideFirstStraightCM      = 120;
         public static final double AmpSideSecondStraightCM     = 0;
         public static final double AmpSideThirdStraightCM      = 0;
 
-        public static final double AmpSideFirstAngle           = 60;
+        public static final double AmpSideFirstAngle           = 50;
         public static final double AmpSideSecondAngle          = 0;
         public static final double AmpSideShootAngle           = 111;
 
@@ -148,7 +148,7 @@ public final class Constants {
         }
 
         public static final double DEFAULT_DRIVE_SPEED       = 0;
-        public static final double DEFAULT_TURN_SPEED        = 0;
+        public static final double DEFAULT_TURN_SPEED        = 0.3;
 
         public static final double TURN_TO_HEADING_CLOSE     = 0;
         public static final double TURN_TO_HEADING_TOLERANCE = 2;
@@ -246,14 +246,16 @@ public final class Constants {
             CLOSE, FAR
         }
 
-        public static final double CLIMB_DISP_CLOSE = 0;
+        public static final double CLIMB_DISP_CLOSE      = 0;
 
-        public static final double CLIMB_PID_KP     = 0;
-        public static final double CLIMB_PID_KI     = 0;
-        public static final double CLIMB_PID_KD     = 0;
+        public static final double CLIMB_PID_KP          = 0;
+        public static final double CLIMB_PID_KI          = 0;
+        public static final double CLIMB_PID_KD          = 0;
 
-        public static final double DISP_TOLERANCE   = 0;
+        public static final double DISP_TOLERANCE        = 0;
 
+        public static final int    SAFETY_LEFT_PORT_DIO  = 1;
+        public static final int    SAFETY_RIGHT_PORT_DIO = 2;
 
 
     }

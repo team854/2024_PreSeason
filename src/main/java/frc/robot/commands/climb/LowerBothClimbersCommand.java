@@ -22,6 +22,7 @@ public class LowerBothClimbersCommand extends BaseClimberCommand {
     // Check here
     @Override
     public void execute() {
+
         climbSubsystem.setLeftSpeed(ClimbConstants.CLIMBER_LOWER_SPEED);
         climbSubsystem.setRightSpeed(ClimbConstants.CLIMBER_LOWER_SPEED);
     }

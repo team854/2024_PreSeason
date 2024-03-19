@@ -101,7 +101,7 @@ public abstract class BaseDriveCommand extends LoggingCommand {
 
             Math.max(Math.min(errorSignal, 1), -1);
 
-            driveSubsystem.setMotorSpeeds(errorSignal, errorSignal);
+            driveSubsystem.setMotorSpeeds(-errorSignal, errorSignal);
 
             break;
         }

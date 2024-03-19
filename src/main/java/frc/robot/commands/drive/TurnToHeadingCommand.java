@@ -51,8 +51,8 @@ public class TurnToHeadingCommand extends BaseDriveCommand {
             return true;
         }
 
-        if (isTimeoutExceeded(timeoutTimeMS)) {
-            setFinishReason("timeout");
+        if (isTimeoutExceeded(timeoutTimeMS / 1000d)) {
+            setFinishReason("timeout of " + timeoutTimeMS / 1000d + " seconds");
             return true;
         }
 

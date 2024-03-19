@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.motorcontrol.VictorSP;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -20,6 +21,9 @@ public class ClimbSubsystem extends SubsystemBase {
     int                         leftEncoder      = 0;
     int                         rightEncoder     = 0;
 
+    DigitalInput                safetyLeft       = new DigitalInput(ClimbConstants.SAFETY_LEFT_PORT_DIO);
+    DigitalInput                safetyRight      = new DigitalInput(ClimbConstants.SAFETY_RIGHT_PORT_DIO);
+
 
     public final GameController driverController = new GameController(
         OperatorConstants.DRIVER_CONTROLLER_PORT,
@@ -39,34 +43,34 @@ public class ClimbSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Left speed", this.leftSpeed);
         SmartDashboard.putNumber("Right speed", this.rightSpeed);
 
+        SmartDashboard.putBoolean("Left is at limit", isLeftAtLimit());
+        SmartDashboard.putBoolean("Right is at limit", isRightAtLimit());
+
     }
 
     public void setLeftSpeed(double leftSpeed) {
         this.leftSpeed = leftSpeed;
-        leftClimber.set(leftSpeed);
+        if (isLeftAtLimit()) {
+            this.leftSpeed = 0;
+        }
+        leftClimber.set(this.leftSpeed);
     }
 
     public void setRightSpeed(double rightSpeed) {
         this.rightSpeed = rightSpeed;
-        rightClimber.set(rightSpeed);
+        if (isRightAtLimit()) {
+            this.rightSpeed = 0;
+        }
+        rightClimber.set(this.rightSpeed);
     }
 
-    /*
-     * public int getLeftEncoder() {
-     * this.leftEncoder = leftClimber.getSelectedSensorPosition();
-     * }
-     * 
-     * public int getRightEncoder() {
-     * 
-     * }
-     * 
-     * public double getRightDistance() {
-     * 
-     * }
-     * 
-     * public double getLeftDistance() {
-     * 
-     * }
-     */
+
+    public boolean isLeftAtLimit() {
+        return !safetyLeft.get();
+    }
+
+    public boolean isRightAtLimit() {
+        return !safetyRight.get();
+    }
 
 }

@@ -66,8 +66,10 @@ public class AutonomousCommand extends SequentialCommandGroup {
             startHeading = driveSubsystem.getHeading();
 
             addCommands(new TurnToHeadingCommand(AutoConstants.AmpSideDriveSpeed,
-                startHeading + AutoConstants.AmpSideFirstAngle, true, AutoConstants.AmpSideTimeoutMS,
+                startHeading + 60, true, AutoConstants.AmpSideTimeoutMS,
                 driveSubsystem));
+
+            break;
 
         case DRIVE_FORWARD_PID_TIMED:
             // Drive forward for 30 seconds
@@ -135,27 +137,27 @@ public class AutonomousCommand extends SequentialCommandGroup {
 
             startHeading = driveSubsystem.getHeading();
 
-            // makes first shot
+            // first shot
 
             addCommands(new PivotShootCommand(AutoConstants.AmpSideShootSpeed,
                 AutoConstants.AmpSideShootAngle, AutoConstants.AmpSideTimeoutMS, armSubsystem));
 
-            // moves backwards
+            // backing up
 
             addCommands(new MeasuredStraightDriveCommand(AutoConstants.AmpSideDiagStepCM,
                 AutoConstants.AmpSideDriveSpeed, true,
                 driveSubsystem));
 
-            // turns and leaves starting zone to get mobility points
+            // turns and drives towards first note while intaking
 
             addCommands(new TurnToHeadingCommand(AutoConstants.AmpSideDriveSpeed,
                 startHeading - AutoConstants.AmpSideFirstAngle, true, AutoConstants.AmpSideTimeoutMS,
                 driveSubsystem));
 
-            // addCommands(
-            // new MeasuredStraightDriveCommand(AutoConstants.AmpSideFirstStraightCM,
-            // AutoConstants.AmpSideDriveSpeed, true,
-            // driveSubsystem));
+            addCommands(new IntakeCommand(operatorInput, armSubsystem)
+                .alongWith(new MeasuredStraightDriveCommand(AutoConstants.AmpSideFirstStraightCM,
+                    -AutoConstants.AmpSideDriveSpeed,
+                    true, driveSubsystem)));
 
             break;
 
@@ -180,28 +182,12 @@ public class AutonomousCommand extends SequentialCommandGroup {
             // backs up to make a shot,
             // then backs into mobility zone
 
-            startHeading = driveSubsystem.getHeading();
-
-            // moves backwards to make first shot
-
-            addCommands(new MeasuredStraightDriveCommand(AutoConstants.OutsideSideDiagStepCM,
-                AutoConstants.OutsideSideDriveSpeed, true,
-                driveSubsystem));
-
-            // makes first shot
-
-            addCommands(new PivotShootCommand(AutoConstants.OutsideSideShooterSpeed,
-
-                AutoConstants.OutsideSideShooterAngle, AutoConstants.AmpSideTimeoutMS, armSubsystem));
-
-            // turns and leaves starting zone to get mobility points
-
-            addCommands(new TurnToHeadingCommand(AutoConstants.OutsideSideDriveSpeed,
-                startHeading + AutoConstants.OutsideSideFirstAngle, true, AutoConstants.AmpSideTimeoutMS,
-                driveSubsystem));
+            addCommands(
+                new PivotShootCommand(AutoConstants.OutsideSideShooterSpeed, AutoConstants.OutsideSideShooterAngle,
+                    AutoConstants.OutsideSideTimeoutMS, armSubsystem));
 
             addCommands(
-                new MeasuredStraightDriveCommand(AutoConstants.OutsideSideFirstStraightCM,
+                new MeasuredStraightDriveCommand(AutoConstants.OutsideSideDiagStepCM,
                     AutoConstants.OutsideSideDriveSpeed, true,
                     driveSubsystem));
 
@@ -258,14 +244,14 @@ public class AutonomousCommand extends SequentialCommandGroup {
                 driveSubsystem));
 
             addCommands(new IntakeCommand(operatorInput, armSubsystem)
-                .alongWith(new MeasuredStraightDriveCommand(AutoConstants.AmpSideSecondStraightCM,
-                    AutoConstants.AmpSideDriveSpeed,
+                .alongWith(new MeasuredStraightDriveCommand(AutoConstants.AmpSideFirstStraightCM,
+                    -AutoConstants.AmpSideDriveSpeed,
                     true, driveSubsystem)));
 
             // goes back to shooting place
 
-            addCommands(new MeasuredStraightDriveCommand(AutoConstants.AmpSideSecondStraightCM,
-                -AutoConstants.AmpSideDriveSpeed,
+            addCommands(new MeasuredStraightDriveCommand(AutoConstants.AmpSideFirstStraightCM,
+                AutoConstants.AmpSideDriveSpeed,
                 true, driveSubsystem));
 
             addCommands(new TurnToHeadingCommand(AutoConstants.AmpSideDriveSpeed,
@@ -287,13 +273,9 @@ public class AutonomousCommand extends SequentialCommandGroup {
                 startHeading + AutoConstants.AmpSideFirstAngle, true, AutoConstants.AmpSideTimeoutMS,
                 driveSubsystem));
 
-            addCommands(new TurnToHeadingCommand(AutoConstants.AmpSideDriveSpeed,
-                startHeading + AutoConstants.AmpSideFirstAngle, true, AutoConstants.AmpSideTimeoutMS,
-                driveSubsystem));
-
             addCommands(
                 new MeasuredStraightDriveCommand(AutoConstants.AmpSideFirstStraightCM,
-                    AutoConstants.AmpSideDriveSpeed, true,
+                    -AutoConstants.AmpSideDriveSpeed, true,
                     driveSubsystem));
 
             break;
@@ -305,50 +287,51 @@ public class AutonomousCommand extends SequentialCommandGroup {
 
             startHeading = driveSubsystem.getHeading();
 
-            // backing up for first shot
+            // first shot
+
+            addCommands(new PivotShootCommand(AutoConstants.AmpSideShootSpeed,
+                AutoConstants.AmpSideShootAngle, AutoConstants.AmpSideTimeoutMS, armSubsystem));
+
+            // backing up
 
             addCommands(new MeasuredStraightDriveCommand(AutoConstants.AmpSideDiagStepCM,
                 AutoConstants.AmpSideDriveSpeed, true,
                 driveSubsystem));
 
-            // first shot
-
-            addCommands(new PivotShootCommand(AutoConstants.AmpSideShootSpeed,
-
-                AutoConstants.AmpSideShootAngle, AutoConstants.AmpSideTimeoutMS, armSubsystem));
-
             // turns and drives towards first note while intaking
 
             addCommands(new TurnToHeadingCommand(AutoConstants.AmpSideDriveSpeed,
-                startHeading + AutoConstants.AmpSideFirstAngle, true, AutoConstants.AmpSideTimeoutMS,
+                startHeading - AutoConstants.AmpSideFirstAngle, true, AutoConstants.AmpSideTimeoutMS,
                 driveSubsystem));
 
-            addCommands(new IntakeCommand(operatorInput, armSubsystem));
-
-            addCommands(new MeasuredStraightDriveCommand(AutoConstants.AmpSideSecondStraightCM,
-                AutoConstants.AmpSideDriveSpeed,
-                true, driveSubsystem));
+            addCommands(new IntakeCommand(operatorInput, armSubsystem)
+                .alongWith(new MeasuredStraightDriveCommand(AutoConstants.AmpSideFirstStraightCM,
+                    -AutoConstants.AmpSideDriveSpeed,
+                    true, driveSubsystem)));
 
             // goes back to shooting place
 
-            addCommands(new MeasuredStraightDriveCommand(AutoConstants.AmpSideSecondStraightCM,
-                -AutoConstants.AmpSideDriveSpeed,
+            addCommands(new MeasuredStraightDriveCommand(AutoConstants.AmpSideFirstStraightCM,
+                AutoConstants.AmpSideDriveSpeed,
                 true, driveSubsystem));
+
+            addCommands(new TurnToHeadingCommand(AutoConstants.AmpSideDriveSpeed,
+                startHeading, true, AutoConstants.AmpSideTimeoutMS,
+                driveSubsystem));
+
+            addCommands(new MeasuredStraightDriveCommand(AutoConstants.AmpSideDiagStepCM,
+                -AutoConstants.AmpSideDriveSpeed, true,
+                driveSubsystem));
 
             // second shot
 
-            addCommands(new TurnToHeadingCommand(AutoConstants.AmpSideDriveSpeed,
-                startHeading + AutoConstants.AmpSideFirstAngle, true, AutoConstants.AmpSideTimeoutMS,
-                driveSubsystem));
-
             addCommands(new PivotShootCommand(AutoConstants.AmpSideShootSpeed,
-
                 AutoConstants.AmpSideShootAngle, AutoConstants.AmpSideTimeoutMS, armSubsystem));
 
             // turns and leaves starting zone to get mobility points
 
             addCommands(new TurnToHeadingCommand(AutoConstants.AmpSideDriveSpeed,
-                startHeading + AutoConstants.AmpSideFirstAngle, true, AutoConstants.AmpSideTimeoutMS,
+                startHeading - AutoConstants.AmpSideFirstAngle, true, AutoConstants.AmpSideTimeoutMS,
                 driveSubsystem));
 
             addCommands(
@@ -357,7 +340,6 @@ public class AutonomousCommand extends SequentialCommandGroup {
                     driveSubsystem));
 
             break;
-
         /*
          * case BLUE_SPEAKER_TWO_SHOT:
          * 
