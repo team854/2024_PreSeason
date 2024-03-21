@@ -92,18 +92,17 @@ public class RobotContainer {
         autoPatternChooser.addOption("Red Amp side 1 shot", AutoPattern.RED_AMP_ONE_SHOT);
         autoPatternChooser.addOption("Red Amp side 2 shot", AutoPattern.RED_AMP_TWO_SHOT);
 
+        autoPatternChooser.addOption("Red Speaker side 1 shot", AutoPattern.RED_SPEAKER_ONE_SHOT);
+        autoPatternChooser.addOption("Red Speaker side 2 shot", AutoPattern.RED_SPEAKER_TWO_SHOT);
+        autoPatternChooser.addOption("Blue Speaker side 1 shot", AutoPattern.BLUE_SPEAKER_ONE_SHOT);
+        autoPatternChooser.addOption("Blue and red Speaker side 2 shot", AutoPattern.BLUE_RED_SPEAKER_TWO_SHOT);
+
         // autoPatternChooser.addOption("Red Outside side 2 shot",
         // AutoPattern.RED_OUTSIDE_TWO_SHOT);
         // autoPatternChooser.addOption("Red Speaker side 3 shot",
         // AutoPattern.RED_SPEAKER_THREE_SHOT);
-        // autoPatternChooser.addOption("Red Speaker side 2 shot",
-        // AutoPattern.RED_SPEAKER_TWO_SHOT);
-        autoPatternChooser.addOption("Red Speaker side 1 shot", AutoPattern.RED_SPEAKER_ONE_SHOT);
         // autoPatternChooser.addOption("Blue Speaker side 3 shot",
         // AutoPattern.BLUE_SPEAKER_THREE_SHOT);
-        // autoPatternChooser.addOption("Blue Speaker side 2 shot",
-        // AutoPattern.BLUE_SPEAKER_TWO_SHOT);
-        autoPatternChooser.addOption("Blue Speaker side 1 shot", AutoPattern.BLUE_SPEAKER_ONE_SHOT);
 
     }
 

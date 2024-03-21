@@ -57,7 +57,7 @@ public class OperatorInput extends SubsystemBase {
     // drive methods
 
     public boolean getBoost() {
-        return driverController.getXButton();
+        return driverController.getLeftBumper();
     }
 
     public double getLeftY() {
@@ -160,7 +160,7 @@ public class OperatorInput extends SubsystemBase {
     }
 
     public boolean isAmpShot() {
-        return driverController.getLeftBumper();
+        return driverController.getXButton();
     }
 
     public boolean isPivotUp() {
@@ -194,15 +194,15 @@ public class OperatorInput extends SubsystemBase {
 
         new Trigger(() -> isIntake())
 
-            .onTrue(new IntakeCommand(this, armSubsystem));
+            .onTrue(new IntakeCommand(this, armSubsystem, false));
 
         new Trigger(() -> isShootBack())
 
-            .onTrue(new PivotShootCommand(1, 111, 5000, armSubsystem));
+            .onTrue(new PivotShootCommand(1, 113, 5000, armSubsystem));
 
         new Trigger(() -> isShootFront())
 
-            .onTrue(new PivotShootCommand(1, 61, 5000, armSubsystem));
+            .onTrue(new PivotShootCommand(1, 63, 5000, armSubsystem));
 
         new Trigger(() -> isLowerClimbers())
 

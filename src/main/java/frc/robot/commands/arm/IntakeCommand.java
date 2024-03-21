@@ -11,13 +11,17 @@ public class IntakeCommand extends BaseArmCommand {
     long                start;
     long                finish;
 
+    boolean             isAuto;
+
+
     // Speeds
 
-    public IntakeCommand(OperatorInput operatorInput, ArmSubsystem armSubsystem) {
+    public IntakeCommand(OperatorInput operatorInput, ArmSubsystem armSubsystem, boolean isAuto) {
 
         super(armSubsystem);
 
         this.operatorInput = operatorInput;
+        this.isAuto        = isAuto;
 
     }
 
@@ -45,31 +49,41 @@ public class IntakeCommand extends BaseArmCommand {
     @Override
     public boolean isFinished() {
 
-        if (!operatorInput.isIntake() && isTimeoutExceeded(0.25)) {
-            setFinishReason("let go of intake button");
-            return true;
-        }
-
-        if (armSubsystem.isLoaded()) {
-            finish = System.currentTimeMillis();
-
-            if ((finish - start > 500) && (start != 0)) {
-                setFinishReason("sensor intook");
+        if (isAuto) {
+            if (isTimeoutExceeded(3) || armSubsystem.isLoaded()) {
+                setFinishReason("timeout exceeded");
                 return true;
             }
-            if (start == 0) {
-
-                start = System.currentTimeMillis();
+        }
+        else {
+            if (!operatorInput.isIntake() && isTimeoutExceeded(0.25)) {
+                setFinishReason("let go of intake button");
+                return true;
             }
 
+            else {
+                if (armSubsystem.isLoaded()) {
+                    finish = System.currentTimeMillis();
 
+                    if ((finish - start > 500) && (start != 0)) {
+                        setFinishReason("sensor intook");
+                        return true;
+                    }
+                    if (start == 0) {
+
+                        start = System.currentTimeMillis();
+                    }
+
+
+                }
+            }
         }
+
 
         return false;
 
-
-
     }
+
 
     @Override
     public void end(boolean interrupted) {

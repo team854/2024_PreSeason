@@ -11,19 +11,17 @@ public class PivotToAngleCommand extends BaseArmCommand {
     private double  timeoutTimeMS;
 
     // Logging skibidi
-    private double  speed;
     private boolean brakeAtEnd;
     private String  reason;
     private double  targetAngle;
 
 
 
-    public PivotToAngleCommand(double speed, double targetAngle, double timeoutTimeMS,
+    public PivotToAngleCommand(double targetAngle, double timeoutTimeMS,
         ArmSubsystem armSubsystem) {
 
         super(armSubsystem);
 
-        this.speed         = speed;
         this.targetAngle   = targetAngle;
         this.timeoutTimeMS = timeoutTimeMS;
     }
@@ -31,7 +29,7 @@ public class PivotToAngleCommand extends BaseArmCommand {
     @Override
     public void initialize() {
 
-        String commandParms = "speed: " + speed + ", brake: " + brakeAtEnd + ", target heading: " + targetAngle
+        String commandParms = "brake: " + brakeAtEnd + ", target heading: " + targetAngle
             + ", timeout time (ms): " + timeoutTimeMS;
         logCommandStart(commandParms);
 
