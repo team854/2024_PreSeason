@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.AutoConstants.AutoPattern;
 import frc.robot.Constants.DriveConstants.DriveMode;
+import frc.robot.Constants.DriveConstants.RookieSettings;
 import frc.robot.commands.arm.DefaultArmCommand;
 import frc.robot.commands.auto.AutonomousCommand;
 import frc.robot.commands.drive.DefaultDriveCommand;
@@ -31,17 +32,18 @@ import frc.robot.subsystems.LightsSubsystem;
 public class RobotContainer {
 
     // The operator input class
-    private final OperatorInput                operatorInput      = new OperatorInput();
+    private final OperatorInput                   operatorInput      = new OperatorInput();
 
     // The robot's subsystems and commands are defined here...
-    private final LightsSubsystem              lightsSubsystem    = new LightsSubsystem();
-    private final DriveSubsystem               driveSubsystem     = new DriveSubsystem();
-    private final ArmSubsystem                 armSubsystem       = new ArmSubsystem();
-    private final ClimbSubsystem               climbSubsystem     = new ClimbSubsystem();
+    private final LightsSubsystem                 lightsSubsystem    = new LightsSubsystem();
+    private final DriveSubsystem                  driveSubsystem     = new DriveSubsystem();
+    private final ArmSubsystem                    armSubsystem       = new ArmSubsystem();
+    private final ClimbSubsystem                  climbSubsystem     = new ClimbSubsystem();
 
     // All dashboard choosers are defined here...
-    private final SendableChooser<DriveMode>   driveModeChooser   = new SendableChooser<>();
-    private final SendableChooser<AutoPattern> autoPatternChooser = new SendableChooser<>();
+    private final SendableChooser<DriveMode>      driveModeChooser   = new SendableChooser<>();
+    private final SendableChooser<AutoPattern>    autoPatternChooser = new SendableChooser<>();
+    private final SendableChooser<RookieSettings> speedChooser       = new SendableChooser<>();
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -53,7 +55,7 @@ public class RobotContainer {
 
         // Initialize all Subsystem default commands.
         driveSubsystem.setDefaultCommand(
-            new DefaultDriveCommand(operatorInput, driveModeChooser, driveSubsystem, lightsSubsystem));
+            new DefaultDriveCommand(operatorInput, speedChooser, driveModeChooser, driveSubsystem, lightsSubsystem));
 
         armSubsystem.setDefaultCommand(
             new DefaultArmCommand(operatorInput, armSubsystem));
@@ -68,6 +70,8 @@ public class RobotContainer {
         // Add a trigger to flash the lights when the robot goes from disabled to enabled
         new Trigger(() -> RobotController.isSysActive())
             .onTrue(new InstantCommand(() -> lightsSubsystem.setEnabled()));
+
+
     }
 
     private void initDashboardChoosers() {
@@ -92,18 +96,21 @@ public class RobotContainer {
         autoPatternChooser.addOption("Red Amp side 1 shot", AutoPattern.RED_AMP_ONE_SHOT);
         autoPatternChooser.addOption("Red Amp side 2 shot", AutoPattern.RED_AMP_TWO_SHOT);
 
+        autoPatternChooser.addOption("Red Speaker side 1 shot", AutoPattern.RED_SPEAKER_ONE_SHOT);
+        autoPatternChooser.addOption("Red Speaker side 2 shot", AutoPattern.RED_SPEAKER_TWO_SHOT);
+        autoPatternChooser.addOption("Blue Speaker side 1 shot", AutoPattern.BLUE_SPEAKER_ONE_SHOT);
+        autoPatternChooser.addOption("Blue Speaker side 2 shot", AutoPattern.BLUE_SPEAKER_TWO_SHOT);
+
         // autoPatternChooser.addOption("Red Outside side 2 shot",
         // AutoPattern.RED_OUTSIDE_TWO_SHOT);
         // autoPatternChooser.addOption("Red Speaker side 3 shot",
         // AutoPattern.RED_SPEAKER_THREE_SHOT);
-        // autoPatternChooser.addOption("Red Speaker side 2 shot",
-        // AutoPattern.RED_SPEAKER_TWO_SHOT);
-        autoPatternChooser.addOption("Red Speaker side 1 shot", AutoPattern.RED_SPEAKER_ONE_SHOT);
         // autoPatternChooser.addOption("Blue Speaker side 3 shot",
         // AutoPattern.BLUE_SPEAKER_THREE_SHOT);
-        // autoPatternChooser.addOption("Blue Speaker side 2 shot",
-        // AutoPattern.BLUE_SPEAKER_TWO_SHOT);
-        autoPatternChooser.addOption("Blue Speaker side 1 shot", AutoPattern.BLUE_SPEAKER_ONE_SHOT);
+
+        speedChooser.setDefaultOption("Rookie driver", RookieSettings.ROOKIE);
+        SmartDashboard.putData("Rookie Mode", speedChooser);
+        speedChooser.addOption("Normal driver", RookieSettings.NORMAL);
 
     }
 

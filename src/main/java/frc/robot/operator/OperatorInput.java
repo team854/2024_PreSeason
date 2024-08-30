@@ -8,6 +8,8 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.CancelCommand;
 import frc.robot.commands.arm.AmpShootCommand;
 import frc.robot.commands.arm.IntakeCommand;
+import frc.robot.commands.arm.LongShotCommand;
+import frc.robot.commands.arm.ManualShootCommand;
 import frc.robot.commands.arm.PivotShootCommand;
 import frc.robot.commands.arm.ShootCommand;
 import frc.robot.commands.climb.LowerBothClimbersCommand;
@@ -57,7 +59,7 @@ public class OperatorInput extends SubsystemBase {
     // drive methods
 
     public boolean getBoost() {
-        return driverController.getXButton();
+        return driverController.getLeftBumper();
     }
 
     public double getLeftY() {
@@ -160,7 +162,7 @@ public class OperatorInput extends SubsystemBase {
     }
 
     public boolean isAmpShot() {
-        return driverController.getLeftBumper();
+        return driverController.getXButton();
     }
 
     public boolean isPivotUp() {
@@ -181,6 +183,11 @@ public class OperatorInput extends SubsystemBase {
         return driverController.getBButton();
     }
 
+    public boolean isLongShot() {
+        return driverController.getPOV() == 90; // Right D-Pad
+    }
+
+
     /**
      * Use this method to define your robotFunction -> command mappings.
      *
@@ -194,15 +201,15 @@ public class OperatorInput extends SubsystemBase {
 
         new Trigger(() -> isIntake())
 
-            .onTrue(new IntakeCommand(this, armSubsystem));
+            .onTrue(new IntakeCommand(this, armSubsystem, false));
 
         new Trigger(() -> isShootBack())
 
-            .onTrue(new PivotShootCommand(1, 111, 5000, armSubsystem));
+            .onTrue(new PivotShootCommand(1, 115, 5000, armSubsystem));
 
         new Trigger(() -> isShootFront())
 
-            .onTrue(new PivotShootCommand(1, 61, 5000, armSubsystem));
+            .onTrue(new PivotShootCommand(1, 65, 5000, armSubsystem));
 
         new Trigger(() -> isLowerClimbers())
 
@@ -222,6 +229,17 @@ public class OperatorInput extends SubsystemBase {
         new Trigger(() -> isShoot())
 
             .onTrue(new ShootCommand(1, armSubsystem));
+
+        new Trigger(() -> isPivotUp())
+
+            .onTrue(new ManualShootCommand(1, 3000, armSubsystem, this));
+
+        new Trigger(() -> isPivotDown())
+
+            .onTrue(new ManualShootCommand(1, 3000, armSubsystem, this));
+
+        new Trigger(() -> isLongShot())
+            .onTrue(new LongShotCommand(1, 40, armSubsystem));
 
 
 

@@ -106,7 +106,7 @@ public abstract class BaseDriveCommand extends LoggingCommand {
             break;
         }
 
-        if (error <= DriveConstants.TURN_TO_HEADING_TOLERANCE) {
+        if (Math.abs(error) <= DriveConstants.TURN_TO_HEADING_TOLERANCE) {
             return true;
         }
         return false;

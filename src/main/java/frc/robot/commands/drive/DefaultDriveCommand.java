@@ -1,7 +1,9 @@
 package frc.robot.commands.drive;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants.DriveMode;
+import frc.robot.Constants.DriveConstants.RookieSettings;
 import frc.robot.commands.LoggingCommand;
 import frc.robot.operator.OperatorInput;
 import frc.robot.subsystems.DriveSubsystem;
@@ -9,22 +11,25 @@ import frc.robot.subsystems.LightsSubsystem;
 
 public class DefaultDriveCommand extends LoggingCommand {
 
-    private final DriveSubsystem             driveSubsystem;
-    private final OperatorInput              operatorInput;
-    private final LightsSubsystem            lightsSubsystem;
+    private final DriveSubsystem                  driveSubsystem;
+    private final OperatorInput                   operatorInput;
+    private final LightsSubsystem                 lightsSubsystem;
 
-    private final SendableChooser<DriveMode> driveModeChooser;
+    private final SendableChooser<DriveMode>      driveModeChooser;
+    private final SendableChooser<RookieSettings> speedChooser;
 
     /**
      * Creates a new ExampleCommand.
      *
      * @param driveSubsystem The subsystem used by this command.
      */
-    public DefaultDriveCommand(OperatorInput operatorInput, SendableChooser<DriveMode> driveModeChooser,
+    public DefaultDriveCommand(OperatorInput operatorInput, SendableChooser<RookieSettings> speedChooser,
+        SendableChooser<DriveMode> driveModeChooser,
         DriveSubsystem driveSubsystem, LightsSubsystem lightsSubsystem) {
 
         this.operatorInput    = operatorInput;
         this.driveModeChooser = driveModeChooser;
+        this.speedChooser     = speedChooser;
         this.driveSubsystem   = driveSubsystem;
         this.lightsSubsystem  = lightsSubsystem;
 
@@ -42,9 +47,10 @@ public class DefaultDriveCommand extends LoggingCommand {
     @Override
     public void execute() {
 
-        DriveMode driveMode = driveModeChooser.getSelected();
+        DriveMode      driveMode = driveModeChooser.getSelected();
+        RookieSettings speedMode = speedChooser.getSelected();
 
-        boolean   boost     = operatorInput.getBoost();
+        boolean        boost     = operatorInput.getBoost();
 
         switch (driveMode) {
 
@@ -53,7 +59,17 @@ public class DefaultDriveCommand extends LoggingCommand {
         case DUAL_STICK_ARCADE:
 
             double speed = operatorInput.getSpeed(driveMode);
-            double turn = operatorInput.getTurn(driveMode) / 2;
+            double turn = operatorInput.getTurn(driveMode);
+
+            switch (speedMode) {
+            case ROOKIE:
+            default:
+                speed *= Constants.DriveConstants.MAX_ROOKIE_SPEED;
+                turn *= 2 * (Constants.DriveConstants.MAX_ROOKIE_SPEED);
+            case NORMAL:
+                speed *= Constants.DriveConstants.MAX_NORMAL_SPEED;
+                turn *= (Constants.DriveConstants.MAX_NORMAL_SPEED) * 0.5;
+            }
 
             setMotorSpeedsArcade(speed, turn, boost);
             lightsSubsystem.ledStick(boost, driveMode);
@@ -64,6 +80,16 @@ public class DefaultDriveCommand extends LoggingCommand {
 
             double leftSpeed = operatorInput.getLeftSpeed();
             double rightSpeed = operatorInput.getRightSpeed();
+
+            switch (speedMode) {
+            case ROOKIE:
+            default:
+                leftSpeed *= Constants.DriveConstants.MAX_ROOKIE_SPEED;
+                rightSpeed *= Constants.DriveConstants.MAX_ROOKIE_SPEED;
+            case NORMAL:
+                leftSpeed *= Constants.DriveConstants.MAX_NORMAL_SPEED;
+                rightSpeed *= Constants.DriveConstants.MAX_NORMAL_SPEED;
+            }
             if (boost) {
                 lightsSubsystem.ledStick(boost, driveMode);
                 driveSubsystem.setMotorSpeeds(leftSpeed, rightSpeed);

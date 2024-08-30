@@ -48,7 +48,6 @@ public final class Constants {
             RED_OUTSIDE_ONE_SHOT,
             RED_OUTSIDE_TWO_SHOT,
             RED_OUTSIDE_THREE_SHOT,
-
         }
 
         // amp side distance variables
@@ -60,7 +59,7 @@ public final class Constants {
         public static final double AmpSideSecondStraightCM     = 0;
         public static final double AmpSideThirdStraightCM      = 0;
 
-        public static final double AmpSideFirstAngle           = 50;
+        public static final double AmpSideFirstAngle           = 60;
         public static final double AmpSideSecondAngle          = 0;
         public static final double AmpSideShootAngle           = 111;
 
@@ -71,7 +70,7 @@ public final class Constants {
 
         public static final double SpeakerSideTimeoutMS        = 5000;
 
-        public static final double SpeakerSideDiagStepCM       = 250;
+        public static final double SpeakerSideDiagStepCM       = 120;
         public static final double SpeakerSideFirstStraightCM  = 100;
         public static final double SpeakerSideSecondStraightCM = 0;
         public static final double SpeakerSideThirdStraightCM  = 0;
@@ -107,48 +106,54 @@ public final class Constants {
             TANK, SINGLE_STICK_ARCADE, DUAL_STICK_ARCADE;
         }
 
+        public static enum RookieSettings {
+            NORMAL, ROOKIE
+        }
+
         // motor stuff
-        public static final int     LEFT_REAR_PORT         = 21;
-        public static final int     LEFT_FRONT_PORT        = 22;
-        public static final int     RIGHT_REAR_PORT        = 23;
-        public static final int     RIGHT_FRONT_PORT       = 24;
+        public static final int     LEFT_REAR_PORT                = 21;
+        public static final int     LEFT_FRONT_PORT               = 22;
+        public static final int     RIGHT_REAR_PORT               = 23;
+        public static final int     RIGHT_FRONT_PORT              = 24;
 
-        public static final boolean LEFT_MOTOR_REVERSED    = false;
-        public static final boolean RIGHT_MOTOR_REVERSED   = true;
+        public static final boolean LEFT_MOTOR_REVERSED           = false;
+        public static final boolean RIGHT_MOTOR_REVERSED          = true;
 
-        public static final boolean LEFT_ENCODER_REVERSED  = false;
-        public static final boolean RIGHT_ENCODER_REVERSED = true;
+        public static final boolean LEFT_ENCODER_REVERSED         = false;
+        public static final boolean RIGHT_ENCODER_REVERSED        = true;
 
         // public static final double MAX_WHEEL_SPEED_MPS;
+        public static final double  MAX_ROOKIE_SPEED              = 0.25;
+        public static final double  MAX_NORMAL_SPEED              = 1.0;
 
         // encoder stuff
-        public static final int    ENCODER_COUNTS_PER_REVOLUTION = 10;
-        public static final double ROBOT_WHEEL_DIAMETER_M        = 6 * 2.54 / 100d;
+        public static final int     ENCODER_COUNTS_PER_REVOLUTION = 10;
+        public static final double  ROBOT_WHEEL_DIAMETER_M        = 6 * 2.54 / 100d;
 
-        public static final double CMS_PER_ENCODER_COUNT         =
+        public static final double  CMS_PER_ENCODER_COUNT         =
             // Assumes the encoders are directly mounted on the wheel shafts
             (ROBOT_WHEEL_DIAMETER_M * Math.PI) / ENCODER_COUNTS_PER_REVOLUTION / 100d;
 
-        public static final double ENCODER_COUNTS_PER_CM         = ENCODER_COUNTS_PER_REVOLUTION
+        public static final double  ENCODER_COUNTS_PER_CM         = ENCODER_COUNTS_PER_REVOLUTION
             / (ROBOT_WHEEL_DIAMETER_M * Math.PI * 100);
 
         // PID gains
-        public static final double HEADING_PID_KP                = 0.02;
-        public static final double HEADING_PID_KI                = 0;
-        public static final double HEADING_PID_KD                = 0;
+        public static final double  HEADING_PID_KP                = 0.02;
+        public static final double  HEADING_PID_KI                = 0;
+        public static final double  HEADING_PID_KD                = 0;
 
-        public static final double TURN_TO_HEADING_PID_KP        = 0.002;
-        public static final double TURN_TO_HEADING_PID_KI        = 0.1;
-        public static final double TURN_TO_HEADING_PID_KD        = 0;
+        public static final double  TURN_TO_HEADING_PID_KP        = 0.002;
+        public static final double  TURN_TO_HEADING_PID_KI        = 0.1;
+        public static final double  TURN_TO_HEADING_PID_KD        = 0;
 
-        public static final double HEADING_ERROR_BUFFER          = 3;
+        public static final double  HEADING_ERROR_BUFFER          = 3;
 
         public static enum HeadingStates {
             FAR, CLOSE
         }
 
         public static final double DEFAULT_DRIVE_SPEED       = 0;
-        public static final double DEFAULT_TURN_SPEED        = 0.3;
+        public static final double DEFAULT_TURN_SPEED        = 0.25;
 
         public static final double TURN_TO_HEADING_CLOSE     = 0;
         public static final double TURN_TO_HEADING_TOLERANCE = 2;
@@ -183,9 +188,9 @@ public final class Constants {
         public static final int     EQUILIBRIUM_ARM_ANGLE_EMPTY          = 68;
         public static final int     EQUILIBRIUM_ARM_ANGLE_LOADED         = 0;
         public static final int     EQUILIBRIUM_ARM_ANGLE_CLOSE          = 10;
-        public static final double  EQUILIBRIUM_ARM_ANGLE_TOLERANCE      = 1.5;
+        public static final double  EQUILIBRIUM_ARM_ANGLE_TOLERANCE      = 2.5;
 
-        public static final double  PIVOT_DEFAULT_SPEED                  = 0.1;
+        public static final double  PIVOT_DEFAULT_SPEED                  = 0.2;
 
         public static final double  INTAKE_ANGLE                         = -25;
         public static final double  INTAKE_SPEED                         = 0.5;
@@ -214,15 +219,15 @@ public final class Constants {
         public static final double AmpTargetAngle          = 100;
         public static final double AmpTimeoutMS            = 4000;
 
-        public static final double LongSpeakerShootSpeed   = 0.5;
-        public static final double LongSpeakerPivotSpeed   = 0.2;
+        public static final double LongSpeakerShootSpeed   = 1;
+        public static final double LongSpeakerPivotSpeed   = 0.8;
         public static final double LongSpeakerTargetAngle  = 60;
         public static final double LongSpeakerTimeoutMS    = 5000;
 
-        public static final double ShortSpeakerShootSpeed  = 0.5;
-        public static final double ShortSpeakerPivotSpeed  = 0.2;
+        public static final double ShortSpeakerShootSpeed  = 1;
+        public static final double ShortSpeakerPivotSpeed  = 0.8;
         public static final double ShortSpeakerTargetAngle = 90;
-        public static final double ShortSpeakerTimeoutMS   = 4000;
+        public static final double ShortSpeakerTimeoutMS   = 2000;
 
     }
 

@@ -2,6 +2,7 @@ package frc.robot.commands.arm;
 
 import frc.robot.subsystems.ArmSubsystem;
 
+
 public class AmpShootCommand extends BaseArmCommand {
 
     // Speeds
@@ -38,13 +39,13 @@ public class AmpShootCommand extends BaseArmCommand {
     @Override
     public void execute() {
 
-        boolean atAngle = moveToTargetAngle(targetAngle);
+        boolean atAngle = moveToTargetAngle(120.25); // WORKS!!! (after 1 hour of testing)
 
         armSubsystem.setAmpSpeed(shootSpeed);
 
         if (atAngle) {
 
-            if (isTimeoutExceeded(2)) {
+            if (isTimeoutExceeded(1)) {
                 armSubsystem.setKeeperSpeed(shootSpeed);
             }
         }

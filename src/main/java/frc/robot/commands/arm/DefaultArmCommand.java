@@ -35,21 +35,13 @@ public class DefaultArmCommand extends BaseArmCommand {
     @Override
     public void execute() {
 
-        if (operatorInput.isPivotUp()) {
-            armSubsystem.pivotRotSetSpeed(.1);
-        }
-        else if (operatorInput.isPivotDown()) {
-            armSubsystem.pivotRotSetSpeed(-.1);
+
+        if (armSubsystem.isLoaded()) {
+            moveToTargetAngle(ArmConstants.EQUILIBRIUM_ARM_ANGLE_EMPTY);
         }
         else {
-            if (armSubsystem.isLoaded()) {
-                moveToTargetAngle(ArmConstants.EQUILIBRIUM_ARM_ANGLE_EMPTY);
-            }
-            else {
-                moveToTargetAngle(ArmConstants.EQUILIBRIUM_ARM_ANGLE_LOADED);
-            }
+            moveToTargetAngle(ArmConstants.EQUILIBRIUM_ARM_ANGLE_LOADED);
         }
-
 
 
     }

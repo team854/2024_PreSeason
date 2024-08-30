@@ -2,76 +2,52 @@ package frc.robot.commands.arm;
 
 import frc.robot.subsystems.ArmSubsystem;
 
-public class PivotShootCommand extends BaseArmCommand {
+/**
+ * Command for shooting from a specific angle defined for long shots.
+ */
+public class LongShotCommand extends BaseArmCommand {
 
-    // Speeds
-    private double shootSpeed;
-    private double pivotSpeed;
+    private final double shootSpeed;
+    private final double targetAngle;
 
-    // Logging skibidi
-    private double targetAngle;
-
-    private long   start   = 0;
-
-    private int    counter = 0;
-
-
-    public PivotShootCommand(double shootSpeed, double targetAngle, double timeoutMS,
-        ArmSubsystem armSubsystem) {
-
+    public LongShotCommand(double shootSpeed, double targetAngle, ArmSubsystem armSubsystem) {
         super(armSubsystem);
-
         this.shootSpeed  = shootSpeed;
         this.targetAngle = targetAngle;
     }
 
     @Override
     public void initialize() {
-
-        String commandParms = "shoot speed: " + shootSpeed + "pivot speed: " + pivotSpeed + "target angle: " + targetAngle;
-        logCommandStart(commandParms);
-
+        String commandParams = "shoot speed: " + shootSpeed + ", target angle: " + targetAngle;
+        logCommandStart(commandParams);
         super.initialize();
-
     }
 
     @Override
     public void execute() {
-
         boolean atAngle = moveToTargetAngle(targetAngle);
-
         armSubsystem.setShooterSpeed(shootSpeed);
 
         if (atAngle) {
-
-            if (isTimeoutExceeded(0.6)) {
+            if (isTimeoutExceeded(1.5))
                 armSubsystem.setKeeperSpeed(shootSpeed);
-            }
         }
     }
 
     @Override
     public boolean isFinished() {
-
-        // Stop after 1 seconds.
-        if (isTimeoutExceeded(1)) {
+        if (isTimeoutExceeded(2)) {
             return true;
         }
-
-        return false;
-
+        else {
+            return false;
+        }
     }
 
     @Override
     public void end(boolean interrupted) {
-
         armSubsystem.intakeSetSpeed(0);
         armSubsystem.pivotRotSetSpeed(0);
-
         logCommandEnd(interrupted);
-
     }
-
-
-
 }

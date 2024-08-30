@@ -45,6 +45,7 @@ public class ShootCommand extends BaseArmCommand {
         counter++;
 
         if (counter >= 20) {
+
             armSubsystem.setKeeperSpeed(shootSpeed);
             counter = 0;
         }
