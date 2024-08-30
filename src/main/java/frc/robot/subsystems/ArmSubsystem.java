@@ -135,8 +135,8 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void setAmpSpeed(double speed) {
-        this.intakeLowerSpeed  = 0.26;           // Works
-        this.intakeHigherSpeed = Math.abs(0.26); // Works
+        this.intakeLowerSpeed  = 0.28;           // Works
+        this.intakeHigherSpeed = Math.abs(0.28); // Works
         intakeLower.set(intakeLowerSpeed);
         intakeHigher.set(intakeHigherSpeed);
     }
@@ -144,6 +144,7 @@ public class ArmSubsystem extends SubsystemBase {
     public void setKeeperSpeed(double speed) {
         this.keeperSpeed = -Math.abs(speed);
         keeper.set(keeperSpeed);
+        System.out.println("Set keeper to speed: " + keeperSpeed);
     }
 
     // proximity sensor methods
