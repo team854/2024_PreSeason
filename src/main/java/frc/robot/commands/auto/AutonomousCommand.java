@@ -269,7 +269,8 @@ public class AutonomousCommand extends SequentialCommandGroup {
                 startHeading + AutoConstants.AmpSideFirstAngle, true, AutoConstants.AmpSideTimeoutMS,
                 driveSubsystem));
 
-            addCommands(new MeasuredStraightDriveCommand(AutoConstants.AmpSideFirstStraightCM,
+            // Subtract 15 because return goes too far
+            addCommands(new MeasuredStraightDriveCommand(AutoConstants.AmpSideFirstStraightCM - 15,
                 AutoConstants.AmpSideDriveSpeed,
                 true, driveSubsystem).alongWith(new IntakeCommand(operatorInput, armSubsystem, true)));
 
@@ -341,8 +342,7 @@ public class AutonomousCommand extends SequentialCommandGroup {
 
             // goes back to shooting place
 
-            // Add 10cm to the return distance to ensure that it is flush with the subwoofer
-            addCommands(new MeasuredStraightDriveCommand(AutoConstants.AmpSideFirstStraightCM + 10,
+            addCommands(new MeasuredStraightDriveCommand(AutoConstants.AmpSideFirstStraightCM - 15,
                 -AutoConstants.AmpSideDriveSpeed,
                 true, driveSubsystem));
 
@@ -350,7 +350,8 @@ public class AutonomousCommand extends SequentialCommandGroup {
                 startHeading, true, AutoConstants.AmpSideTimeoutMS,
                 driveSubsystem));
 
-            addCommands(new MeasuredStraightDriveCommand(AutoConstants.AmpSideDiagStepCM,
+            // Add 10cm to the return distance to ensure that it is flush with the subwoofer
+            addCommands(new MeasuredStraightDriveCommand(AutoConstants.AmpSideDiagStepCM + 10,
                 -AutoConstants.AmpSideDriveSpeed, true,
                 driveSubsystem));
 
