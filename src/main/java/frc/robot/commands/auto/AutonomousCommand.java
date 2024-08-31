@@ -275,8 +275,8 @@ public class AutonomousCommand extends SequentialCommandGroup {
 
             // goes back to shooting place
 
-
-            addCommands(new MeasuredStraightDriveCommand(AutoConstants.AmpSideFirstStraightCM,
+            // Add 10cm to the return distance to ensure that it is flush with the subwoofer
+            addCommands(new MeasuredStraightDriveCommand(AutoConstants.AmpSideFirstStraightCM + 10,
                 -AutoConstants.AmpSideDriveSpeed,
                 true, driveSubsystem));
 
@@ -341,7 +341,8 @@ public class AutonomousCommand extends SequentialCommandGroup {
 
             // goes back to shooting place
 
-            addCommands(new MeasuredStraightDriveCommand(AutoConstants.AmpSideFirstStraightCM,
+            // Add 10cm to the return distance to ensure that it is flush with the subwoofer
+            addCommands(new MeasuredStraightDriveCommand(AutoConstants.AmpSideFirstStraightCM + 10,
                 -AutoConstants.AmpSideDriveSpeed,
                 true, driveSubsystem));
 
