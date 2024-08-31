@@ -61,7 +61,7 @@ public final class Constants {
 
         public static final double AmpSideFirstAngle           = 60;
         public static final double AmpSideSecondAngle          = 0;
-        public static final double AmpSideShootAngle           = 111;
+        public static final double AmpSideShootAngle           = 115;
 
         public static final double AmpSideShootSpeed           = 1;
         public static final double AmpSideDriveSpeed           = 0.3;
@@ -75,7 +75,7 @@ public final class Constants {
         public static final double SpeakerSideSecondStraightCM = 0;
         public static final double SpeakerSideThirdStraightCM  = 0;
 
-        public static final double SpeakerSideShootAngle       = 111;
+        public static final double SpeakerSideShootAngle       = 115;
         public static final double SpeakerSideSwivelAngle      = 0;
         public static final double SpeakerSideFirstAngle       = 0;
 
@@ -93,7 +93,7 @@ public final class Constants {
 
         public static final double OutsideSideFirstAngle       = 0;
         public static final double OutsideSideSecondAngle      = 0;
-        public static final double OutsideSideShooterAngle     = 111;
+        public static final double OutsideSideShooterAngle     = 115;
 
         public static final double OutsideSideShooterSpeed     = 1;
         public static final double OutsideSideDriveSpeed       = 0.3;
