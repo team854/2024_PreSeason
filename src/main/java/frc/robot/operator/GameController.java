@@ -1,5 +1,6 @@
 package frc.robot.operator;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 
 /**
@@ -153,5 +154,29 @@ public class GameController extends XboxController {
         }
 
         return sb.toString();
+    }
+
+    // New method to create quick pulses on both left and right rumble motors
+    public void pulseRumble(double intensity, double duration) {
+        // Start the rumble
+        setRumble(RumbleType.kLeftRumble, intensity);
+        setRumble(RumbleType.kRightRumble, intensity);
+
+        // Schedule stopping the rumble after the duration
+        Timer.delay(duration);
+
+        // Stop the rumble
+        setRumble(RumbleType.kLeftRumble, 0);
+        setRumble(RumbleType.kRightRumble, 0);
+
+        // Delay between pulses
+        Timer.delay(0.1); // 0.1 second pause between pulses
+
+        // Repeat the pulse
+        setRumble(RumbleType.kLeftRumble, intensity);
+        setRumble(RumbleType.kRightRumble, intensity);
+        Timer.delay(duration);
+        setRumble(RumbleType.kLeftRumble, 0);
+        setRumble(RumbleType.kRightRumble, 0);
     }
 }
