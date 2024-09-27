@@ -1,4 +1,3 @@
-
 package frc.robot.subsystems;
 
 import edu.wpi.first.cameraserver.CameraServer;
@@ -70,13 +69,13 @@ public class LightsSubsystem extends SubsystemBase {
    @Override
    public void periodic() {
 
-      // Flash all lights in time with the RLS when the robot is first enabled
+      // Flash all lights in time with the RSL when the robot is first enabled
       if (rslFlashCount >= 0) {
          flashRSL();
       }
-      else {
-         ledStrip.setData(ledBuffer);
-      }
+
+      // Ensure the data is always sent to the strip, even if not flashing
+      ledStrip.setData(ledBuffer);
    }
 
    private void clear() {
@@ -117,9 +116,7 @@ public class LightsSubsystem extends SubsystemBase {
       }
    }
 
-
    public void ledStick(boolean boost, DriveMode driveMode) {
-
 
       int    leftMidPoint  = (int) 15;
       int    rightMidPoint = (int) 45;
@@ -141,21 +138,19 @@ public class LightsSubsystem extends SubsystemBase {
             ledBuffer.setLED(i, SINGLE_STICK_COLOR);
          }
 
-
          if (boost) {
             ledBuffer.setLED(LightConstants.BOOST_INDEX, BOOST_COLOR);
          }
          else {
             ledBuffer.setLED(LightConstants.BOOST_INDEX, NOTHING_COLOR);
          }
+         break; // Added break
 
       case DUAL_STICK_ARCADE:
       default:
 
-
          upToLeft = (int) Math.round(leftMidPoint - (leftStickY * LightConstants.LED_STICK_TAKEN_LENGTH));
          upToRight = (int) Math.round(rightMidPoint + (rightStickX * LightConstants.LED_STICK_TAKEN_LENGTH));
-         // System.out.println(upToLeft);
 
          for (int i = (leftMidPoint - LightConstants.LED_STICK_TAKEN_LENGTH + 1); i < leftMidPoint
             + LightConstants.LED_STICK_TAKEN_LENGTH; i++) {
@@ -165,7 +160,6 @@ public class LightsSubsystem extends SubsystemBase {
          Adder = (leftMidPoint - upToLeft);
          if (Adder != 0) {
             for (int i = leftMidPoint; i != upToLeft; i = i - (Adder / Math.abs(Adder))) {
-               // System.out.println(i);
                ledBuffer.setLED(i, DUAL_STICK_COLOR);
             }
          }
@@ -178,7 +172,6 @@ public class LightsSubsystem extends SubsystemBase {
          Adder = (rightMidPoint - upToRight);
          if (Adder != 0) {
             for (int i = rightMidPoint; i != upToRight; i = i - (Adder / Math.abs(Adder))) {
-               // System.out.println(i);
                ledBuffer.setLED(i - 1, DUAL_STICK_COLOR);
             }
          }
@@ -189,13 +182,16 @@ public class LightsSubsystem extends SubsystemBase {
          else {
             ledBuffer.setLED(LightConstants.BOOST_INDEX, NOTHING_COLOR);
          }
+         break; // Added break
 
       case TANK:
-
+         // Add logic for TANK mode if needed
+         break; // Added break
 
       }
+
+      // Ensure the LED data is sent after updating the buffer
+      ledStrip.setData(ledBuffer);
    }
 
-
 }
-

@@ -326,7 +326,7 @@ public class AutonomousCommand extends SequentialCommandGroup {
 
             // backing up
 
-            addCommands(new MeasuredStraightDriveCommand(AutoConstants.AmpSideDiagStepCM,
+            addCommands(new MeasuredStraightDriveCommand(AutoConstants.AmpSideDiagStepCM + 10,
                 AutoConstants.AmpSideDriveSpeed, true,
                 driveSubsystem).alongWith(new IntakeCommand(operatorInput, armSubsystem, true)));
             // turns and drives towards first note while intaking
@@ -347,11 +347,11 @@ public class AutonomousCommand extends SequentialCommandGroup {
                 true, driveSubsystem));
 
             addCommands(new TurnToHeadingCommand(AutoConstants.AmpSideDriveSpeed,
-                startHeading, true, AutoConstants.AmpSideTimeoutMS,
+                startHeading - 10, true, AutoConstants.AmpSideTimeoutMS,
                 driveSubsystem));
 
-            // Add 10cm to the return distance to ensure that it is flush with the subwoofer
-            addCommands(new MeasuredStraightDriveCommand(AutoConstants.AmpSideDiagStepCM + 10,
+            // Add 50cm to the return distance to ensure that it is flush with the subwoofer
+            addCommands(new MeasuredStraightDriveCommand(AutoConstants.AmpSideDiagStepCM + 50,
                 -AutoConstants.AmpSideDriveSpeed, true,
                 driveSubsystem));
 

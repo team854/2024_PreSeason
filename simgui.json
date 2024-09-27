@@ -1,9 +1,29 @@
 {
+  "HALProvider": {
+    "Addressable LEDs": {
+      "window": {
+        "visible": true
+      }
+    },
+    "Other Devices": {
+      "SPARK MAX [22]": {
+        "header": {
+          "open": true
+        }
+      }
+    },
+    "PWM Outputs": {
+      "window": {
+        "visible": true
+      }
+    }
+  },
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
       "/SmartDashboard/Auto Pattern": "String Chooser",
-      "/SmartDashboard/Drive Mode": "String Chooser"
+      "/SmartDashboard/Drive Mode": "String Chooser",
+      "/SmartDashboard/Rookie Mode": "String Chooser"
     }
   },
   "NetworkTables": {

@@ -162,7 +162,7 @@ public final class Constants {
 
     public static final class LightConstants {
 
-        public static final int LED_STRIP_PWM_PORT     = 9;
+        public static final int LED_STRIP_PWM_PORT     = 5;
         public static final int LED_STRIP_LENGTH       = 60;
         public static final int LED_STICK_TAKEN_LENGTH = 5;
         public static final int BOOST_INDEX            = 0;

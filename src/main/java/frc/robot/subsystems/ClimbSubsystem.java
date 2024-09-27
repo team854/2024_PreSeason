@@ -7,10 +7,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimbConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.operator.GameController;
+import frc.robot.operator.OperatorInput;
 
 
 public class ClimbSubsystem extends SubsystemBase {
 
+    final OperatorInput         operatorInput;
 
     VictorSP                    leftClimber      = new VictorSP(ClimbConstants.LEFT_CLIMB_PORT);
     VictorSP                    rightClimber     = new VictorSP(ClimbConstants.RIGHT_CLIMB_PORT);
@@ -30,8 +32,8 @@ public class ClimbSubsystem extends SubsystemBase {
         OperatorConstants.GAME_CONTROLLER_STICK_DEADBAND);
 
 
-    public ClimbSubsystem() {
-
+    public ClimbSubsystem(OperatorInput operatorInput) {
+        this.operatorInput = operatorInput;
         leftClimber.setInverted(ClimbConstants.LEFT_CLIMBER_REVERSED);
         rightClimber.setInverted(ClimbConstants.RIGHT_CLIMBER_REVERSED);
 
@@ -60,6 +62,7 @@ public class ClimbSubsystem extends SubsystemBase {
         this.rightSpeed = rightSpeed;
         if (isRightAtLimit()) {
             this.rightSpeed = 0;
+            operatorInput.driverController.pulseRumble(1.0, 0.2);
         }
         rightClimber.set(this.rightSpeed);
     }

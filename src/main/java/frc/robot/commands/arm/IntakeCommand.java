@@ -49,9 +49,7 @@ public class IntakeCommand extends BaseArmCommand {
             else {
                 if (armSubsystem.isLoaded()) {
                     // Added code to trigger vibration when loaded
-                    operatorInput.driverController.pulseRumble(1.0, 0.2); // Full intensity, 0.2
-                                                                          // seconds duration per
-                                                                          // pulse
+                    operatorInput.driverController.pulseRumble(1.0, 0.1);
                     finish = System.currentTimeMillis();
 
                     if ((finish - start > 500) && (start != 0)) {

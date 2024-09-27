@@ -38,7 +38,7 @@ public class RobotContainer {
     private final LightsSubsystem                 lightsSubsystem    = new LightsSubsystem();
     private final DriveSubsystem                  driveSubsystem     = new DriveSubsystem();
     private final ArmSubsystem                    armSubsystem       = new ArmSubsystem();
-    private final ClimbSubsystem                  climbSubsystem     = new ClimbSubsystem();
+    private final ClimbSubsystem                  climbSubsystem     = new ClimbSubsystem(operatorInput);
 
     // All dashboard choosers are defined here...
     private final SendableChooser<DriveMode>      driveModeChooser   = new SendableChooser<>();
