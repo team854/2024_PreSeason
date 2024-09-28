@@ -35,18 +35,23 @@ public class LightsSubsystem extends SubsystemBase {
    private static final Color                INTAKING_COLOR       = new Color(255, 140, 0);
    private static final Color                NOTE_INTOOK_COLOR    = new Color(255, 255, 255);
    private static final Color                POSESSION_COLOR      = new Color(0, 255, 0);
+
+   // General Variables
    private static final int                  TRAIL_LENGTH         = 5;
-
-
-
    private boolean                           driveVisualization   = false;
    private int                               rslFlashCount        = -1;
    private boolean                           prevRSLOn            = false;
    private int                               rainbowFirstPixelHue = 0;
+
+   // Variables for the Knight Rider effect
    private int                               knightFrontIndex     = 0;
    private int                               knightBackIndex      = 29;
    private boolean                           knightFrontDirection = true;
    private boolean                           knightBackDirection  = false;
+
+   // Variables for countdown effect
+   private boolean                           countdownActive      = false;
+   private double                            lastMatchTime        = -1;
 
    // Game controller
    public final GameController               driverController     = new GameController(
@@ -83,18 +88,50 @@ public class LightsSubsystem extends SubsystemBase {
          flashRSL();
       }
 
-      if (!DriverStation.isEnabled()) {
-         runKnightRiderEffect();
+      // Check the match time and control LED behavior accordingly
+      double matchTime = DriverStation.getMatchTime();
+      if (matchTime <= 20 && matchTime != -1) {
+         runCountdownEffect(matchTime); // Turn off LEDs progressively in the last 20 seconds
+      }
+      else if (!DriverStation.isEnabled()) {
+         runKnightRiderEffect(); // Knight Rider effect when the robot is disabled
       }
       else {
          setAllianceColorOrRainbow(); // Default alliance color or rainbow effect when enabled
+      }
+
+      // After match ends, reset LEDs
+      if (DriverStation.isDisabled() && countdownActive) {
+         resetLEDsAfterMatch(); // Reset all LEDs after match ends
+         countdownActive = false;
       }
 
       // Ensure the data is always sent to the strip, even if not flashing
       ledStrip.setData(ledBuffer);
    }
 
-   // LED tron effect
+   // Method to run the LED countdown effect during the last 20 seconds
+   public void runCountdownEffect(double matchTime) {
+      countdownActive = true;
+
+      // Number of LEDs to turn off based on the time left (20 seconds -> 60 LEDs)
+      int ledsOff = (int) (60 * ((20.0 - matchTime) / 20.0));
+
+      // Turn off LEDs from the outside towards the center
+      for (int i = 0; i < ledsOff / 2; i++) {
+         ledBuffer.setLED(i, NOTHING_COLOR); // Turn off front section
+         ledBuffer.setLED(59 - i, NOTHING_COLOR); // Turn off back section
+      }
+
+      ledStrip.setData(ledBuffer);
+   }
+
+   // Method to reset all LEDs after the match ends
+   public void resetLEDsAfterMatch() {
+      setAllLEDs(Color.kWhite); // Turn all LEDs back on to white after match ends
+   }
+
+   // Method to run the Knight Rider effect with a fading trail
    // Front section moves left to right, Back section moves right to left
    public void runKnightRiderEffect() {
       // Set all LEDs to the background color first (black/off)
@@ -137,7 +174,7 @@ public class LightsSubsystem extends SubsystemBase {
       ledStrip.setData(ledBuffer);
    }
 
-   // LED bouncing effect
+   // Draw the Knight Rider trail on the LED strip
    // index is the current "main" LED position, offset is the starting position for the section
    // direction controls whether the LEDs move forward or backward
    private void drawKnightRiderTrail(int index, int offset, boolean direction) {
@@ -145,7 +182,9 @@ public class LightsSubsystem extends SubsystemBase {
          int ledIndex = direction ? index - i : index + i; // Adjust index for trail
          if (ledIndex >= 0 && ledIndex < 30) { // Only set LEDs within the section
             int brightness = 255 - (i * (255 / TRAIL_LENGTH)); // Decrease brightness for the trail
-            ledBuffer.setLED(offset + ledIndex, Color.fromHSV(0, 255, brightness));
+            ledBuffer.setLED(offset + ledIndex, Color.fromHSV(0, 255, brightness)); // Red hue with
+                                                                                    // fading
+                                                                                    // brightness
          }
       }
    }
