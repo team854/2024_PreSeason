@@ -1,15 +1,8 @@
 {
   "HALProvider": {
     "Addressable LEDs": {
-      "window": {
-        "visible": true
-      }
-    },
-    "Other Devices": {
-      "SPARK MAX [22]": {
-        "header": {
-          "open": true
-        }
+      "0": {
+        "columns": 30
       }
     },
     "PWM Outputs": {
@@ -30,11 +23,25 @@
     "Retained Values": {
       "open": false
     },
-    "Transitory Values": {
-      "open": false
+    "transitory": {
+      "Shuffleboard": {
+        ".recording": {
+          "open": true
+        },
+        "open": true
+      }
     }
   },
   "NetworkTables Info": {
+    "Connections": {
+      "open": true
+    },
+    "Server": {
+      "Publishers": {
+        "open": true
+      },
+      "open": true
+    },
     "visible": true
   }
 }

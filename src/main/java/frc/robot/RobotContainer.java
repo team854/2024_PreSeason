@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot;
 
 import edu.wpi.first.wpilibj.RobotController;
@@ -22,65 +18,52 @@ import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LightsSubsystem;
 
-/**
- * This class is where the bulk of the robot should be declared. Since
- * Command-based is a "declarative" paradigm, very little robot logic should
- * actually be handled in the {@link Robot} periodic methods (other than the
- * scheduler calls). Instead, the structure of the robot (including subsystems,
- * commands, and button mappings) should be declared here.
- */
 public class RobotContainer {
 
     // The operator input class
     private final OperatorInput                   operatorInput      = new OperatorInput();
 
-    // The robot's subsystems and commands are defined here...
-    private final LightsSubsystem                 lightsSubsystem    = new LightsSubsystem();
+    // The robot's subsystems and commands are defined here
+    private final LightsSubsystem                 lightsSubsystem    = new LightsSubsystem();            // LightsSubsystem
+                                                                                                         // initialized
     private final DriveSubsystem                  driveSubsystem     = new DriveSubsystem();
     private final ArmSubsystem                    armSubsystem       = new ArmSubsystem();
     private final ClimbSubsystem                  climbSubsystem     = new ClimbSubsystem(operatorInput);
 
-    // All dashboard choosers are defined here...
+    // All dashboard choosers are defined here
     private final SendableChooser<DriveMode>      driveModeChooser   = new SendableChooser<>();
     private final SendableChooser<AutoPattern>    autoPatternChooser = new SendableChooser<>();
     private final SendableChooser<RookieSettings> speedChooser       = new SendableChooser<>();
 
-    /**
-     * The container for the robot. Contains subsystems, OI devices, and commands.
-     */
     public RobotContainer() {
 
         // Initialize the dashboard choosers
         initDashboardChoosers();
 
-        // Initialize all Subsystem default commands.
+        // Set default commands for subsystems
         driveSubsystem.setDefaultCommand(
             new DefaultDriveCommand(operatorInput, speedChooser, driveModeChooser, driveSubsystem, lightsSubsystem));
 
         armSubsystem.setDefaultCommand(
             new DefaultArmCommand(operatorInput, armSubsystem));
 
-        // Initialize the default command of the subsystem, to keep the arm hovering over the
-        // ground.
-        // armSubsystem.setDefaultCommand(new DefaultKeepArmUpCommand(armSubsystem));
-
-        // Configure the button bindings
-        operatorInput.configureButtonBindings(driveSubsystem, armSubsystem, climbSubsystem);
+        // Configure the button bindings (ensure LightsSubsystem is passed)
+        operatorInput.configureButtonBindings(driveSubsystem, armSubsystem, climbSubsystem, lightsSubsystem);
 
         // Add a trigger to flash the lights when the robot goes from disabled to enabled
         new Trigger(() -> RobotController.isSysActive())
             .onTrue(new InstantCommand(() -> lightsSubsystem.setEnabled()));
-
-
     }
 
     private void initDashboardChoosers() {
 
+        // Drive Mode chooser
         driveModeChooser.setDefaultOption("Dual Stick Arcade", DriveMode.DUAL_STICK_ARCADE);
         SmartDashboard.putData("Drive Mode", driveModeChooser);
         driveModeChooser.addOption("Single Stick Arcade", DriveMode.SINGLE_STICK_ARCADE);
         driveModeChooser.addOption("Tank", DriveMode.TANK);
 
+        // Auto Pattern chooser
         autoPatternChooser.setDefaultOption("Do Nothing", AutoPattern.DO_NOTHING);
         SmartDashboard.putData("Auto Pattern", autoPatternChooser);
         autoPatternChooser.addOption("Test Arm Commands", AutoPattern.TEST_ARM_COMMANDS);
@@ -101,17 +84,10 @@ public class RobotContainer {
         autoPatternChooser.addOption("Blue Speaker side 1 shot", AutoPattern.BLUE_SPEAKER_ONE_SHOT);
         autoPatternChooser.addOption("Blue Speaker side 2 shot", AutoPattern.BLUE_SPEAKER_TWO_SHOT);
 
-        // autoPatternChooser.addOption("Red Outside side 2 shot",
-        // AutoPattern.RED_OUTSIDE_TWO_SHOT);
-        // autoPatternChooser.addOption("Red Speaker side 3 shot",
-        // AutoPattern.RED_SPEAKER_THREE_SHOT);
-        // autoPatternChooser.addOption("Blue Speaker side 3 shot",
-        // AutoPattern.BLUE_SPEAKER_THREE_SHOT);
-
-        speedChooser.setDefaultOption("Rookie driver", RookieSettings.ROOKIE);
+        // Speed chooser (Rookie vs Normal mode)
+        speedChooser.setDefaultOption("Normal driver", RookieSettings.NORMAL);
+        speedChooser.addOption("Rookie driver", RookieSettings.ROOKIE);
         SmartDashboard.putData("Rookie Mode", speedChooser);
-        speedChooser.addOption("Normal driver", RookieSettings.NORMAL);
-
     }
 
     /**
@@ -120,12 +96,13 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-
-        // Pass in all of the subsystems and all of the choosers to the auto command.
+        // Pass subsystems, choosers, and LightsSubsystem to AutonomousCommand
         return new AutonomousCommand(
             driveSubsystem,
             autoPatternChooser,
             armSubsystem,
-            operatorInput);
+            operatorInput,
+            lightsSubsystem // Pass LightsSubsystem to AutonomousCommand
+        );
     }
 }

@@ -18,13 +18,13 @@ import frc.robot.commands.drive.TimedStraightDriveCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
-
+import frc.robot.subsystems.LightsSubsystem;
 
 /**
  * The Operator input class is used to map buttons to functions and functions to commands
  * <p>
  * This class extends SubsystemBase so that the periodic() routine is called each loop. The periodic
- * routine can be used to send debug information to the dashboard
+ * routine can be used to send debug information to the dashboard.
  */
 public class OperatorInput extends SubsystemBase {
 
@@ -42,22 +42,16 @@ public class OperatorInput extends SubsystemBase {
 
     /*
      * Map all functions to buttons.
-     *
      * A function should be a description of the robot behavior it is triggering.
-     *
-     * This separation of concerns allows for remapping of the robot functions to different
-     * controller buttons without the need to change the command or the trigger. The mapping
-     * from controller button to function is done in the following methods.
      */
 
-    // Cancel all commands when the driver presses the XBox controller three lines (aka. start)
+    // Cancel all commands when the driver presses the Xbox controller three lines (aka. start)
     // button
     public boolean isCancel() {
         return driverController.getStartButton();
     }
 
     // drive methods
-
     public boolean getBoost() {
         return driverController.getLeftBumper();
     }
@@ -78,11 +72,8 @@ public class OperatorInput extends SubsystemBase {
         return driverController.getRightX();
     }
 
-
     public double getDriverControllerAxis(Stick stick, Axis axis) {
-
         switch (stick) {
-
         case LEFT:
             switch (axis) {
             case X:
@@ -101,21 +92,16 @@ public class OperatorInput extends SubsystemBase {
             }
             break;
         }
-
         return 0;
     }
 
     public double getSpeed(DriveMode driveMode) {
-
         return getDriverControllerAxis(Stick.LEFT, Axis.Y);
     }
 
     public double getTurn(DriveMode driveMode) {
-
         double turn = 0;
-
         switch (driveMode) {
-
         case SINGLE_STICK_ARCADE:
             turn = getDriverControllerAxis(Stick.LEFT, Axis.X);
             break;
@@ -125,7 +111,6 @@ public class OperatorInput extends SubsystemBase {
             turn = getDriverControllerAxis(Stick.RIGHT, Axis.X);
             break;
         }
-
         return turn;
     }
 
@@ -138,19 +123,12 @@ public class OperatorInput extends SubsystemBase {
     }
 
     // arm methods
-
     public boolean isIntake() {
-        if (driverController.getLeftTriggerAxis() >= 0.5) {
-            return true;
-        }
-        return false;
+        return driverController.getLeftTriggerAxis() >= 0.5;
     }
 
     public boolean isShootFront() {
-        if (driverController.getRightTriggerAxis() >= 0.5) {
-            return true;
-        }
-        return false;
+        return driverController.getRightTriggerAxis() >= 0.5;
     }
 
     public boolean isShootBack() {
@@ -174,7 +152,6 @@ public class OperatorInput extends SubsystemBase {
     }
 
     // climber methods
-
     public boolean isLowerClimbers() {
         return driverController.getAButton();
     }
@@ -187,70 +164,54 @@ public class OperatorInput extends SubsystemBase {
         return driverController.getPOV() == 90; // Right D-Pad
     }
 
-
     /**
      * Use this method to define your robotFunction -> command mappings.
-     *
      * NOTE: all subsystems should be passed into this method.
      */
-    public void configureButtonBindings(DriveSubsystem driveSubsystem, ArmSubsystem armSubsystem, ClimbSubsystem climbSubsystem) {
+    public void configureButtonBindings(DriveSubsystem driveSubsystem, ArmSubsystem armSubsystem, ClimbSubsystem climbSubsystem,
+        LightsSubsystem lightsSubsystem) { // Add LightsSubsystem
 
         new Trigger(() -> isCancel())
-
             .onTrue(new CancelCommand(this, driveSubsystem));
 
         new Trigger(() -> isIntake())
-
-            .onTrue(new IntakeCommand(this, armSubsystem, false));
+            .onTrue(new IntakeCommand(this, armSubsystem, lightsSubsystem, false)); // Pass
+                                                                                    // LightsSubsystem
+                                                                                    // to
+                                                                                    // IntakeCommand
 
         new Trigger(() -> isShootBack())
-
             .onTrue(new PivotShootCommand(1, 115, 5000, armSubsystem));
 
         new Trigger(() -> isShootFront())
-
             .onTrue(new PivotShootCommand(1, 65, 5000, armSubsystem));
 
         new Trigger(() -> isLowerClimbers())
-
             .onTrue(new LowerBothClimbersCommand(climbSubsystem, this));
 
         new Trigger(() -> isRaiseClimbers())
-
             .onTrue(new RaiseBothClimbersCommand(climbSubsystem, this));
 
         new Trigger(() -> isAmpShot())
-
-            // 108, 0.25
-            .onTrue(
-                new AmpShootCommand(0.4, 112, 5000, armSubsystem)
-                    .deadlineWith(new TimedStraightDriveCommand(10000, -0.1, true, driveSubsystem.getHeading(), driveSubsystem)));
+            .onTrue(new AmpShootCommand(0.4, 112, 5000, armSubsystem)
+                .deadlineWith(new TimedStraightDriveCommand(10000, -0.1, true, driveSubsystem.getHeading(), driveSubsystem)));
 
         new Trigger(() -> isShoot())
-
             .onTrue(new ShootCommand(1, armSubsystem));
 
         new Trigger(() -> isPivotUp())
-
             .onTrue(new ManualShootCommand(1, 3000, armSubsystem, this));
 
         new Trigger(() -> isPivotDown())
-
             .onTrue(new ManualShootCommand(1, 3000, armSubsystem, this));
 
         new Trigger(() -> isLongShot())
             .onTrue(new LongShotCommand(1, 40, armSubsystem));
-
-
-
     }
 
     @Override
     public void periodic() {
-
         // Display any operator input values on the smart dashboard.
-
         SmartDashboard.putString("Driver Controller", driverController.toString());
     }
-
 }
