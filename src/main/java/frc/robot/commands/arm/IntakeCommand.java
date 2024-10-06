@@ -50,7 +50,7 @@ public class IntakeCommand extends BaseArmCommand {
         if (armSubsystem.isLoaded()) {
             if (!hasFlashed) {
                 // Start the white flashing effect for 3 seconds
-                lightsSubsystem.flashWhite();
+                lightsSubsystem.flashGreen();
                 flashTimer.start();
                 hasFlashed = true;
             }

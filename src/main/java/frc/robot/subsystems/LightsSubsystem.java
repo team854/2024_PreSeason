@@ -33,7 +33,7 @@ public class LightsSubsystem extends SubsystemBase {
    private static final Color                NO_SPEED_COLOR       = new Color(255, 255, 255);
    private static final Color                NOTHING_COLOR        = new Color(0, 0, 0);
    private static final Color                INTAKING_COLOR       = new Color(255, 140, 0);
-   private static final Color                NOTE_INTOOK_COLOR    = new Color(255, 255, 255);
+   private static final Color                NOTE_INTOOK_COLOR    = new Color(0, 255, 0);
    private static final Color                POSESSION_COLOR      = new Color(0, 255, 0);
 
    // General Variables
@@ -192,9 +192,29 @@ public class LightsSubsystem extends SubsystemBase {
       setAllLEDs(INTAKING_COLOR);
    }
 
-   // Method to flash white for a note intake
-   public void flashWhite() {
-      setAllLEDs(NOTE_INTOOK_COLOR);
+   // Method to flash green when a note is first collected
+   public void flashGreen() {
+      for (int flashCount = 0; flashCount < 3; flashCount++) {
+         // Set all LEDs to green
+         setAllLEDs(NOTE_INTOOK_COLOR);
+         ledStrip.setData(ledBuffer);
+         try {
+            Thread.sleep(100); // 100ms on
+         }
+         catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+         }
+
+         // Turn off the LEDs
+         setAllLEDs(NOTHING_COLOR);
+         ledStrip.setData(ledBuffer);
+         try {
+            Thread.sleep(100); // 100ms off
+         }
+         catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+         }
+      }
    }
 
    // Method to set LEDs green when the robot is holding a note

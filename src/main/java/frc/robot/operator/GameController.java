@@ -1,25 +1,17 @@
 package frc.robot.operator;
 
-import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.XboxController;
 
 /**
  * The Game Controller extends {@link XboxController}
  * <p>
  * This class adds deadbanding to the axes values (X,Y) of the
- * left and right joysticks on the XBox controller, as well as the Triggers
- * <p>
- * Deadbanding of the axis values is is intended to prevent 'drift' or movement of the robot
- * when the operators are not touching the controls.
- * <p>
- * Since the GameController overrides the {@link XboxController#getRawAxis} method,
- * an additional method {#link {@link #getHardwareAxisValue} is provided to retrieve
- * the underlying hardware values
+ * left and right joysticks on the XBox controller, as well as the Triggers.
  */
 public class GameController extends XboxController {
 
     public static final double DEFAULT_AXIS_DEADBAND = .2;
-
     private double             axisDeadband          = DEFAULT_AXIS_DEADBAND;
 
     /**
@@ -37,15 +29,10 @@ public class GameController extends XboxController {
      * Construct a GameController on the specified port with the specified deadband
      *
      * @param port on the driver station which the joystick is plugged into
-     * @param axisDeadband (0 - 0.4) to use for all axis values on this controller. When the
-     * axis value from the hardware is less than the specified value, then the axis will return
-     * zero. Setting the axisDeadbanding to zero turns off all deadbanding.
-     * Values < 0 or > 0.4 are ignored, and
-     * the {@link #DEFAULT_AXIS_DEADBAND} value is used.
+     * @param axisDeadband (0 - 0.4) to use for all axis values on this controller.
      */
     public GameController(int port, final double axisDeadband) {
         super(port);
-
         if (axisDeadband < 0 || axisDeadband > 0.4) {
             System.out.println("Invalid axis deadband(" + axisDeadband + ") must be between 0 - 0.4. Overriding value to "
                 + DEFAULT_AXIS_DEADBAND);
@@ -58,125 +45,91 @@ public class GameController extends XboxController {
 
     @Override
     public double getRawAxis(int axis) {
-
         double axisValue = super.getRawAxis(axis);
-
         if (Math.abs(axisValue) < axisDeadband) {
             axisValue = 0;
         }
         else {
-            // Subtract the deadband (take the absolute value in order to remove
-            // the deadband amount whether it is positive or negative.
             double value = Math.abs(axisValue) - axisDeadband;
-
-            // Scale the value to the full range of 0-1.0 after the deadband amount
-            // is removed
             value      = value / (1.0 - axisDeadband);
-
-            // multiply by 1.0 or -1.0 in order to put the sign back
-            // on the end result based on the original axis value.
             value     *= Math.signum(axisValue);
-
             axisValue  = value;
         }
-
-        // The Y axis values should be inverted in order to make North (away
-        // from the driver) positive.
         if (axis == XboxController.Axis.kLeftY.value || axis == XboxController.Axis.kRightY.value) {
             axisValue *= -1.0;
         }
-
-        // Round the value to 2 decimal places
         return Math.round(axisValue * 100) / 100.0d;
     }
 
     /**
      * Set the axis deadband on the stick and trigger axes of this gameController
-     * <p>
-     * The value set applies to the x and y axes of the left and right sticks, as
-     * well as the trigger's axes values.
-     * <p>
-     * The deadband must be set larger than the highest expected value returned from
-     * the stick axis when they are released. A released controller axis will not
-     * always return to zero.
-     * <p>
-     * Use the method {@link #getRawHardwareAxisValue(int)} to get the hardware value
-     * coming off the game controller axis before deadbanding.
      *
-     * @param axisDeadband (0 - 0.4) to use for all axis values on this controller. When the
-     * axis value from the hardware is less than the specified value, then the axis will return
-     * zero. Setting the axisDeadbanding to zero turns off all deadbanding.
+     * @param axisDeadband (0 - 0.4) to use for all axis values on this controller.
      */
     public void setAxisDeadband(double axisDeadband) {
-
         if (axisDeadband < 0 || axisDeadband > 0.4) {
             System.out.println("Invalid axis deadband(" + axisDeadband
-                + ") must be between 0 - 0.4. Axis deadband value not changed.  Currently " + this.axisDeadband);
+                + ") must be between 0 - 0.4. Axis deadband value not changed. Currently " + this.axisDeadband);
             return;
         }
-
         this.axisDeadband = axisDeadband;
     }
 
     /**
-     * Get the raw hardware axis value (unmodified by the deadband)
-     * <p>
-     * This method could be used to debug potential hardware issues.
+     * Pulse the rumble on the controller without blocking the robot's main thread.
      *
-     * @param axis see {@link XboxController.Axis} for list of axis constants
+     * @param intensity the strength of the rumble (0.0 - 1.0)
+     * @param duration the duration of each rumble in seconds
      */
-    public double getHardwareAxisValue(int axis) {
-        return super.getRawAxis(axis);
-    }
-
-    @Override
-    public String toString() {
-
-        StringBuilder sb = new StringBuilder();
-
-        sb.append('(').append(getLeftX()).append(',').append(getLeftY()).append(") ")
-            .append('(').append(getRightX()).append(',').append(getRightY()).append(") ")
-            .append("T(").append(getRightTriggerAxis()).append(',').append(getLeftTriggerAxis()).append(")");
-
-        sb.append(getAButton() ? " A" : "");
-        sb.append(getBButton() ? " B" : "");
-        sb.append(getXButton() ? " X" : "");
-        sb.append(getYButton() ? " Y" : "");
-
-        sb.append(getLeftBumper() ? " Lb" : "");
-        sb.append(getRightBumper() ? " Rb" : "");
-
-        sb.append(getStartButton() ? " Start" : "");
-        sb.append(getBackButton() ? " Back" : "");
-
-        if (getPOV() >= 0) {
-            sb.append("POV(").append(getPOV()).append('0');
-        }
-
-        return sb.toString();
-    }
-
-    // New method to create quick pulses on both left and right rumble motors
     public void pulseRumble(double intensity, double duration) {
         // Start the rumble
         setRumble(RumbleType.kLeftRumble, intensity);
         setRumble(RumbleType.kRightRumble, intensity);
 
-        // Schedule stopping the rumble after the duration
-        Timer.delay(duration);
+        // First rumble pulse and stop using Notifier
+        try (Notifier stopRumble = new Notifier(() -> {
+            setRumble(RumbleType.kLeftRumble, 0);
+            setRumble(RumbleType.kRightRumble, 0);
+        })) {
+            // Schedule stopping the rumble after the duration
+            stopRumble.startSingle(duration);
+        }
 
-        // Stop the rumble
-        setRumble(RumbleType.kLeftRumble, 0);
-        setRumble(RumbleType.kRightRumble, 0);
+        // Second rumble pulse and stop using Notifier
+        try (Notifier secondPulse = new Notifier(() -> {
+            setRumble(RumbleType.kLeftRumble, intensity);
+            setRumble(RumbleType.kRightRumble, intensity);
 
-        // Delay between pulses
-        Timer.delay(0.1); // 0.1 second pause between pulses
+            // Stop the second rumble after duration
+            try (Notifier stopSecondPulse = new Notifier(() -> {
+                setRumble(RumbleType.kLeftRumble, 0);
+                setRumble(RumbleType.kRightRumble, 0);
+            })) {
+                stopSecondPulse.startSingle(duration);
+            }
+        })) {
+            // Schedule the second pulse after the pause (duration + 0.1 seconds)
+            secondPulse.startSingle(duration + 0.1);
+        }
+    }
 
-        // Repeat the pulse
-        setRumble(RumbleType.kLeftRumble, intensity);
-        setRumble(RumbleType.kRightRumble, intensity);
-        Timer.delay(duration);
-        setRumble(RumbleType.kLeftRumble, 0);
-        setRumble(RumbleType.kRightRumble, 0);
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append('(').append(getLeftX()).append(',').append(getLeftY()).append(") ")
+            .append('(').append(getRightX()).append(',').append(getRightY()).append(") ")
+            .append("T(").append(getRightTriggerAxis()).append(',').append(getLeftTriggerAxis()).append(")");
+        sb.append(getAButton() ? " A" : "");
+        sb.append(getBButton() ? " B" : "");
+        sb.append(getXButton() ? " X" : "");
+        sb.append(getYButton() ? " Y" : "");
+        sb.append(getLeftBumper() ? " Lb" : "");
+        sb.append(getRightBumper() ? " Rb" : "");
+        sb.append(getStartButton() ? " Start" : "");
+        sb.append(getBackButton() ? " Back" : "");
+        if (getPOV() >= 0) {
+            sb.append(" POV(").append(getPOV()).append(')');
+        }
+        return sb.toString();
     }
 }
