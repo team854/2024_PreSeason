@@ -182,9 +182,7 @@ public class LightsSubsystem extends SubsystemBase {
          int ledIndex = direction ? index - i : index + i; // Adjust index for trail
          if (ledIndex >= 0 && ledIndex < 30) { // Only set LEDs within the section
             int brightness = 255 - (i * (255 / TRAIL_LENGTH)); // Decrease brightness for the trail
-            ledBuffer.setLED(offset + ledIndex, Color.fromHSV(0, 255, brightness)); // Red hue with
-                                                                                    // fading
-                                                                                    // brightness
+            ledBuffer.setLED(offset + ledIndex, Color.fromHSV(0, 255, brightness));
          }
       }
    }
