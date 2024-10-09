@@ -200,17 +200,17 @@ public final class Constants {
         public static final double PIVOT_TO_ANGLE_PID_KI   = 0;
         public static final double PIVOT_TO_ANGLE_PID_KD   = 0;
 
-        public static final double AmpShootSpeed           = 0.3;
-        public static final double AmpPivotSpeed           = 0.2;
-        public static final double AmpTargetAngle          = 100;
+        public static final double AmpShootSpeed           = 0.24;
+        public static final double AmpPivotSpeed           = 0.3;
+        public static final double AmpTargetAngle          = 110;
         public static final double AmpTimeoutMS            = 4000;
 
-        public static final double LongSpeakerShootSpeed   = 0.5;
+        public static final double LongSpeakerShootSpeed   = 1;
         public static final double LongSpeakerPivotSpeed   = 0.2;
         public static final double LongSpeakerTargetAngle  = 60;
         public static final double LongSpeakerTimeoutMS    = 5000;
 
-        public static final double ShortSpeakerShootSpeed  = 0.5;
+        public static final double ShortSpeakerShootSpeed  = 1;
         public static final double ShortSpeakerPivotSpeed  = 0.2;
         public static final double ShortSpeakerTargetAngle = 90;
         public static final double ShortSpeakerTimeoutMS   = 4000;
