@@ -205,11 +205,11 @@ public class OperatorInput extends SubsystemBase {
 
         new Trigger(() -> isShootBack())
 
-            .onTrue(new PivotShootCommand(1, 115, 5000, armSubsystem));
+            .onTrue(new PivotShootCommand(1, 115, 5000, armSubsystem)); // FIX THIS
 
         new Trigger(() -> isShootFront())
 
-            .onTrue(new PivotShootCommand(1, 65, 5000, armSubsystem));
+            .onTrue(new PivotShootCommand(1, 65, 5000, armSubsystem)); // FIX THIS
 
         new Trigger(() -> isLowerClimbers())
 
@@ -223,7 +223,7 @@ public class OperatorInput extends SubsystemBase {
 
             // 108, 0.25
             .onTrue(
-                new AmpShootCommand(0.4, 112, 5000, armSubsystem)
+                new AmpShootCommand(0.4, 112, 5000, armSubsystem) // FIX THIS
                     .deadlineWith(new TimedStraightDriveCommand(10000, -0.1, true, driveSubsystem.getHeading(), driveSubsystem)));
 
         new Trigger(() -> isShoot())

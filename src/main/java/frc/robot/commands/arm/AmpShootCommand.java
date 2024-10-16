@@ -39,7 +39,7 @@ public class AmpShootCommand extends BaseArmCommand {
     @Override
     public void execute() {
 
-        boolean atAngle = moveToTargetAngle(120.25); // WORKS!!! (after 1 hour of testing)
+        boolean atAngle = moveToTargetAngle(targetAngle);
 
         armSubsystem.setAmpSpeed(shootSpeed);
 
