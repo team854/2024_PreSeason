@@ -75,7 +75,7 @@ public final class Constants {
         public static final double SpeakerSideSecondStraightCM = 0;
         public static final double SpeakerSideThirdStraightCM  = 0;
 
-        public static final double SpeakerSideShootAngle       = 115;
+        public static final double SpeakerSideShootAngle       = 105;
         public static final double SpeakerSideSwivelAngle      = 0;
         public static final double SpeakerSideFirstAngle       = 0;
 
@@ -220,7 +220,7 @@ public final class Constants {
         public static final double AmpTimeoutMS            = 4000;
 
         public static final double LongSpeakerShootSpeed   = 1;
-        public static final double LongSpeakerPivotSpeed   = 0.2;
+        public static final double LongSpeakerPivotSpeed   = 0.5;
         public static final double LongSpeakerTargetAngle  = 60;
         public static final double LongSpeakerTimeoutMS    = 5000;
 

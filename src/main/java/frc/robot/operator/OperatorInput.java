@@ -223,7 +223,7 @@ public class OperatorInput extends SubsystemBase {
 
             // 108, 0.25
             .onTrue(
-                new AmpShootCommand(0.4, 112, 5000, armSubsystem) // FIX THIS
+                new AmpShootCommand(0.5, 112, 5000, armSubsystem) // FIX THIS
                     .deadlineWith(new TimedStraightDriveCommand(10000, -0.1, true, driveSubsystem.getHeading(), driveSubsystem)));
 
         new Trigger(() -> isShoot())

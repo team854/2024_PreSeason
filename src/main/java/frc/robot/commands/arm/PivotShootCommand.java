@@ -44,7 +44,7 @@ public class PivotShootCommand extends BaseArmCommand {
 
         if (atAngle) {
 
-            if (isTimeoutExceeded(2)) {
+            if (isTimeoutExceeded(0.5)) {
                 armSubsystem.setKeeperSpeed(shootSpeed);
             }
         }
@@ -54,7 +54,7 @@ public class PivotShootCommand extends BaseArmCommand {
     public boolean isFinished() {
 
         // Stop after 5 seconds.
-        if (isTimeoutExceeded(3.5)) {
+        if (isTimeoutExceeded(2)) {
             return true;
         }
 
